@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -37,20 +38,23 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kOffWhite,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(
-                height: 300,
+              Container(
+                padding: EdgeInsets.zero,
+                margin: EdgeInsets.zero,
+                // width: MediaQuery.of(context).size.width,
+                child: Image(
+                  // color: Colors.green,
+                  image: AssetImage('assets/images/man.png'),
+                ),
               ),
               Container(
-                padding: EdgeInsets.only(top: kVPadding * 4),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(kBorderRadius * 3),
-                    color: Colors.white),
+                color: Colors.white,
                 child: Column(
                   children: [
                     FormHeading(
