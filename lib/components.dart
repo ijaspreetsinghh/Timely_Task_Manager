@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'constants.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -98,7 +97,7 @@ class PriorityTaskGrid extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(kBorderRadius),
                         bottomLeft: Radius.circular(kBorderRadius))),
-                width: 35,
+                width: 30,
                 height: 7,
               )
             ],
@@ -143,6 +142,62 @@ class PriorityTaskGrid extends StatelessWidget {
                 ),
               )
             ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class TodayHorizontalTaskBuilder extends StatelessWidget {
+  final String taskTitle;
+  final String time;
+  final Color color;
+  TodayHorizontalTaskBuilder(
+      {@required this.color, @required this.taskTitle, @required this.time});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin:
+          EdgeInsets.symmetric(horizontal: kHPadding * .8, vertical: kVPadding),
+      padding: EdgeInsets.only(
+          left: kHPadding, top: kVPadding * 2, bottom: kVPadding * 2),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(kBorderRadius)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(kBorderRadius),
+                    bottomLeft: Radius.circular(kBorderRadius))),
+            width: 25,
+            height: 7,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                taskTitle,
+                style: kCircularStdText.copyWith(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(right: kHPadding / 2),
+            child: Text(time,
+                style: kHintTextStyle.copyWith(
+                  fontSize: 12,
+                  color: kGrayTextColor.withOpacity(.7),
+                  fontFamily: kCircularStdFont,
+                )),
           )
         ],
       ),

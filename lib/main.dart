@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:timely/Screens/ForgotPassword/forgotpassword.dart';
 import 'package:timely/Screens/ForgotPassword/gotoemail.dart';
 import 'package:timely/Screens/SchedulePage/schedule.dart';
@@ -14,19 +15,28 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(primaryColor: kPrimaryColor),
-      themeMode: ThemeMode.light,
-      initialRoute: App.route,
-      routes: {
-        App.route: (context) => App(),
-        ForgotPassword.route: (context) => ForgotPassword(),
-        SignUp.route: (context) => SignUp(),
-        SignIn.route: (context) => SignIn(),
-        GoToEmail.route: (context) => GoToEmail(),
-        Schedule.route: (context) => Schedule(),
-      },
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light().copyWith(
+          primaryColor: kPrimaryColor,
+        ),
+        themeMode: ThemeMode.light,
+        initialRoute: App.route,
+        routes: {
+          App.route: (context) => App(),
+          ForgotPassword.route: (context) => ForgotPassword(),
+          SignUp.route: (context) => SignUp(),
+          SignIn.route: (context) => SignIn(),
+          GoToEmail.route: (context) => GoToEmail(),
+          Schedule.route: (context) => Schedule(),
+        },
+      ),
     );
   }
 }
