@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:timely/Screens/ForgotPassword/forgotpassword.dart';
 import 'package:timely/Screens/ForgotPassword/gotoemail.dart';
-import 'package:timely/Screens/SchedulePage/schedule.dart';
+import 'package:timely/Screens/MainAppPages/schedule.dart';
+import 'package:timely/Screens/MainAppPages/timelypagesdecider.dart';
 import 'package:timely/Screens/SignIn/signin.dart';
 import 'constants.dart';
 import 'Screens/SignUp/signup.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
           SignIn.route: (context) => SignIn(),
           GoToEmail.route: (context) => GoToEmail(),
           Schedule.route: (context) => Schedule(),
+          PagesDecider.route: (context) => PagesDecider()
         },
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timely/Screens/ForgotPassword/forgotpassword.dart';
-import 'package:timely/Screens/SchedulePage/schedule.dart';
+import 'package:timely/Screens/MainAppPages/timelypagesdecider.dart';
 import 'package:timely/constants.dart';
 import 'package:timely/components.dart';
 
@@ -182,8 +182,8 @@ class _SignInState extends State<SignIn> {
                               height: kVPadding * 2,
                             ),
                             PrimaryButton(
-                              action: () =>
-                                  Navigator.pushNamed(context, Schedule.route),
+                              action: () => Navigator.pushNamed(
+                                  context, PagesDecider.route),
                               title: 'Sign In',
                             )
                           ],
