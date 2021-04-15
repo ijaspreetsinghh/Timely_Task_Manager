@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:timely/Screens/ForgotPassword/forgotpassword.dart';
 import 'package:timely/Screens/SignIn/signin.dart';
 import '../../components.dart';
 import '../../constants.dart';

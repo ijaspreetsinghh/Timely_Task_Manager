@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'constants.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -71,8 +72,6 @@ class PriorityTaskGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(
-          top: kHPadding * .7, left: kHPadding * .7, right: kHPadding * .7),
       padding:
           EdgeInsets.only(left: kVPadding, top: kVPadding, bottom: kVPadding),
       decoration: BoxDecoration(
@@ -149,6 +148,83 @@ class PriorityTaskGrid extends StatelessWidget {
   }
 }
 
+class CategoryGrid extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: AlignmentDirectional.center,
+      padding: EdgeInsets.all(kVPadding),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(kBorderRadius),
+          color: Colors.white),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: kYellowColor,
+                    borderRadius: BorderRadius.circular(kBorderRadius / 3)),
+                child: Icon(
+                  Icons.star_border_rounded,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                width: kHPadding,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '12',
+                    style: kCircularStdText.copyWith(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    'Tasks',
+                    style: TextStyle(
+                        color: kGrayTextColor,
+                        fontSize: 14,
+                        fontFamily: kCircularStdFont,
+                        fontWeight: FontWeight.w400,
+                        height: 1),
+                  )
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            height: kVPadding,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Important',
+                style: kCircularStdText.copyWith(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600),
+              ),
+              SvgPicture.asset(
+                'assets/icons/plus.svg',
+                color: kPrimaryColor,
+                height: kVPadding * 3,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class TodayHorizontalTaskBuilder extends StatelessWidget {
   final String taskTitle;
   final String time;
@@ -159,8 +235,7 @@ class TodayHorizontalTaskBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:
-          EdgeInsets.symmetric(horizontal: kHPadding * .8, vertical: kVPadding),
+      margin: EdgeInsets.symmetric(vertical: kVPadding),
       padding: EdgeInsets.only(
           left: kHPadding, top: kVPadding * 2, bottom: kVPadding * 2),
       decoration: BoxDecoration(

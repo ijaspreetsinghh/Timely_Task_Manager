@@ -37,6 +37,13 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
       time: '1:20 pm',
     ),
   ];
+
+  final List<CategoryGrid> categoryList = [
+    CategoryGrid(),
+    CategoryGrid(),
+    CategoryGrid(),
+    CategoryGrid(),
+  ];
   @override
   void initState() {
     _controller = TabController(vsync: this, length: 3);
@@ -119,13 +126,14 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                       margin: EdgeInsets.zero,
                       child: TabBar(
                           isScrollable: true,
-                          indicatorColor: Colors.transparent,
+                          indicatorColor: Colors.black,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          indicatorPadding: EdgeInsets.zero,
                           labelStyle: TextStyle(
                             fontSize: 12,
                             fontFamily: kCircularStdFont,
                             fontWeight: FontWeight.w700,
                           ),
-                          // labelPadding: EdgeInsets.zero,
                           unselectedLabelColor: kGrayTextColor,
                           labelColor: Colors.black,
                           controller: _controller,
@@ -152,13 +160,16 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
             body: TabBarView(controller: _controller, children: [
               Container(
                 color: kGreyWhite,
-                padding: EdgeInsets.symmetric(
-                    vertical: kVPadding, horizontal: kHPadding * .7),
+                padding: EdgeInsets.fromLTRB(
+                    kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, 0),
                 child: ListView(children: [
                   GridView.count(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     crossAxisCount: 2,
+                    crossAxisSpacing: kHPadding,
+                    childAspectRatio: 1.1,
+                    mainAxisSpacing: kHPadding,
                     children: List.generate(gridList.length, (index) {
                       return gridList[index];
                     }),
@@ -231,8 +242,65 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                   ),
                 ]),
               ),
+              Container(
+                color: kGreyWhite,
+                padding: EdgeInsets.fromLTRB(
+                    kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, 0),
+                child: ListView(children: [
+                  GridView.count(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: kHPadding,
+                    mainAxisSpacing: kHPadding,
+                    childAspectRatio: 1.4,
+                    children: List.generate(categoryList.length, (index) {
+                      return categoryList[index];
+                    }),
+                  ),
+                  Container(
+                    alignment: AlignmentDirectional.centerEnd,
+                    padding: EdgeInsets.only(right: kHPadding * .7),
+                    child: Icon(
+                      Icons.more_horiz_rounded,
+                      size: 34,
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: kVPadding * 2),
+                    padding: EdgeInsets.symmetric(horizontal: kHPadding * 0.8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Tasks'.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: kBlackTextColor,
+                                fontFamily: kCircularStdFont,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'View All',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: kPrimaryColor,
+                            fontFamily: kCircularStdFont,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
+              ),
               Text('hii'),
-              Text('hii2')
             ]),
           ),
         )));

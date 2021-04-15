@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timely/constants.dart';
 import 'schedule.dart';
+import 'secondTab.dart';
 
 class PagesDecider extends StatefulWidget {
   static const route = 'PagesDecider';
@@ -18,7 +20,7 @@ class _PagesDeciderState extends State<PagesDecider> {
 
   List _children = [
     Schedule(),
-    Text('hola'),
+    SecondTab(),
     Text('reee'),
     Text('ram'),
     Text('rfe')
@@ -27,9 +29,35 @@ class _PagesDeciderState extends State<PagesDecider> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_selectedIndex],
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: kPrimaryColor,
+          child: Icon(
+            Icons.add_rounded,
+            size: 36,
+          ),
+          onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (BuildContext bc) {
+                return Container(
+                  child: new Wrap(
+                    children: <Widget>[
+                      new ListTile(
+                          leading: new Icon(Icons.music_note),
+                          title: new Text('Music'),
+                          onTap: () => {}),
+                      new ListTile(
+                        leading: new Icon(Icons.videocam),
+                        title: new Text('Video'),
+                        onTap: () => {},
+                      ),
+                    ],
+                  ),
+                );
+              })),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
         showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
         items: [
           BottomNavigationBarItem(
@@ -41,7 +69,11 @@ class _PagesDeciderState extends State<PagesDecider> {
             label: 'Business',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: SvgPicture.asset(
+              'assets/icons/plus.svg',
+              width: 32,
+              color: Colors.transparent,
+            ),
             label: 'School',
           ),
           BottomNavigationBarItem(

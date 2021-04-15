@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timely/Screens/ForgotPassword/forgotpassword.dart';
 import 'package:timely/Screens/MainAppPages/timelypagesdecider.dart';
 import 'package:timely/constants.dart';
 import 'package:timely/components.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignIn extends StatefulWidget {
   static const route = 'SignIn';
