@@ -44,9 +44,29 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
     CategoryGrid(),
     CategoryGrid(),
   ];
+  List<String> item = [
+    "Clients",
+    "Designer",
+    "Developer",
+    "Director",
+    "Employee",
+    "Manager",
+    "Worker",
+    "Owner"
+  ];
+  void reorderData(int oldindex, int newindex) {
+    setState(() {
+      if (newindex > oldindex) {
+        newindex -= 1;
+      }
+      final items = item.removeAt(oldindex);
+      item.insert(newindex, items);
+    });
+  }
+
   @override
   void initState() {
-    _controller = TabController(vsync: this, length: 3);
+    _controller = TabController(vsync: this, length: 2);
     super.initState();
   }
 
@@ -56,7 +76,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
         backgroundColor: kPrimaryColor,
         body: SafeArea(
             child: DefaultTabController(
-          length: 3,
+          length: 2,
           child: Scaffold(
             appBar: AppBar(
               brightness: Brightness.light,
@@ -125,10 +145,11 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                       padding: EdgeInsets.zero,
                       margin: EdgeInsets.zero,
                       child: TabBar(
-                          isScrollable: true,
+                          // isScrollable: true,
                           indicatorColor: Colors.black,
                           indicatorSize: TabBarIndicatorSize.label,
-                          indicatorPadding: EdgeInsets.zero,
+                          // indicatorPadding: EdgeInsets.zero,
+
                           labelStyle: TextStyle(
                             fontSize: 12,
                             fontFamily: kCircularStdFont,
@@ -144,9 +165,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                             Tab(
                               text: 'Categories'.toUpperCase(),
                             ),
-                            Tab(
-                              text: 'Notes'.toUpperCase(),
-                            )
                           ]),
                     ),
                   ],
@@ -160,147 +178,168 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
             body: TabBarView(controller: _controller, children: [
               Container(
                 color: kGreyWhite,
-                padding: EdgeInsets.fromLTRB(
-                    kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, 0),
-                child: ListView(children: [
-                  GridView.count(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: kHPadding,
-                    childAspectRatio: 1.1,
-                    mainAxisSpacing: kHPadding,
-                    children: List.generate(gridList.length, (index) {
-                      return gridList[index];
-                    }),
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional.centerEnd,
-                    padding: EdgeInsets.only(right: kHPadding * .7),
-                    child: Icon(
-                      Icons.more_horiz_rounded,
-                      size: 34,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: kVPadding * 2),
-                    padding: EdgeInsets.symmetric(horizontal: kHPadding * 0.8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+                child: ListView(
+                    padding: EdgeInsets.fromLTRB(
+                        kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, 0),
+                    children: [
+                      GridView.count(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: kHPadding,
+                        childAspectRatio: 1.1,
+                        mainAxisSpacing: kHPadding,
+                        children: List.generate(gridList.length, (index) {
+                          return gridList[index];
+                        }),
+                      ),
+                      Container(
+                        alignment: AlignmentDirectional.centerEnd,
+                        padding: EdgeInsets.only(right: kHPadding * .7),
+                        child: Icon(
+                          Icons.more_horiz_rounded,
+                          size: 34,
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: kVPadding * 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: kHPadding * 0.8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Today'.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: kBlackTextColor,
+                                    fontFamily: kCircularStdFont,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: kHPadding,
+                                ),
+                                Text(
+                                  'This week'.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: kGrayTextColor,
+                                    fontFamily: kCircularStdFont,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
                             Text(
-                              'Today'.toUpperCase(),
+                              'View All',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: kBlackTextColor,
-                                fontFamily: kCircularStdFont,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            SizedBox(
-                              width: kHPadding,
-                            ),
-                            Text(
-                              'This week'.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: kGrayTextColor,
+                                color: kPrimaryColor,
                                 fontFamily: kCircularStdFont,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
                         ),
-                        Text(
-                          'View All',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: kPrimaryColor,
-                            fontFamily: kCircularStdFont,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      TodayHorizontalTaskBuilder(
-                        color: kRedColor,
-                        time: 'Tomorrow',
-                        taskTitle: 'Skype call with jack',
                       ),
-                      TodayHorizontalTaskBuilder(
-                        color: kGreenColor,
-                        time: 'Tomorrow',
-                        taskTitle: 'Skype call with mickey',
-                      )
-                    ],
-                  ),
-                ]),
+                      Column(
+                        children: [
+                          TodayHorizontalTaskBuilder(
+                            color: kRedColor,
+                            time: 'Tomorrow',
+                            taskTitle: 'Skype call with jack',
+                          ),
+                          TodayHorizontalTaskBuilder(
+                            color: kGreenColor,
+                            time: 'Tomorrow',
+                            taskTitle: 'Skype call with mickey',
+                          )
+                        ],
+                      ),
+                    ]),
               ),
               Container(
                 color: kGreyWhite,
-                padding: EdgeInsets.fromLTRB(
-                    kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, 0),
-                child: ListView(children: [
-                  GridView.count(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: kHPadding,
-                    mainAxisSpacing: kHPadding,
-                    childAspectRatio: 1.4,
-                    children: List.generate(categoryList.length, (index) {
-                      return categoryList[index];
-                    }),
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional.centerEnd,
-                    padding: EdgeInsets.only(right: kHPadding * .7),
-                    child: Icon(
-                      Icons.more_horiz_rounded,
-                      size: 34,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: kVPadding * 2),
-                    padding: EdgeInsets.symmetric(horizontal: kHPadding * 0.8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+                child: ListView(
+                    padding: EdgeInsets.fromLTRB(0, kVPadding * 2, 0, 0),
+                    children: [
+                      GridView.count(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: kHPadding * 1.5),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: kHPadding,
+                        mainAxisSpacing: kHPadding,
+                        childAspectRatio: 1.4,
+                        children: List.generate(categoryList.length, (index) {
+                          return categoryList[index];
+                        }),
+                      ),
+                      Container(
+                        alignment: AlignmentDirectional.centerEnd,
+                        padding: EdgeInsets.only(right: kHPadding * 1.5),
+                        child: Icon(
+                          Icons.more_horiz_rounded,
+                          size: 34,
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: kVPadding * 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: kHPadding * 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Tasks'.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: kBlackTextColor,
+                                    fontFamily: kCircularStdFont,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
                             Text(
-                              'Tasks'.toUpperCase(),
+                              'View All',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: kBlackTextColor,
+                                color: kPrimaryColor,
                                 fontFamily: kCircularStdFont,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
                         ),
-                        Text(
-                          'View All',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: kPrimaryColor,
-                            fontFamily: kCircularStdFont,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: kHPadding),
+                        child: Column(
+                          children: [
+                            TodayHorizontalTaskBuilder(
+                              color: kRedColor,
+                              time: 'Tomorrow',
+                              taskTitle: 'Skype call with jack',
+                            ),
+                            TodayHorizontalTaskBuilder(
+                              color: kGreenColor,
+                              time: 'Tomorrow',
+                              taskTitle: 'Skype call with mickey',
+                            )
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ]),
+                      ),
+                    ]),
               ),
-              Text('hii'),
             ]),
           ),
         )));
