@@ -72,12 +72,13 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: kPrimaryColor,
-        body: SafeArea(
-            child: DefaultTabController(
+    return Container(
+      color: kPrimaryColor,
+      child: SafeArea(
+        child: DefaultTabController(
           length: 2,
           child: Scaffold(
+            backgroundColor: kPrimaryColor,
             appBar: AppBar(
               brightness: Brightness.light,
               elevation: 0, backgroundColor: Colors.white,
@@ -132,7 +133,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                       ),
                     ),
                     SizedBox(
-                      height: kVPadding,
+                      height: kVPadding * 4,
                     ),
                     Container(
                       alignment: AlignmentDirectional.center,
@@ -171,7 +172,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                 ),
               ),
               // backgroundColor: kGreyWhite,
-              toolbarHeight: 160,
+              toolbarHeight: 208,
               automaticallyImplyLeading: false,
               foregroundColor: Colors.red,
             ),
@@ -342,6 +343,8 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
               ),
             ]),
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

@@ -279,3 +279,59 @@ class TodayHorizontalTaskBuilder extends StatelessWidget {
     );
   }
 }
+
+class MyTaskNameBuilder extends StatelessWidget {
+  final String taskTitle;
+
+  MyTaskNameBuilder({@required this.taskTitle});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+          left: kHPadding, top: kVPadding * 2, bottom: kVPadding * 2),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(kBorderRadius)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 2,
+                child: Text(
+                  taskTitle,
+                  maxLines: 5,
+                  overflow: TextOverflow.clip,
+                  softWrap: true,
+                  style: kCircularStdText.copyWith(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DashedLineVerticalPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    double dashHeight = 7, dashSpace = 5, startY = 0;
+    final paint = Paint()
+      ..color = kGrayTextColor
+      ..strokeWidth = 2;
+    while (startY < size.height) {
+      canvas.drawLine(Offset(0, startY), Offset(0, startY + dashHeight), paint);
+      startY += dashHeight + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
