@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:timelines/timelines.dart';
+
 import 'package:timely/constants.dart';
 
 import '../../components.dart';
@@ -62,54 +64,31 @@ class _SecondTabState extends State<SecondTab> {
                     topRight: Radius.circular(kBorderRadius * 2))),
             child: ListView(
               padding: EdgeInsets.fromLTRB(
-                  kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, 0),
+                  kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, kVPadding),
               children: [
-                Text(
-                  'My Tasks',
-                  style: kCircularStdText.copyWith(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
+                TimelineTile(
+                  nodeAlign: TimelineNodeAlign.start,
+                  contents: TimeLineTaskBuilder(
+                    time: '9:00',
+                    taskName: 'Skype call with mickey.',
+                  ),
+                  node: MyTaskTimelineIconBuilder(
+                      color: kGreenColor,
+                      icon: Icons.check,
+                      lineType: SolidLine()),
                 ),
-                SizedBox(
-                  height: kVPadding * 2,
+                TimelineTile(
+                  nodeAlign: TimelineNodeAlign.start,
+                  contents: TimeLineTaskBuilder(
+                    time: '9:00',
+                    taskName: 'Skype call with mickey.',
+                  ),
+                  node: MyTaskTimelineIconBuilder(
+                    color: kGreenColor,
+                    icon: Icons.check,
+                    lineType: DashedLine(),
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Icon(
-                        Icons.check,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          color: kGreenColor,
-                          borderRadius: BorderRadius.circular(50)),
-                    ),
-                    SizedBox(
-                      width: kHPadding,
-                    ),
-                    Text(
-                      '9:00',
-                      style: kHintTextStyle.copyWith(
-                        fontSize: 13,
-                      ),
-                    ),
-                    SizedBox(
-                      width: kHPadding,
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: MyTaskNameBuilder(
-                        taskTitle: 'Skype call with mickey.',
-                      ),
-                    ),
-                  ],
-                ),
-                CustomPaint(
-                    size: Size(2, 50.0), painter: DashedLineVerticalPainter())
               ],
             ),
           ),

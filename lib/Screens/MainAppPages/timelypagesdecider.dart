@@ -317,7 +317,7 @@ class _PagesDeciderState extends State<PagesDecider> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt_rounded),
+            icon: Icon(Icons.sort_rounded),
             label: 'Business',
           ),
           BottomNavigationBarItem(

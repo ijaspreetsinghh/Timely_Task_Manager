@@ -25,8 +25,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light().copyWith(
-          primaryColor: kPrimaryColor,
-        ),
+            primaryColor: kPrimaryColor,
+            splashColor: kGrayTextColor,
+            highlightColor: kGrayTextColor),
         themeMode: ThemeMode.light,
         initialRoute: App.route,
         routes: {
