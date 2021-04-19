@@ -327,28 +327,31 @@ class TimeLineTaskBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: kHPadding,
-        ),
-        Text(
-          time,
-          style: kHintTextStyle.copyWith(
-            fontSize: 13,
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: kVPadding),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: kHPadding,
           ),
-        ),
-        SizedBox(
-          width: kHPadding,
-        ),
-        Flexible(
-          flex: 2,
-          child: MyTaskNameBuilder(
-            taskTitle: taskName,
+          Text(
+            time,
+            style: kHintTextStyle.copyWith(
+              fontSize: 13,
+            ),
           ),
-        ),
-      ],
+          SizedBox(
+            width: kHPadding,
+          ),
+          Flexible(
+            flex: 2,
+            child: MyTaskNameBuilder(
+              taskTitle: taskName,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

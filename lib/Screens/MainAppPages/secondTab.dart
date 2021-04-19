@@ -62,34 +62,15 @@ class _SecondTabState extends State<SecondTab> {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(kBorderRadius * 2),
                     topRight: Radius.circular(kBorderRadius * 2))),
-            child: ListView(
-              padding: EdgeInsets.fromLTRB(
-                  kHPadding * 1.5, kVPadding * 2, kHPadding * 1.5, kVPadding),
-              children: [
-                TimelineTile(
-                  nodeAlign: TimelineNodeAlign.start,
-                  contents: TimeLineTaskBuilder(
-                    time: '9:00',
-                    taskName: 'Skype call with mickey.',
-                  ),
-                  node: MyTaskTimelineIconBuilder(
-                      color: kGreenColor,
-                      icon: Icons.check,
-                      lineType: SolidLine()),
+            child: Timeline.tileBuilder(
+              builder: TimelineTileBuilder.fromStyle(
+                contentsAlign: ContentsAlign.alternating,
+                contentsBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Text('Timeline Event $index'),
                 ),
-                TimelineTile(
-                  nodeAlign: TimelineNodeAlign.start,
-                  contents: TimeLineTaskBuilder(
-                    time: '9:00',
-                    taskName: 'Skype call with mickey.',
-                  ),
-                  node: MyTaskTimelineIconBuilder(
-                    color: kGreenColor,
-                    icon: Icons.check,
-                    lineType: DashedLine(),
-                  ),
-                ),
-              ],
+                itemCount: 10,
+              ),
             ),
           ),
         ),
@@ -97,3 +78,15 @@ class _SecondTabState extends State<SecondTab> {
     );
   }
 }
+//TimelineTile(
+//                   nodeAlign: TimelineNodeAlign.start,
+//                   contents: TimeLineTaskBuilder(
+//                     time: '9:00',
+//                     taskName: 'Skype call with mickey.',
+//                   ),
+//                   node: MyTaskTimelineIconBuilder(
+//                     color: kGreenColor,
+//                     icon: Icons.check,
+//                     lineType: DashedLine(),
+//                   ),
+//                 ),
