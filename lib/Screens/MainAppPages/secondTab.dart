@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:timelines/timelines.dart';
 
 import 'package:timely/constants.dart';
-
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 import '../../components.dart';
 
 class SecondTab extends StatefulWidget {
@@ -11,6 +11,7 @@ class SecondTab extends StatefulWidget {
 }
 
 class _SecondTabState extends State<SecondTab> {
+  DateTime _selectedDate = DateTime.now();
   DateTime selectedDate = DateTime.now();
 
   @override
@@ -42,10 +43,36 @@ class _SecondTabState extends State<SecondTab> {
                     ),
                   ),
                   SizedBox(
-                    height: kVPadding * 2,
+                    height: kVPadding,
+                  ),
+                  DatePicker(
+                    DateTime.now(),
+                    initialSelectedDate: DateTime.now(),
+                    selectedTextColor: Colors.black,
+                    selectionColor: Colors.white,
+                    monthTextStyle: TextStyle(
+                        fontFamily: kCircularStdFont,
+                        color: Colors.white,
+                        fontSize: 11),
+                    dateTextStyle: TextStyle(
+                        fontFamily: kCircularStdFont,
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                    dayTextStyle: TextStyle(
+                        fontFamily: kCircularStdFont,
+                        color: Colors.white,
+                        fontSize: 11),
+                    daysCount: 30,
+                    onDateChange: (date) {
+                      // New date selected
+                      setState(() {
+                        _selectedDate = date;
+                      });
+                    },
                   ),
                   SizedBox(
-                    height: kVPadding,
+                    height: kVPadding * 2,
                   ),
                 ],
               ),
@@ -57,36 +84,100 @@ class _SecondTabState extends State<SecondTab> {
           ),
           backgroundColor: kPrimaryColor,
           body: Container(
-            decoration: BoxDecoration(
-                color: kGreyWhite,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(kBorderRadius * 2),
-                    topRight: Radius.circular(kBorderRadius * 2))),
-            child: Timeline.tileBuilder(
-              builder: TimelineTileBuilder.fromStyle(
-                contentsAlign: ContentsAlign.alternating,
-                contentsBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Text('Timeline Event $index'),
-                ),
-                itemCount: 10,
-              ),
-            ),
-          ),
+              padding: EdgeInsets.symmetric(
+                  horizontal: kHPadding * 1.5, vertical: kVPadding * 3),
+              decoration: BoxDecoration(
+                  color: kGreyWhite,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(kBorderRadius * 2),
+                      topRight: Radius.circular(kBorderRadius * 2))),
+              child: ListView(
+                children: [
+                  FormHeading(title: 'My Tasks'),
+                  SizedBox(
+                    height: kVPadding * 2,
+                  ),
+                  TimelineTaskBuilder(
+                    icon: Icons.check,
+                    color: kGreenColor,
+                    time: '9:00',
+                    taskTitle: 'Skype call with jack',
+                  ),
+                  TimelineTaskBuilder(
+                    icon: Icons.check,
+                    color: kGreenColor,
+                    time: '9:00',
+                    taskTitle: 'Skype call with jack',
+                  )
+                ],
+              )),
         ),
       ),
     );
   }
 }
-//TimelineTile(
-//                   nodeAlign: TimelineNodeAlign.start,
-//                   contents: TimeLineTaskBuilder(
-//                     time: '9:00',
-//                     taskName: 'Skype call with mickey.',
-//                   ),
-//                   node: MyTaskTimelineIconBuilder(
-//                     color: kGreenColor,
-//                     icon: Icons.check,
-//                     lineType: DashedLine(),
-//                   ),
-//                 ),
+
+class TimelineTaskBuilder extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String time;
+  final String taskTitle;
+  const TimelineTaskBuilder(
+      {@required this.icon,
+      @required this.time,
+      @required this.taskTitle,
+      @required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(3),
+          child: Icon(
+            icon,
+            size: 16,
+            color: Colors.white,
+          ),
+          decoration: BoxDecoration(
+              color: color, borderRadius: BorderRadius.circular(50)),
+        ),
+        SizedBox(
+          width: kVPadding,
+        ),
+        Text(
+          time,
+          style: kHintTextStyle.copyWith(fontSize: 14),
+        ),
+        SizedBox(
+          width: kVPadding,
+        ),
+        Flexible(
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: kVPadding),
+            padding: EdgeInsets.only(
+                left: kHPadding,
+                right: kHPadding,
+                top: kVPadding * 3,
+                bottom: kVPadding * 3),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(kBorderRadius)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  taskTitle,
+                  style: kCircularStdText.copyWith(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

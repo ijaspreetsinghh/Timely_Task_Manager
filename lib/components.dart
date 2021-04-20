@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:timelines/timelines.dart';
 import 'constants.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -352,61 +351,6 @@ class TimeLineTaskBuilder extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class MyTaskTimelineIconBuilder extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final Widget lineType;
-  const MyTaskTimelineIconBuilder(
-      {@required this.icon, @required this.color, @required this.lineType});
-
-  @override
-  Widget build(BuildContext context) {
-    return TimelineNode(
-      overlap: true,
-      indicator: DotIndicator(
-        size: 20,
-        child: Icon(
-          icon,
-          size: 16,
-          color: Colors.white,
-        ),
-        color: color,
-      ),
-      endConnector: lineType,
-    );
-  }
-}
-
-class DashedLine extends StatelessWidget {
-  const DashedLine({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return DashedLineConnector(
-      color: kGrayTextColor.withOpacity(.5),
-      thickness: 2,
-      dash: 5,
-      gap: 3,
-    );
-  }
-}
-
-class SolidLine extends StatelessWidget {
-  const SolidLine({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SolidLineConnector(
-      color: kGrayTextColor.withOpacity(.5),
-      thickness: 2,
     );
   }
 }
