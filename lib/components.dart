@@ -212,10 +212,16 @@ class CategoryGrid extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w600),
               ),
-              SvgPicture.asset(
-                'assets/icons/plus.svg',
-                color: kPrimaryColor,
-                height: kVPadding * 3,
+              Container(
+                decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(50)),
+                padding: EdgeInsets.all(3),
+                child: Icon(
+                  Icons.add_rounded,
+                  color: Colors.white,
+                  size: 16,
+                ),
               ),
             ],
           )

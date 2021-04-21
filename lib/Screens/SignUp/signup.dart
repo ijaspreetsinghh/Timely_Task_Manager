@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timely/Screens/SignIn/signin.dart';
 import '../../components.dart';
 import '../../constants.dart';
@@ -15,7 +14,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   GlobalKey<FormState> _signUpFormKey = GlobalKey();
   var showPasswordIcon = Icon(
-    FontAwesomeIcons.eyeSlash,
+    Icons.lock_outline_rounded,
     size: 18,
   );
   bool _obscureText = true;
@@ -24,11 +23,11 @@ class _SignUpState extends State<SignUp> {
       _obscureText = !_obscureText;
       _obscureText == true
           ? showPasswordIcon = Icon(
-              FontAwesomeIcons.eyeSlash,
+              Icons.lock_outline_rounded,
               size: 18,
             )
           : showPasswordIcon = Icon(
-              FontAwesomeIcons.eye,
+              Icons.lock_open_rounded,
               size: 18,
             );
     });

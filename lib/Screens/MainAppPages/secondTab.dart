@@ -12,7 +12,6 @@ class SecondTab extends StatefulWidget {
 
 class _SecondTabState extends State<SecondTab> {
   DateTime _selectedDate = DateTime.now();
-  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {

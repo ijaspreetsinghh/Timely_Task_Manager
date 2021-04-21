@@ -3,7 +3,6 @@ import 'package:timely/Screens/ForgotPassword/forgotpassword.dart';
 import 'package:timely/Screens/MainAppPages/timelypagesdecider.dart';
 import 'package:timely/constants.dart';
 import 'package:timely/components.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignIn extends StatefulWidget {
   static const route = 'SignIn';
@@ -14,7 +13,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   GlobalKey<FormState> _signInFormKey = GlobalKey();
   var showPasswordIcon = Icon(
-    FontAwesomeIcons.eyeSlash,
+    Icons.lock_outline_rounded,
     size: 18,
   );
   bool _obscureText = true;
@@ -23,11 +22,11 @@ class _SignInState extends State<SignIn> {
       _obscureText = !_obscureText;
       _obscureText == true
           ? showPasswordIcon = Icon(
-              FontAwesomeIcons.eyeSlash,
+              Icons.lock_outline_rounded,
               size: 18,
             )
           : showPasswordIcon = Icon(
-              FontAwesomeIcons.eye,
+              Icons.lock_open_rounded,
               size: 18,
             );
     });

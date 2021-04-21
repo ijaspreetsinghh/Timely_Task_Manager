@@ -318,23 +318,22 @@ class _PagesDeciderState extends State<PagesDecider> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sort_rounded),
-            label: 'Business',
+            label: 'My Tasks',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/plus.svg',
-              width: 32,
+            icon: Icon(
+              Icons.add,
               color: Colors.transparent,
             ),
-            label: 'School',
+            label: 'Schedule',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today_rounded),
-            label: 'Home',
+            label: 'Schedule',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline_rounded),
-            label: 'Business',
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
