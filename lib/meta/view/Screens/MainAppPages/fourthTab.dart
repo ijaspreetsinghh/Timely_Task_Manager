@@ -1,6 +1,6 @@
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../constants.dart';
+import '../../../widgets/constants.dart';
 import 'package:flutter/material.dart';
 
 class FourthTab extends StatelessWidget {
@@ -44,7 +44,7 @@ class FourthTab extends StatelessWidget {
           //   // backgroundColor: kGreyWhite,
           //   toolbarHeight: 160,
           //   automaticallyImplyLeading: false,
-          //   foregroundColor: Colors.red,
+          //   foregroundColor: kRedColor,
           // ),
           backgroundColor: kGreyWhite,
           body: Container(

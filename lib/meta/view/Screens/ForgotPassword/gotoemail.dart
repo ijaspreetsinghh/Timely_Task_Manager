@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:timely/components.dart';
-import '../../constants.dart';
+import '../../../widgets/components.dart';
+import '../../../widgets/constants.dart';
 
 class GoToEmail extends StatefulWidget {
   static const route = 'GoToEmail';

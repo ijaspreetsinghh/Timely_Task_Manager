@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:timely/constants.dart';
+import '../../../widgets/constants.dart';
+import '../../../widgets/components.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
-import '../../components.dart';
 
 class SecondTab extends StatefulWidget {
   @override
@@ -44,31 +44,34 @@ class _SecondTabState extends State<SecondTab> {
                   SizedBox(
                     height: kVPadding,
                   ),
-                  DatePicker(
-                    DateTime.now(),
-                    initialSelectedDate: DateTime.now(),
-                    selectedTextColor: Colors.black,
-                    selectionColor: Colors.white,
-                    monthTextStyle: TextStyle(
-                        fontFamily: kCircularStdFont,
-                        color: Colors.white,
-                        fontSize: 11),
-                    dateTextStyle: TextStyle(
-                        fontFamily: kCircularStdFont,
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600),
-                    dayTextStyle: TextStyle(
-                        fontFamily: kCircularStdFont,
-                        color: Colors.white,
-                        fontSize: 11),
-                    daysCount: 30,
-                    onDateChange: (date) {
-                      // New date selected
-                      setState(() {
-                        _selectedDate = date;
-                      });
-                    },
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: kHPadding / 2),
+                    child: DatePicker(
+                      DateTime.now(),
+                      initialSelectedDate: DateTime.now(),
+                      selectedTextColor: Colors.black,
+                      selectionColor: Colors.white,
+                      monthTextStyle: TextStyle(
+                          fontFamily: kCircularStdFont,
+                          color: Colors.white,
+                          fontSize: 11),
+                      dateTextStyle: TextStyle(
+                          fontFamily: kCircularStdFont,
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600),
+                      dayTextStyle: TextStyle(
+                          fontFamily: kCircularStdFont,
+                          color: Colors.white,
+                          fontSize: 11),
+                      daysCount: 15,
+                      onDateChange: (date) {
+                        // New date selected
+                        setState(() {
+                          _selectedDate = date;
+                        });
+                      },
+                    ),
                   ),
                   SizedBox(
                     height: kVPadding * 2,
@@ -79,7 +82,7 @@ class _SecondTabState extends State<SecondTab> {
             // backgroundColor: kGreyWhite,
             toolbarHeight: 160,
             automaticallyImplyLeading: false,
-            foregroundColor: Colors.red,
+            foregroundColor: kRedColor,
           ),
           backgroundColor: kPrimaryColor,
           body: Container(
@@ -91,22 +94,27 @@ class _SecondTabState extends State<SecondTab> {
                       topLeft: Radius.circular(kBorderRadius * 2),
                       topRight: Radius.circular(kBorderRadius * 2))),
               child: ListView(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   FormHeading(title: 'My Tasks'),
                   SizedBox(
                     height: kVPadding * 2,
                   ),
-                  TimelineTaskBuilder(
-                    icon: Icons.check,
-                    color: kGreenColor,
-                    time: '9:00',
-                    taskTitle: 'Skype call with jack',
-                  ),
-                  TimelineTaskBuilder(
-                    icon: Icons.check,
-                    color: kGreenColor,
-                    time: '9:00',
-                    taskTitle: 'Skype call with jack',
+                  Column(
+                    children: [
+                      TimelineTaskBuilder(
+                        icon: Icons.check,
+                        color: kGreenColor,
+                        time: '9:00',
+                        taskTitle: 'Skype call with jack',
+                      ),
+                      TimelineTaskBuilder(
+                        icon: Icons.check,
+                        color: kGreenColor,
+                        time: '9:00',
+                        taskTitle: 'Skype call with jack',
+                      ),
+                    ],
                   )
                 ],
               )),

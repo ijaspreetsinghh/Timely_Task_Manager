@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../constants.dart';
-import '../../components.dart';
+import '../../../widgets/components.dart';
+import '../../../widgets/constants.dart';
 
 class Schedule extends StatefulWidget {
   static const route = 'Schedule';
@@ -174,7 +174,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
               // backgroundColor: kGreyWhite,
               toolbarHeight: 208,
               automaticallyImplyLeading: false,
-              foregroundColor: Colors.red,
+              foregroundColor: kRedColor,
             ),
             body: TabBarView(controller: _controller, children: [
               Container(

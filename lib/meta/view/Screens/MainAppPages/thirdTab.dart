@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../constants.dart';
+import '../../../widgets/constants.dart';
 
-class FifthTab extends StatelessWidget {
+class ThirdTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +42,7 @@ class FifthTab extends StatelessWidget {
             // backgroundColor: kGreyWhite,
             toolbarHeight: 160,
             automaticallyImplyLeading: false,
-            foregroundColor: Colors.red,
+            foregroundColor: kRedColor,
           ),
           backgroundColor: kPrimaryColor,
           body: Container(

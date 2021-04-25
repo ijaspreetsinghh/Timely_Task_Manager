@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:timely/Screens/MainAppPages/fifthTab.dart';
-import 'package:timely/Screens/MainAppPages/fourthTab.dart';
-import 'package:timely/Screens/MainAppPages/thirdTab.dart';
-import 'package:timely/components.dart';
-import 'package:timely/constants.dart';
+import '../../Screens/MainAppPages/fourthTab.dart';
+import '../../Screens/MainAppPages/fifthTab.dart';
+import '../../Screens/MainAppPages/thirdTab.dart';
+import 'package:timely/meta/widgets/components.dart';
+import 'package:timely/meta/widgets/constants.dart';
 import 'schedule.dart';
 import 'secondTab.dart';
 
@@ -29,19 +28,31 @@ class _PagesDeciderState extends State<PagesDecider> {
         backgroundColor: Colors.transparent,
         context: context,
         isScrollControlled: true,
-        isDismissible: false,
+        isDismissible: true,
         builder: (BuildContext bc) {
           return Container(
             height: MediaQuery.of(context).size.height * .7,
             padding: EdgeInsets.fromLTRB(
-                kHPadding * .7, kVPadding * 3, kHPadding * .7, kVPadding),
+                kHPadding * .7, kVPadding * 1.5, kHPadding * .7, kVPadding),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(kBorderRadius * 2),
                     topRight: Radius.circular(kBorderRadius * 2))),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xffbbbbb9),
+                      borderRadius: BorderRadius.circular(kBorderRadius)),
+                  height: 3,
+                  width: 75,
+                  alignment: AlignmentDirectional.center,
+                ),
+                SizedBox(
+                  height: kVPadding * 2,
+                ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: kHPadding * .8),
@@ -55,7 +66,6 @@ class _PagesDeciderState extends State<PagesDecider> {
                       hintText: 'Your Task Name',
                       hintStyle: kHintTextStyle,
                       border: UnderlineInputBorder(
-                          borderRadius: BorderRadius.circular(kBorderRadius),
                           borderSide: BorderSide(color: kGrayTextColor)),
                     ),
                   ),

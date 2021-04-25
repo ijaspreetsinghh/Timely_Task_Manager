@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:timely/Screens/ForgotPassword/forgotpassword.dart';
-import 'package:timely/Screens/ForgotPassword/gotoemail.dart';
-import 'package:timely/Screens/MainAppPages/schedule.dart';
-import 'package:timely/Screens/MainAppPages/timelypagesdecider.dart';
-import 'package:timely/Screens/SignIn/signin.dart';
-import 'constants.dart';
-import 'Screens/SignUp/signup.dart';
+import 'meta/view/Screens/Onboarding/onboarding.dart';
+import 'meta/view/Screens/ForgotPassword/forgotpassword.dart';
+import 'meta/view/Screens/ForgotPassword/gotoemail.dart';
+import 'meta/view/Screens/MainAppPages/schedule.dart';
+import 'meta/view/Screens/MainAppPages/timelypagesdecider.dart';
+import 'meta/view/Screens/SignIn/signin.dart';
+import 'meta/widgets/constants.dart';
+import 'meta/view/Screens/SignUp/signup.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
             splashColor: kGrayTextColor,
             highlightColor: kGrayTextColor),
         themeMode: ThemeMode.light,
-        initialRoute: App.route,
+        initialRoute: Onboarding.route,
         routes: {
           App.route: (context) => App(),
           ForgotPassword.route: (context) => ForgotPassword(),
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
           SignIn.route: (context) => SignIn(),
           GoToEmail.route: (context) => GoToEmail(),
           Schedule.route: (context) => Schedule(),
-          PagesDecider.route: (context) => PagesDecider()
+          PagesDecider.route: (context) => PagesDecider(),
+          Onboarding.route: (context) => Onboarding(),
         },
       ),
     );

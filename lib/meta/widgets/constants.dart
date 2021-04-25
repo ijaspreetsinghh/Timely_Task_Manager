@@ -19,6 +19,13 @@ const kCircularStdFont = 'CircularStd';
 const kCircularStdText = TextStyle(
   fontFamily: kCircularStdFont,
 );
+const kErrorTextStyle = TextStyle(
+  fontFamily: kCircularStdFont,
+  color: kRedColor,
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+);
+
 const kGapPadding = 10;
 const kHintTextStyle = TextStyle(
     color: kGrayTextColor,
@@ -30,3 +37,6 @@ const kLabelTextStyle = TextStyle(
     color: kPrimaryColor,
     fontFamily: kCircularStdFont,
     fontWeight: FontWeight.w500);
+const kRegExp =
+    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+const kNameRegEx = r"[a-zA-Z]";
