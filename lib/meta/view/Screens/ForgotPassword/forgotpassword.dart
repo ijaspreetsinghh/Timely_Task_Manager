@@ -11,22 +11,34 @@ class ForgotPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ForgotPasswordViewModel>.reactive(
         builder: (context, model, child) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+          return Container(
+            color: kOffWhite,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                body: ListView(
+                  physics: BouncingScrollPhysics(),
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(
-                      height: 300,
+                    Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.zero,
+                          margin: EdgeInsets.zero,
+                          // width: MediaQuery.of(context).size.width,
+                          child: Image(
+                            // color: Colors.green,
+                            image:
+                                AssetImage('assets/images/forgetPassword.png'),
+                          ),
+                        ),
+                        BackButtonWithoutAppBar(),
+                      ],
                     ),
                     Container(
-                      padding: EdgeInsets.only(top: kVPadding * 4),
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(kBorderRadius * 3),
-                          color: Colors.white),
+                      transform: Matrix4.translationValues(0, -20, 0),
+                      padding: EdgeInsets.only(top: 0),
+                      color: Colors.transparent,
                       child: Column(
                         children: [
                           Container(
@@ -34,7 +46,7 @@ class ForgotPassword extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 FormHeading(
-                                  title: 'Forgot Password?',
+                                  title: 'Reset Password',
                                 ),
                                 SizedBox(
                                   height: kVPadding,
@@ -70,6 +82,7 @@ class ForgotPassword extends StatelessWidget {
                                           RegExp(" ")),
                                     ],
                                     autofocus: false,
+                                    controller: model.emailController,
                                     validator: (value) {
                                       return model.emailValidator(value);
                                     },

@@ -12,22 +12,49 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<SignInViewModel>.reactive(
         builder: (context, model, child) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+          return Container(
+            color: kOffWhite,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                body: ListView(
+                  physics: BouncingScrollPhysics(),
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(
-                      height: 300,
+                    Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.zero,
+                          margin: EdgeInsets.zero,
+                          // width: MediaQuery.of(context).size.width,
+                          child: Image(
+                            // color: Colors.green,
+                            image: AssetImage('assets/images/signIn.png'),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            BackButtonWithoutAppBar(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: kHPadding * 1.5),
+                              child: Text(
+                                'Welcome Back ',
+                                style: kCircularStdText.copyWith(
+                                    color: kBlackTextColor,
+                                    fontFamily: kMuliFont,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                     Container(
-                      padding: EdgeInsets.only(top: kVPadding * 4),
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(kBorderRadius * 3),
-                          color: Colors.white),
+                      color: Colors.transparent,
                       child: Column(
                         children: [
                           FormHeading(
@@ -49,6 +76,7 @@ class SignIn extends StatelessWidget {
                                       FilteringTextInputFormatter.deny(
                                           RegExp(" ")),
                                     ],
+                                    controller: model.emailController,
                                     autofocus: false,
                                     validator: (value) {
                                       return model.emailValidator(value);
@@ -112,6 +140,7 @@ class SignIn extends StatelessWidget {
                                       FilteringTextInputFormatter.deny(
                                           RegExp(" ")),
                                     ],
+                                    controller: model.passwordController,
                                     autofocus: false,
                                     validator: (value) {
                                       return model.passwordValidator(value);

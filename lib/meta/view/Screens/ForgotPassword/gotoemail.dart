@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:timely/core/services/navigationService.dart';
+import 'package:timely/meta/view/Screens/MainAppPages/timelypagesdecider.dart';
 import '../../../widgets/components.dart';
 import '../../../widgets/constants.dart';
 
@@ -81,19 +83,24 @@ class _GoToEmailState extends State<GoToEmail> {
                     ),
                     PrimaryButton(
                       title: 'Open Email',
+                      action: () => print('hello'),
                     ),
                     SizedBox(
-                      height: kVPadding * 2,
+                      height: kVPadding * 3,
                     ),
-                    Text(
-                      'Skip for now',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: kGrayTextColor,
-                          fontSize: 14,
-                          fontFamily: kCircularStdFont,
-                          fontWeight: FontWeight.w600,
-                          height: 1.2),
+                    GestureDetector(
+                      onTap: () => NavigationService.instance
+                          .replace(PagesDecider.route),
+                      child: Text(
+                        'Skip for now',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: kGrayTextColor,
+                            fontSize: 16,
+                            fontFamily: kCircularStdFont,
+                            fontWeight: FontWeight.w600,
+                            height: 1.2),
+                      ),
                     ),
                   ],
                 ),

@@ -13,32 +13,75 @@ class SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<SignUpViewModel>.reactive(
         builder: (context, model, child) {
-          return Scaffold(
-            backgroundColor: kOffWhite,
-            body: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+          return Container(
+            color: kOffWhite,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                resizeToAvoidBottomInset: true,
+                body: ListView(
+                  physics: BouncingScrollPhysics(),
                   children: [
-                    Container(
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.zero,
-                      // width: MediaQuery.of(context).size.width,
-                      child: Image(
-                        // color: Colors.green,
-                        image: AssetImage('assets/images/man.png'),
-                      ),
+                    Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.zero,
+                          margin: EdgeInsets.zero,
+                          // width: MediaQuery.of(context).size.width,
+                          child: Image(
+                            // color: Colors.green,
+                            image: AssetImage('assets/images/signUp.png'),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            BackButtonWithoutAppBar(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: kHPadding * 1.5),
+                              child: RichText(
+                                text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                          text: 'Friend,',
+                                          style: kCircularStdText.copyWith(
+                                              fontWeight: FontWeight.w700)),
+                                    ],
+                                    text: 'Hello ',
+                                    style: kCircularStdText.copyWith(
+                                      color: kBlackTextColor,
+                                      fontFamily: kMuliFont,
+                                      fontSize: 28,
+                                    )),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: kHPadding * 1.5),
+                              child: Text(
+                                'Enter your information',
+                                style: kCircularStdText.copyWith(
+                                  color: kBlackTextColor,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
                     Container(
                       color: Colors.white,
                       child: Column(
                         children: [
                           FormHeading(
-                            title: 'Sign Up',
+                            title: 'Create Account',
                           ),
                           Container(
                             margin:
-                                EdgeInsets.symmetric(vertical: kVPadding * 3),
+                                EdgeInsets.symmetric(vertical: kVPadding * 2),
                             padding: EdgeInsets.symmetric(
                               horizontal: kHPadding * 2,
                             ),
@@ -55,6 +98,7 @@ class SignUp extends StatelessWidget {
                                       FilteringTextInputFormatter.allow(
                                           RegExp(kNameRegEx))
                                     ],
+                                    controller: model.nameController,
                                     autofocus: false,
                                     textInputAction: TextInputAction.next,
                                     cursorColor: kPrimaryColor,
@@ -115,6 +159,7 @@ class SignUp extends StatelessWidget {
                                     validator: (value) {
                                       return model.emailValidator(value);
                                     },
+                                    controller: model.emailController,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.deny(
                                           RegExp(" ")),
@@ -175,6 +220,7 @@ class SignUp extends StatelessWidget {
                                     height: kVPadding * 3,
                                   ),
                                   TextFormField(
+                                    controller: model.passwordController,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.deny(
                                           RegExp(" ")),
@@ -269,7 +315,7 @@ class SignUp extends StatelessWidget {
                                   ),
                                   PrimaryButton(
                                     action: () => model.formValidator(),
-                                    title: 'Sign Up',
+                                    title: 'Create Account',
                                   )
                                 ],
                               ),

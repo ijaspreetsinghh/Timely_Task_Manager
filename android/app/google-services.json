@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "961800134180",
+    "project_id": "timely-80246",
+    "storage_bucket": "timely-80246.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961800134180:android:e5952f733d8a2276e1c2b1",
+        "android_client_info": {
+          "package_name": "com.ij.timely"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961800134180-hhnc8m57kqfe4v4t38j61ufvlco0h730.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ij.timely",
+            "certificate_hash": "77febabad46c712a6567eb6d914fba651da8e86b"
+          }
+        },
+        {
+          "client_id": "961800134180-b9jhqddg7oe2o3tv9u35360jpm7ooh8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1fYHYyZSehpsZjz7DZeYBNVQdJmJFOqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961800134180-b9jhqddg7oe2o3tv9u35360jpm7ooh8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

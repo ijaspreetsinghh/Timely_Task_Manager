@@ -1,6 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:timely/core/services/services.dart';
+import 'package:timely/meta/view/Screens/MainAppPages/profileInformationPage.dart';
+import 'package:timely/meta/view/Screens/Onboarding/welcomeScreen.dart';
+import 'core/services/navigationService.dart';
 import 'meta/view/Screens/Onboarding/onboarding.dart';
 import 'meta/view/Screens/ForgotPassword/forgotpassword.dart';
 import 'meta/view/Screens/ForgotPassword/gotoemail.dart';
@@ -10,11 +15,59 @@ import 'meta/view/Screens/SignIn/signin.dart';
 import 'meta/widgets/constants.dart';
 import 'meta/view/Screens/SignUp/signup.dart';
 
+const applicationVersion = '1.0.0+1';
+const applicationName = 'Timely';
+const applicationLegalese = '2021 \u00a9 Timely';
+
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(StartApp());
 }
 
+class StartApp extends StatelessWidget {
+  // Create the initialization Future outside of `build`:
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          return Container(
+            child: Text(
+              'Error',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900),
+            ),
+            color: Colors.red,
+          );
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MyApp();
+        }
+
+        // Otherwise, show something whilst waiting for initialization to complete
+        return Container(
+            decoration: BoxDecoration(color: Colors.white),
+            child: Image(
+              image: AssetImage('assets/images/logo.png'),
+            ));
+      },
+    );
+  }
+}
+
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
+  Services services = Services();
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -25,12 +78,15 @@ class MyApp extends StatelessWidget {
       value: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: NavigationService.instance.navigationKey,
         theme: ThemeData.light().copyWith(
             primaryColor: kPrimaryColor,
             splashColor: kGrayTextColor,
             highlightColor: kGrayTextColor),
         themeMode: ThemeMode.light,
-        initialRoute: Onboarding.route,
+        initialRoute: services.auth.currentUser == null
+            ? OnBoarding.route
+            : PagesDecider.route,
         routes: {
           App.route: (context) => App(),
           ForgotPassword.route: (context) => ForgotPassword(),
@@ -39,20 +95,30 @@ class MyApp extends StatelessWidget {
           GoToEmail.route: (context) => GoToEmail(),
           Schedule.route: (context) => Schedule(),
           PagesDecider.route: (context) => PagesDecider(),
-          Onboarding.route: (context) => Onboarding(),
+          OnBoarding.route: (context) => OnBoarding(),
+          WelcomeScreen.route: (context) => WelcomeScreen(),
+          ProfileInformationPage.route: (context) => ProfileInformationPage(),
         },
       ),
     );
   }
 }
 
+// ignore: must_be_immutable
 class App extends StatefulWidget {
   static const route = 'App';
+  Services services = Services();
   @override
   _AppState createState() => _AppState();
 }
 
 class _AppState extends State<App> {
+  @override
+  void initState() {
+    widget.services.initializeUser();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SignUp();

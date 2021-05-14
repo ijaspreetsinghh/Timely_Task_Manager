@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:timely/core/services/navigationService.dart';
 
 import 'constants.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String title;
   final dynamic action;
-  PrimaryButton({this.title, this.action});
+  final Color buttonColor;
+  final Color buttonBackgroundColor;
+  final Color textColor;
+  final double hPadding;
+  final double vPadding;
+  final double textSize;
+  PrimaryButton(
+      {this.title,
+      this.action,
+      this.buttonBackgroundColor,
+      this.buttonColor,
+      this.textColor,
+      this.hPadding,
+      this.textSize,
+      this.vPadding});
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
       turns: AlwaysStoppedAnimation(357 / 360),
       child: Container(
         decoration: BoxDecoration(
-          color: kPrimaryButtonColor.withOpacity(0.4),
+          color: (buttonBackgroundColor ?? kPrimaryButtonColor).withOpacity(.3),
           borderRadius: BorderRadius.circular(kBorderRadius),
         ),
         child: RotationTransition(
@@ -20,9 +35,12 @@ class PrimaryButton extends StatelessWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 elevation: 0,
-                primary: kPrimaryButtonColor,
+                onPrimary: textColor,
+                shadowColor: Colors.transparent,
+                primary: buttonColor ?? kPrimaryButtonColor,
                 padding: EdgeInsets.symmetric(
-                    horizontal: kHPadding * 1.5, vertical: kVPadding * 1.3),
+                    horizontal: hPadding ?? (kHPadding * 1.5),
+                    vertical: vPadding ?? (kVPadding * 1.3)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(kBorderRadius),
                 )),
@@ -33,9 +51,10 @@ class PrimaryButton extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: textSize ?? 18,
+                      color: textColor ?? Colors.white,
                       fontFamily: kCircularStdFont,
-                      fontWeight: FontWeight.w400),
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -48,14 +67,18 @@ class PrimaryButton extends StatelessWidget {
 
 class FormHeading extends StatelessWidget {
   final String title;
-  FormHeading({@required this.title});
+  final Color color;
+  final double fontSize;
+  FormHeading({@required this.title, this.color, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
     return Text(title,
         textAlign: TextAlign.left,
         style: kCircularStdText.copyWith(
-            fontSize: 22, fontWeight: FontWeight.w700, color: kBlackTextColor));
+            fontSize: fontSize ?? 22,
+            fontWeight: FontWeight.w700,
+            color: color ?? kBlackTextColor));
   }
 }
 
@@ -357,6 +380,121 @@ class TimeLineTaskBuilder extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BackButtonWithoutAppBar extends StatelessWidget {
+  final Color iconColor;
+  const BackButtonWithoutAppBar({this.iconColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.arrow_back_ios_rounded,
+        color: iconColor ?? kPrimaryColor,
+        size: 24,
+      ),
+      onPressed: () => NavigationService.instance.goBack(),
+    );
+  }
+}
+
+class OnBoardingPageTitle extends StatelessWidget {
+  final String pageTitle;
+  OnBoardingPageTitle(
+      {@required this.pageTitle, @required this.topMargin, this.textColor});
+  final double topMargin;
+  final Color textColor;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        left: kHPadding * 2,
+        right: kHPadding * 2,
+        top: topMargin,
+      ),
+      alignment: AlignmentDirectional.topStart,
+      child: Text(
+        pageTitle,
+        style: kCircularStdText.copyWith(
+            color: textColor ?? kBlackTextColor,
+            fontSize: 26,
+            fontFamily: kMuliFont,
+            height: 1.3,
+            fontWeight: FontWeight.w800),
+      ),
+    );
+  }
+}
+
+class OnBoardingImage extends StatelessWidget {
+  final String imagePath;
+  final double verticalPadding;
+  OnBoardingImage({@required this.imagePath, @required this.verticalPadding});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: verticalPadding),
+      child: Image(
+        image: AssetImage(imagePath),
+      ),
+    );
+  }
+}
+
+class ProfileEntryField extends StatelessWidget {
+  final String buttonTitle;
+  final String entryText;
+  final Function action;
+  ProfileEntryField(
+      {@required this.action,
+      @required this.buttonTitle,
+      @required this.entryText});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            entryText,
+            overflow: TextOverflow.ellipsis,
+            style: kCircularStdText.copyWith(
+                fontWeight: FontWeight.w700,
+                color: kBlackTextColor,
+                fontSize: 18),
+          ),
+        ),
+        SizedBox(
+          width: kHPadding / 2,
+        ),
+        GestureDetector(
+          onTap: action,
+          child: Container(
+            margin: EdgeInsets.only(top: kVPadding),
+            decoration: BoxDecoration(
+              color: kBlackTextColor,
+              // border: Border.all(color: kGreyWhite, width: 2),
+              borderRadius: BorderRadius.circular(kBorderRadius / 2),
+            ),
+            padding: EdgeInsets.symmetric(
+                horizontal: kHPadding, vertical: kVPadding / 1.5),
+            child: Text(
+              buttonTitle,
+              overflow: TextOverflow.ellipsis,
+              style: kCircularStdText.copyWith(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

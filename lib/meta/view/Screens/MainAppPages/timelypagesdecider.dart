@@ -17,9 +17,13 @@ class PagesDecider extends StatefulWidget {
 class _PagesDeciderState extends State<PagesDecider> {
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 2) {
+      _showBottomSheet();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   void _showBottomSheet() {
@@ -31,7 +35,7 @@ class _PagesDeciderState extends State<PagesDecider> {
         isDismissible: true,
         builder: (BuildContext bc) {
           return Container(
-            height: MediaQuery.of(context).size.height * .7,
+            // height: MediaQuery.of(context).size.height * .7,
             padding: EdgeInsets.fromLTRB(
                 kHPadding * .7, kVPadding * 1.5, kHPadding * .7, kVPadding),
             decoration: BoxDecoration(
@@ -309,48 +313,54 @@ class _PagesDeciderState extends State<PagesDecider> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_selectedIndex],
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: kPrimaryColor,
-          child: Icon(
-            Icons.add_rounded,
-            size: 36,
-          ),
-          onPressed: () => _showBottomSheet()),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sort_rounded),
-            label: 'My Tasks',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.add,
-              color: Colors.transparent,
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent),
+        child: BottomNavigationBar(
+          elevation: 10,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: 'Home',
             ),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today_rounded),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_rounded),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: kGrayTextColor.withOpacity(.5),
-        selectedItemColor: kPrimaryColor,
-        iconSize: 24,
-        onTap: _onItemTapped,
+            BottomNavigationBarItem(
+              icon: Icon(Icons.sort_rounded),
+              label: 'My Tasks',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(50)),
+                padding: EdgeInsets.all(7),
+                child: Icon(
+                  Icons.add_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              label: 'Schedule',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today_rounded),
+              label: 'Schedule',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          unselectedItemColor: kBlackTextColor.withOpacity(.4),
+          selectedItemColor: kPrimaryColor,
+          iconSize: 28,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

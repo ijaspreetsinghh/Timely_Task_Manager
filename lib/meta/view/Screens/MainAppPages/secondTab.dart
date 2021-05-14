@@ -11,7 +11,7 @@ class SecondTab extends StatefulWidget {
 }
 
 class _SecondTabState extends State<SecondTab> {
-  DateTime _selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class _SecondTabState extends State<SecondTab> {
                       onDateChange: (date) {
                         // New date selected
                         setState(() {
-                          _selectedDate = date;
+                          selectedDate = date;
                         });
                       },
                     ),
@@ -94,6 +94,7 @@ class _SecondTabState extends State<SecondTab> {
                       topLeft: Radius.circular(kBorderRadius * 2),
                       topRight: Radius.circular(kBorderRadius * 2))),
               child: ListView(
+                physics: BouncingScrollPhysics(),
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   FormHeading(title: 'My Tasks'),

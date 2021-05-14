@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-
-import '../../meta/widgets/constants.dart';
+import 'package:timely/core/services/services.dart';
 
 class SignInViewModel extends BaseViewModel {
   GlobalKey<FormState> signInFormKey = GlobalKey();
@@ -9,7 +8,10 @@ class SignInViewModel extends BaseViewModel {
     Icons.lock_outline_rounded,
     size: 18,
   );
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
+  Services services = Services();
   bool obscureText = true;
   var autoValidate = AutovalidateMode.disabled;
   void toggle() {
@@ -27,28 +29,20 @@ class SignInViewModel extends BaseViewModel {
   }
 
   String emailValidator(value) {
-    if (value == null || value.isEmpty) {
-      return 'Email cannot be blank';
-    } else if (!RegExp(kRegExp).hasMatch(value)) {
-      return 'Not an email';
-    }
-    return null;
+    return services.emailValidator(value);
   }
 
   String passwordValidator(value) {
-    if (value == null || value.isEmpty) {
-      return '6-30 characters password';
-    } else if (value.length < 6) {
-      return 'Minimum 6 characters';
-    } else if (value.length > 30) {
-      return 'Maximum 30 characters';
-    }
-    return null;
+    return services.passwordValidator(value);
   }
 
   void formValidator() {
+    String email = emailController.text;
+    String password = passwordController.text;
     autoValidate = AutovalidateMode.onUserInteraction;
     notifyListeners();
-    if (signInFormKey.currentState.validate()) {}
+    if (signInFormKey.currentState.validate()) {
+      services.signInUser(thisEmail: email, thisPassword: password);
+    }
   }
 }

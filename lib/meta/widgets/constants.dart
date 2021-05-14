@@ -7,7 +7,7 @@ const kYellowColor = Color(0xfffad229);
 const kGreenColor = Color(0xff6BCF87);
 const kRedColor = Color(0xffed667c);
 const kAquaColor = Color(0xff70E8DB);
-const kBlackTextColor = Color(0xff333333);
+const kBlackTextColor = Color(0xff222222);
 const kGrayTextColor = Color(0xff777777);
 const kOffWhite = Color(0xffFFF3C1);
 const kHPadding = 16.0;
@@ -16,9 +16,8 @@ const kVPadding = 10.0;
 const kGreyWhite = Color(0xffF4F5F9);
 const kMuliFont = 'Muli';
 const kCircularStdFont = 'CircularStd';
-const kCircularStdText = TextStyle(
-  fontFamily: kCircularStdFont,
-);
+const kCircularStdText =
+    TextStyle(fontFamily: kCircularStdFont, color: kBlackTextColor);
 const kErrorTextStyle = TextStyle(
   fontFamily: kCircularStdFont,
   color: kRedColor,
@@ -39,4 +38,4 @@ const kLabelTextStyle = TextStyle(
     fontWeight: FontWeight.w500);
 const kRegExp =
     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-const kNameRegEx = r"[a-zA-Z]";
+const kNameRegEx = r"[a-z A-Z]";
