@@ -325,11 +325,25 @@ class _PagesDeciderState extends State<PagesDecider> {
           showSelectedLabels: false,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
+              icon: Image(
+                image: AssetImage('assets/images/homeGrey.png'),
+                height: 28,
+              ),
+              activeIcon: Image(
+                image: AssetImage('assets/images/homeBlue.png'),
+                height: 28,
+              ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.sort_rounded),
+              icon: Image(
+                image: AssetImage('assets/images/listGrey.png'),
+                height: 28,
+              ),
+              activeIcon: Image(
+                image: AssetImage('assets/images/listBlue.png'),
+                height: 28,
+              ),
               label: 'My Tasks',
             ),
             BottomNavigationBarItem(
@@ -347,11 +361,25 @@ class _PagesDeciderState extends State<PagesDecider> {
               label: 'Schedule',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today_rounded),
+              icon: Image(
+                image: AssetImage('assets/images/calendarGrey.png'),
+                height: 28,
+              ),
+              activeIcon: Image(
+                image: AssetImage('assets/images/calendarBlue.png'),
+                height: 28,
+              ),
               label: 'Schedule',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Image(
+                image: AssetImage('assets/images/userSettingGrey.png'),
+                height: 28,
+              ),
+              activeIcon: Image(
+                image: AssetImage('assets/images/userSettingBlue.png'),
+                height: 28,
+              ),
               label: 'Settings',
             ),
           ],

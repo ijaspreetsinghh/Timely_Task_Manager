@@ -297,7 +297,8 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                           ProfileEntryField(
                             entryText: '• • • • • • • •',
                             buttonTitle: 'Change',
-                            action: () => print('changed'),
+                            action: () =>
+                                model.showUpdatePassword(ctx: context),
                           ),
                         ],
                       ),

@@ -63,8 +63,7 @@ class Services extends ChangeNotifier {
         .then((value) async {
       await auth.currentUser.updateEmail(email).then((value) async {
         NavigationService.instance.hideLoader();
-        await auth.currentUser.sendEmailVerification();
-        NavigationService.instance.replace(GoToEmail.route);
+        NavigationService.instance.replace(PagesDecider.route);
       }).catchError((error) {
         NavigationService.instance.hideLoader();
         NavigationService.instance.showAlertWithOneButton(
@@ -79,6 +78,46 @@ class Services extends ChangeNotifier {
         NavigationService.instance.showAlertWithOneButton(
             title: 'Wrong password',
             content: 'Email can not be updated without the current password.',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try Again');
+      }
+    });
+  }
+
+  Future updatePassword(currentPassword, newPassword) async {
+    NavigationService.instance.goBack();
+    NavigationService.instance.showLoader(title: 'Updating');
+    return auth.currentUser
+        .reauthenticateWithCredential(EmailAuthProvider.credential(
+            email: auth.currentUser.email, password: currentPassword))
+        .then((value) async {
+      await auth.currentUser.updatePassword(newPassword).then((value) async {
+        NavigationService.instance.hideLoader();
+
+        NavigationService.instance.showAlertWithOneButton(
+          title: 'Success',
+          content:
+              "Your password has been changed successfully for account '${auth.currentUser.email}'",
+          primaryActionTitle: 'OK',
+          primaryAction: () {
+            NavigationService.instance.goBack();
+            NavigationService.instance.replace(PagesDecider.route);
+          },
+        );
+      }).catchError((error) {
+        NavigationService.instance.hideLoader();
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Error',
+            content: 'Something went wrong. ${error.code}',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'OK');
+      });
+    }).catchError((error) {
+      NavigationService.instance.hideLoader();
+      if (error.code == 'wrong-password') {
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Wrong password',
+            content: 'Please check your current password and try again.',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try Again');
       }

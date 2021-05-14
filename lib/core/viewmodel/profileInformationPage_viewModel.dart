@@ -16,6 +16,7 @@ class ProfileInformationPageViewModel extends BaseViewModel {
   );
   bool obscureText = true;
   void toggle() {
+    print('togl');
     obscureText = !obscureText;
     obscureText == true
         ? showPasswordIcon = Icon(
@@ -30,12 +31,14 @@ class ProfileInformationPageViewModel extends BaseViewModel {
   }
 
   GlobalKey<FormState> updateEmailFormKey = GlobalKey();
+  GlobalKey<FormState> updatePasswordFormKey = GlobalKey();
   AutovalidateMode autoValidate = AutovalidateMode.onUserInteraction;
   TextEditingController nameController =
       TextEditingController(text: Services().auth.currentUser.displayName);
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController currentPasswordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
+  TextEditingController currentPasswordController =
+      TextEditingController(text: '');
 
   void updateNameFormValidator() {
     notifyListeners();
@@ -52,6 +55,14 @@ class ProfileInformationPageViewModel extends BaseViewModel {
     }
   }
 
+  void updatePasswordFormValidator() {
+    notifyListeners();
+    if (updatePasswordFormKey.currentState.validate()) {
+      services.updatePassword(
+          currentPasswordController.text, passwordController.text);
+    }
+  }
+
   logOut() async {
     // services.initializeUser();
     await services.logOut();
@@ -61,16 +72,25 @@ class ProfileInformationPageViewModel extends BaseViewModel {
     return services.nameValidator(value);
   }
 
-  String passwordValidator(value) {
-    return services.passwordValidator(value);
-  }
-
   String currentPasswordValidator(value) {
     if (value == null ||
         value.isEmpty ||
         value.length < 6 ||
         value.length > 30) {
       return 'Enter your current password.';
+    }
+    return null;
+  }
+
+  String newPasswordValidator(value) {
+    if (value == null || value.isEmpty) {
+      return '6-30 characters password';
+    } else if (value.length < 6) {
+      return 'Minimum 6 characters';
+    } else if (value.length > 30) {
+      return 'Maximum 30 characters';
+    } else if (value == currentPasswordController.text) {
+      return 'New password cannot not be same.';
     }
     return null;
   }
@@ -190,7 +210,7 @@ class ProfileInformationPageViewModel extends BaseViewModel {
                           action: () {
                             updateNameFormValidator();
                           },
-                          title: 'Update',
+                          title: 'Update Name',
                           textColor: Colors.white,
                           buttonColor: kPrimaryColor,
                           buttonBackgroundColor: kPrimaryColor.withOpacity(.3),
@@ -380,7 +400,205 @@ class ProfileInformationPageViewModel extends BaseViewModel {
                           action: () {
                             updateEmailFormValidator();
                           },
-                          title: 'Update',
+                          title: 'Update Email',
+                          textColor: Colors.white,
+                          buttonColor: kPrimaryColor,
+                          buttonBackgroundColor: kPrimaryColor.withOpacity(.3),
+                        ),
+                        SizedBox(
+                          height: kVPadding * 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  void showUpdatePassword({
+    BuildContext ctx,
+  }) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        elevation: 20,
+        backgroundColor: Colors.transparent,
+        context: ctx,
+        builder: (ctx) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xffbbbbb9),
+                      borderRadius: BorderRadius.circular(kBorderRadius)),
+                  height: 3,
+                  width: 75,
+                  alignment: AlignmentDirectional.center,
+                ),
+                SizedBox(
+                  height: kVPadding,
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(kHPadding * 1.5, kVPadding * 2,
+                      kHPadding * 1.5, kVPadding),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(kBorderRadius * 2),
+                          topRight: Radius.circular(kBorderRadius * 2))),
+                  child: Form(
+                    key: updatePasswordFormKey,
+                    autovalidateMode: autoValidate,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FormHeading(title: 'Change Password'),
+                        SizedBox(
+                          height: kVPadding * 4,
+                        ),
+                        TextFormField(
+                          controller: currentPasswordController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(" ")),
+                          ],
+                          validator: (value) {
+                            return currentPasswordValidator(value);
+                          },
+                          autofocus: false,
+                          textInputAction: TextInputAction.done,
+                          cursorColor: kPrimaryColor,
+                          obscureText: obscureText,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
+                          style: kCircularStdText.copyWith(fontSize: 16),
+                          decoration: InputDecoration(
+                            errorStyle: kErrorTextStyle,
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                color: kRedColor,
+                                width: 2,
+                              ),
+                            ),
+                            isDense: true,
+                            suffixIcon: IconButton(
+                              icon: showPasswordIcon,
+                              onPressed: () => toggle(),
+                              padding: EdgeInsets.only(right: kHPadding),
+                            ),
+                            hintText: '• • • • • • • •',
+                            hintStyle: kHintTextStyle.copyWith(fontSize: 12),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: kHPadding * 1.5,
+                                vertical: kVPadding * 1.7),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            labelText: 'Current Password',
+                            labelStyle: kLabelTextStyle,
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                color: kPrimaryColor,
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                color: kPrimaryColor,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: kVPadding * 3,
+                        ),
+                        TextFormField(
+                          controller: passwordController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(" ")),
+                          ],
+                          validator: (value) {
+                            return newPasswordValidator(value);
+                          },
+                          autofocus: false,
+                          textInputAction: TextInputAction.done,
+                          cursorColor: kPrimaryColor,
+                          obscureText: obscureText,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
+                          style: kCircularStdText.copyWith(fontSize: 16),
+                          decoration: InputDecoration(
+                            errorStyle: kErrorTextStyle,
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                color: kRedColor,
+                                width: 2,
+                              ),
+                            ),
+                            isDense: true,
+                            suffixIcon: IconButton(
+                              tooltip: 'hi',
+                              icon: showPasswordIcon,
+                              onPressed: () => toggle(),
+                              padding: EdgeInsets.only(right: kHPadding),
+                            ),
+                            hintText: '• • • • • • • •',
+                            hintStyle: kHintTextStyle.copyWith(fontSize: 12),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: kHPadding * 1.5,
+                                vertical: kVPadding * 1.7),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            labelText: 'New Password',
+                            labelStyle: kLabelTextStyle,
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                color: kPrimaryColor,
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                              borderSide: BorderSide(
+                                color: kPrimaryColor,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: kVPadding * 3,
+                        ),
+                        PrimaryButton(
+                          action: () {
+                            updatePasswordFormValidator();
+                          },
+                          title: 'Change Password',
                           textColor: Colors.white,
                           buttonColor: kPrimaryColor,
                           buttonBackgroundColor: kPrimaryColor.withOpacity(.3),
