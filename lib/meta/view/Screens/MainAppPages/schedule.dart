@@ -75,6 +75,9 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ScheduleViewModel>.reactive(
+        onModelReady: (model) => model.initiate(),
+        initialiseSpecialViewModelsOnce: true,
+        fireOnModelReadyOnce: true,
         builder: (context, model, child) {
           return Container(
             color: kPrimaryColor,
@@ -101,7 +104,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Hello, ${model.services.auth.currentUser.displayName}',
+                                  'Hello, ${model.displayName}',
                                   style: kCircularStdText.copyWith(
                                       color: Colors.white,
                                       fontSize: 20,

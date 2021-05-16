@@ -6,12 +6,16 @@ import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/viewmodel/fifthTab_viewModel.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/profileInformationPage.dart';
 import 'package:timely/meta/widgets/components.dart';
+import '../../../../main.dart';
 import '../../../widgets/constants.dart';
 
 class FifthTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<FifthTabViewModel>.reactive(
+        onModelReady: (model) => model.initialize(),
+        fireOnModelReadyOnce: true,
+        initialiseSpecialViewModelsOnce: true,
         builder: (context, model, child) {
           return Container(
             color: Colors.white,
@@ -38,16 +42,10 @@ class FifthTab extends StatelessWidget {
                           Hero(
                             tag: 'Display Image',
                             child: CircleAvatar(
-                              backgroundColor: kGreyWhite,
                               radius: 35,
-                              backgroundImage:
-                                  AssetImage('assets/images/logo.png'),
-                              child: CircleAvatar(
-                                radius: 35,
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: NetworkImage(
-                                    'https://picsum.photos/250?image=9'),
-                              ),
+                              backgroundColor: kBlackTextColor.withOpacity(.03),
+                              backgroundImage: NetworkImage(model.photoURL ??
+                                  defaultProfilePictureLocation),
                             ),
                           ),
                           SizedBox(
@@ -62,9 +60,7 @@ class FifthTab extends StatelessWidget {
                                   child: Material(
                                     type: MaterialType.transparency,
                                     child: Text(
-                                      model.services.auth.currentUser
-                                              .displayName ??
-                                          'NA',
+                                      model.displayName ?? 'NA',
                                       overflow: TextOverflow.ellipsis,
                                       style: kCircularStdText.copyWith(
                                           fontSize: 22,
@@ -77,8 +73,7 @@ class FifthTab extends StatelessWidget {
                                   child: Material(
                                     type: MaterialType.transparency,
                                     child: Text(
-                                      model.services.auth.currentUser.email ??
-                                          'NA',
+                                      model.email ?? 'NA',
                                       overflow: TextOverflow.ellipsis,
                                       style: kCircularStdText.copyWith(
                                           color:

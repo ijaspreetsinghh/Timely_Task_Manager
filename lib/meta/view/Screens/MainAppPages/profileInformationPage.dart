@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/viewmodel/profileInformationPage_viewModel.dart';
+import 'package:timely/main.dart';
 
 import 'package:timely/meta/widgets/components.dart';
 import 'package:timely/meta/widgets/constants.dart';
@@ -39,9 +40,9 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileInformationPageViewModel>.reactive(
-        // onModelReady: (model) => model.initialize(),
-        fireOnModelReadyOnce: true,
-        initialiseSpecialViewModelsOnce: true,
+        onModelReady: (model) => model.initialize(),
+        // fireOnModelReadyOnce: true,
+        // initialiseSpecialViewModelsOnce: true,
         builder: (context, model, child) {
           return Container(
             color: Colors.white,
@@ -71,39 +72,43 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                           EdgeInsets.symmetric(horizontal: kHPadding * 1.5),
                       child: Row(
                         children: [
-                          Stack(
-                            children: [
-                              Hero(
-                                child: CircleAvatar(
-                                  backgroundColor: kGreyWhite,
-                                  radius: 45,
-                                  backgroundImage:
-                                      AssetImage('assets/images/logo.png'),
-                                  child: CircleAvatar(
-                                    radius: 45,
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage: NetworkImage(
-                                        'https://picsum.photos/250?image=9'),
-                                  ),
-                                ),
-                                tag: 'Display Image',
+                          Hero(
+                            child: GestureDetector(
+                              onTap: () => NavigationService.instance
+                                  .showAlertWithTwoButtonsWithoutText(
+                                primaryActionTitle: 'Change Photo',
+                                secondaryActionTitle: 'Cancel',
+                                primaryAction: () {
+                                  NavigationService.instance.goBack();
+                                  model.openGallery(context);
+                                },
+                                secondaryAction: () =>
+                                    NavigationService.instance.goBack(),
                               ),
-                              Positioned(
-                                right: 0,
+                              child: CircleAvatar(
+                                radius: 45,
+                                backgroundColor:
+                                    kBlackTextColor.withOpacity(.03),
+                                backgroundImage: NetworkImage(model.photoURL ??
+                                    defaultProfilePictureLocation),
                                 child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.white, width: 2),
-                                        color: kBlackTextColor,
-                                        shape: BoxShape.circle),
-                                    padding: EdgeInsets.all(4),
-                                    child: Icon(
-                                      Icons.edit_rounded,
-                                      color: kGreyWhite,
-                                      size: 16,
-                                    )),
-                              )
-                            ],
+                                  alignment: AlignmentDirectional.topEnd,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.white, width: 2),
+                                          color: Colors.black,
+                                          shape: BoxShape.circle),
+                                      padding: EdgeInsets.all(4),
+                                      child: Icon(
+                                        Icons.edit_rounded,
+                                        color: kGreyWhite,
+                                        size: 16,
+                                      )),
+                                ),
+                              ),
+                            ),
+                            tag: 'Display Image',
                           ),
                           SizedBox(
                             width: kHPadding * 1.5,
@@ -273,9 +278,7 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                             child: Material(
                               type: MaterialType.transparency,
                               child: ProfileEntryField(
-                                entryText:
-                                    model.services.auth.currentUser.email ??
-                                        'NA',
+                                entryText: model.email ?? 'NA',
                                 buttonTitle: 'Edit',
                                 action: () =>
                                     model.showUpdateEmail(ctx: context),

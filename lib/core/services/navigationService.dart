@@ -21,6 +21,10 @@ class NavigationService {
     return navigationKey.currentState.pushNamed(_rn);
   }
 
+  Future<dynamic> pushReplace(String _rn) {
+    return navigationKey.currentState.pushReplacementNamed(_rn);
+  }
+
   Future<dynamic> materialRoute(MaterialPageRoute _rn) {
     return navigationKey.currentState.push(_rn);
   }
@@ -64,6 +68,24 @@ class NavigationService {
         builder: (context) => AlertBoxWithTwoButton(
               title: title,
               content: content,
+              action1: primaryAction,
+              action2: secondaryAction,
+              titleAction1: primaryActionTitle,
+              titleAction2: secondaryActionTitle,
+            ));
+  }
+
+  showAlertWithTwoButtonsWithoutText({
+    primaryAction,
+    secondaryAction,
+    primaryActionTitle,
+    secondaryActionTitle,
+  }) {
+    return showDialog(
+        barrierColor: Colors.black.withOpacity(.7),
+        // barrierDismissible: false,
+        context: navigationKey.currentContext,
+        builder: (context) => AlertBoxWithTwoButtonWithoutText(
               action1: primaryAction,
               action2: secondaryAction,
               titleAction1: primaryActionTitle,
@@ -609,6 +631,106 @@ class _AboutAppDialog extends State<AboutAppDialog>
                   ),
                   Container(
                     transform: Matrix4.translationValues(0, 6, 0),
+                    child: TextButton(
+                        onPressed: widget.action2,
+                        style: TextButton.styleFrom(
+                            primary: kBlackTextColor,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: kHPadding * 1.5,
+                                vertical: kVPadding * 2)),
+                        child: Text(
+                          widget.titleAction2,
+                          style: kCircularStdText.copyWith(
+                              color: kBlackTextColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700),
+                        )),
+                  )
+                ],
+              )),
+        ),
+      ),
+    );
+  }
+}
+
+class AlertBoxWithTwoButtonWithoutText extends StatefulWidget {
+  final Function action1;
+  final Function action2;
+  final String titleAction1;
+  final String titleAction2;
+
+  AlertBoxWithTwoButtonWithoutText({
+    @required this.action1,
+    @required this.action2,
+    @required this.titleAction1,
+    @required this.titleAction2,
+  });
+
+  @override
+  _AlertBoxWithTwoButtonWithoutText createState() =>
+      _AlertBoxWithTwoButtonWithoutText();
+}
+
+class _AlertBoxWithTwoButtonWithoutText
+    extends State<AlertBoxWithTwoButtonWithoutText>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    scaleAnimation =
+        CurvedAnimation(parent: controller, curve: Curves.linearToEaseOut);
+
+    controller.addListener(() {
+      setState(() {});
+    });
+
+    controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Material(
+        color: Colors.transparent,
+        child: ScaleTransition(
+          scale: scaleAnimation,
+          child: Container(
+              width: 275,
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(kBorderRadius))),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    child: TextButton(
+                        onPressed: widget.action1,
+                        style: TextButton.styleFrom(
+                            primary: kPrimaryColor,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: kHPadding * 1.5,
+                                vertical: kVPadding * 2)),
+                        child: Text(
+                          widget.titleAction1,
+                          style: kCircularStdText.copyWith(
+                              color: kPrimaryColor, fontSize: 16),
+                        )),
+                  ),
+                  Container(
+                    height: .5,
+                    color: kBlackTextColor.withOpacity(.2),
+                  ),
+                  Container(
                     child: TextButton(
                         onPressed: widget.action2,
                         style: TextButton.styleFrom(

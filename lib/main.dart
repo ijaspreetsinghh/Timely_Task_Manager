@@ -18,6 +18,8 @@ import 'meta/view/Screens/SignUp/signup.dart';
 const applicationVersion = '1.0.0+1';
 const applicationName = 'Timely';
 const applicationLegalese = '2021 \u00a9 Timely';
+const defaultProfilePictureLocation =
+    'https://firebasestorage.googleapis.com/v0/b/timely-80246.appspot.com/o/profile.png?alt=media&token=a6994fcb-5b8a-4f61-8407-4eea93d7d532';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,8 +58,8 @@ class StartApp extends StatelessWidget {
         // Otherwise, show something whilst waiting for initialization to complete
         return Container(
             decoration: BoxDecoration(color: Colors.white),
-            child: Image(
-              image: AssetImage('assets/images/logo.png'),
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
             ));
       },
     );
@@ -115,8 +117,12 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
-    widget.services.initializeUser();
+    loadUser();
     super.initState();
+  }
+
+  loadUser() async {
+    widget.services.initializeUser();
   }
 
   @override

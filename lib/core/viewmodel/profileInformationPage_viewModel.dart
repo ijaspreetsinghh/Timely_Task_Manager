@@ -1,13 +1,23 @@
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/core/services/services.dart';
 import 'package:timely/meta/widgets/components.dart';
 import 'package:flutter/material.dart';
 import 'package:timely/meta/widgets/constants.dart';
+import 'dart:io';
 
 class ProfileInformationPageViewModel extends BaseViewModel {
   Services services = Services();
   bool isProUser = true;
+  String _photoURL;
+  String _email;
+  get email => _email;
+  get photoURL => _photoURL;
+  initialize() {
+    _photoURL = services.auth.currentUser.photoURL;
+    _email = services.auth.currentUser.email;
+  }
 
   GlobalKey<FormState> updateNameFormKey = GlobalKey();
   var showPasswordIcon = Icon(
@@ -34,7 +44,7 @@ class ProfileInformationPageViewModel extends BaseViewModel {
   GlobalKey<FormState> updatePasswordFormKey = GlobalKey();
   AutovalidateMode autoValidate = AutovalidateMode.onUserInteraction;
   TextEditingController nameController =
-      TextEditingController(text: Services().auth.currentUser.displayName);
+      TextEditingController(text: Services().displayName);
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
   TextEditingController currentPasswordController =
@@ -53,6 +63,15 @@ class ProfileInformationPageViewModel extends BaseViewModel {
       services.updateEmail(
           emailController.text, currentPasswordController.text);
     }
+  }
+
+  void openGallery(BuildContext context) async {
+    final pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    );
+
+    await services.uploadImageToFirebase(
+        context: context, thisImageFile: File(pickedFile.path));
   }
 
   void updatePasswordFormValidator() {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/meta/view/Screens/ForgotPassword/gotoemail.dart';
@@ -11,25 +12,66 @@ import 'package:timely/meta/widgets/constants.dart';
 class Services extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
-  String _displayName;
-  get displayName => _displayName;
-  String _email;
-  get email => _email;
-  bool _isEmailVerified;
-  get isEmailVerified => _isEmailVerified;
-  Future initializeUser() async {
-    _displayName = await auth.currentUser.displayName;
-    _email = await auth.currentUser.email;
-    _isEmailVerified = await auth.currentUser.emailVerified;
+  String displayName;
+  String email;
+  String photoUrl;
+  bool isEmailVerified;
+  final firebaseStorageRef = FirebaseStorage.instance.ref();
+  bool isPro;
+
+  initializeUser() {
+    photoUrl = auth.currentUser.photoURL;
+    displayName = auth.currentUser.displayName;
+    email = auth.currentUser.email;
+    isEmailVerified = auth.currentUser.emailVerified;
+    isPro = false;
     notifyListeners();
     print('Current User Initialized');
     print('email ${auth.currentUser.emailVerified}');
-    print('_isEmailVerified $_isEmailVerified');
+    // print('_isEmailVerified $_isEmailVerified')
+  }
+
+  Future uploadImageToFirebase({BuildContext context, thisImageFile}) async {
+    NavigationService.instance.showLoader(title: 'Setting Profile Image');
+    var snapshot = await firebaseStorageRef
+        .child('ProfilePictures/${Services().auth.currentUser.uid}')
+        .putFile(thisImageFile)
+        .catchError((onError) {
+      NavigationService.instance.hideLoader();
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Error',
+          content: 'Something went wrong while uploading profile image.',
+          primaryActionTitle: 'Close',
+          primaryAction: () => NavigationService.instance.goBack());
+    });
+
+    await snapshot.ref.getDownloadURL().then((value) async {
+      await auth.currentUser
+          .updateProfile(photoURL: value)
+          .catchError((onError) {
+        NavigationService.instance.hideLoader();
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Error',
+            content: 'Something went wrong while setting profile image.',
+            primaryActionTitle: 'Close',
+            primaryAction: () => NavigationService.instance.goBack());
+      });
+      NavigationService.instance.hideLoader();
+      NavigationService.instance.replace(PagesDecider.route);
+      print('done');
+    }).catchError((onError) {
+      NavigationService.instance.hideLoader();
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Error',
+          content: 'Something went wrong while uploading profile image.',
+          primaryActionTitle: 'Close',
+          primaryAction: () => NavigationService.instance.goBack());
+    });
   }
 
   Future updateDisplayName(name) async {
     NavigationService.instance.goBack();
-    NavigationService.instance.showLoader(title: 'Updating');
+    NavigationService.instance.showLoader(title: 'Updating Name');
 
     return await auth.currentUser
         .updateProfile(displayName: name)
@@ -61,9 +103,19 @@ class Services extends ChangeNotifier {
         .reauthenticateWithCredential(EmailAuthProvider.credential(
             email: auth.currentUser.email, password: currentPassword))
         .then((value) async {
-      await auth.currentUser.updateEmail(email).then((value) async {
+      await auth.currentUser
+          .verifyBeforeUpdateEmail(
+        email,
+      )
+          .then((value) async {
         NavigationService.instance.hideLoader();
-        NavigationService.instance.replace(PagesDecider.route);
+        await NavigationService.instance.replace(WelcomeScreen.route);
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Email Changed',
+            content:
+                "Your sign in email has been changed to '$email'. You may need to sign in again with the new email.",
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Sign In Now');
       }).catchError((error) {
         NavigationService.instance.hideLoader();
         NavigationService.instance.showAlertWithOneButton(
