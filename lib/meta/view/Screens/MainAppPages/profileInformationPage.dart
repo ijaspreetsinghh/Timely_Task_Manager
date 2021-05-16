@@ -75,13 +75,16 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                           Hero(
                             child: GestureDetector(
                               onTap: () => NavigationService.instance
-                                  .showAlertWithTwoButtonsWithoutText(
-                                primaryActionTitle: 'Change Photo',
+                                  .showAlertWithTwoButtons(
+                                primaryActionTitle: 'Select form gallery',
                                 secondaryActionTitle: 'Cancel',
                                 primaryAction: () {
                                   NavigationService.instance.goBack();
                                   model.openGallery(context);
                                 },
+                                title: 'Change Photo',
+                                content:
+                                    'Put your favourite image as your profile picture.',
                                 secondaryAction: () =>
                                     NavigationService.instance.goBack(),
                               ),

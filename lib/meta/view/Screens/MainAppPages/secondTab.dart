@@ -44,34 +44,38 @@ class _SecondTabState extends State<SecondTab> {
                   SizedBox(
                     height: kVPadding,
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: kHPadding / 2),
-                    child: DatePicker(
-                      DateTime.now(),
-                      initialSelectedDate: DateTime.now(),
-                      selectedTextColor: Colors.black,
-                      selectionColor: Colors.white,
-                      monthTextStyle: TextStyle(
-                          fontFamily: kCircularStdFont,
-                          color: Colors.white,
-                          fontSize: 11),
-                      dateTextStyle: TextStyle(
-                          fontFamily: kCircularStdFont,
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600),
-                      dayTextStyle: TextStyle(
-                          fontFamily: kCircularStdFont,
-                          color: Colors.white,
-                          fontSize: 11),
-                      daysCount: 15,
-                      onDateChange: (date) {
-                        // New date selected
-                        setState(() {
-                          selectedDate = date;
-                        });
-                      },
-                    ),
+                  Wrap(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: kHPadding / 2),
+                        child: DatePicker(
+                          DateTime.now(),
+                          initialSelectedDate: DateTime.now(),
+                          selectedTextColor: Colors.black,
+                          selectionColor: Colors.white,
+                          monthTextStyle: TextStyle(
+                              fontFamily: kCircularStdFont,
+                              color: Colors.white,
+                              fontSize: 11),
+                          dateTextStyle: TextStyle(
+                              fontFamily: kCircularStdFont,
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                          dayTextStyle: TextStyle(
+                              fontFamily: kCircularStdFont,
+                              color: Colors.white,
+                              fontSize: 11),
+                          daysCount: 15,
+                          onDateChange: (date) {
+                            // New date selected
+                            setState(() {
+                              selectedDate = date;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: kVPadding * 2,

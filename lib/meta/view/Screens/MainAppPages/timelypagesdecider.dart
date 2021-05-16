@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import '../../Screens/MainAppPages/fourthTab.dart';
 import '../../Screens/MainAppPages/fifthTab.dart';
@@ -348,24 +349,26 @@ class _PagesDeciderState extends State<PagesDecider> {
           showSelectedLabels: false,
           items: [
             BottomNavigationBarItem(
-              icon: Image(
-                image: AssetImage('assets/images/homeGrey.png'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/home.svg',
                 height: 28,
               ),
-              activeIcon: Image(
-                image: AssetImage('assets/images/homeBlue.png'),
+              icon: SvgPicture.asset(
+                'assets/icons/home-alt.svg',
                 height: 28,
+                color: kGrayTextColor.withOpacity(.7),
               ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Image(
-                image: AssetImage('assets/images/listGrey.png'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/list.svg',
                 height: 28,
               ),
-              activeIcon: Image(
-                image: AssetImage('assets/images/listBlue.png'),
+              icon: SvgPicture.asset(
+                'assets/icons/list-alt.svg',
                 height: 28,
+                color: kGrayTextColor.withOpacity(.7),
               ),
               label: 'My Tasks',
             ),
@@ -384,30 +387,32 @@ class _PagesDeciderState extends State<PagesDecider> {
               label: 'Schedule',
             ),
             BottomNavigationBarItem(
-              icon: Image(
-                image: AssetImage('assets/images/calendarGrey.png'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/calendar.svg',
                 height: 28,
               ),
-              activeIcon: Image(
-                image: AssetImage('assets/images/calendarBlue.png'),
+              icon: SvgPicture.asset(
+                'assets/icons/calendar-alt.svg',
                 height: 28,
+                color: kGrayTextColor.withOpacity(.7),
               ),
               label: 'Schedule',
             ),
             BottomNavigationBarItem(
-              icon: Image(
-                image: AssetImage('assets/images/userSettingGrey.png'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/user.svg',
                 height: 28,
               ),
-              activeIcon: Image(
-                image: AssetImage('assets/images/userSettingBlue.png'),
+              icon: SvgPicture.asset(
+                'assets/icons/user-alt.svg',
                 height: 28,
+                color: kGrayTextColor.withOpacity(.7),
               ),
               label: 'Settings',
             ),
           ],
           currentIndex: _selectedIndex,
-          unselectedItemColor: kBlackTextColor.withOpacity(.4),
+          unselectedItemColor: kGreyWhite,
           selectedItemColor: kPrimaryColor,
           iconSize: 28,
           onTap: _onItemTapped,
