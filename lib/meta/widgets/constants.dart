@@ -9,6 +9,7 @@ const kRedColor = Color(0xffed667c);
 const kAquaColor = Color(0xff70E8DB);
 const kBlackTextColor = Color(0xff222222);
 const kGrayTextColor = Color(0xff777777);
+const kLightGrey = Color(0xffd6d6d6);
 const kOffWhite = Color(0xffFFF3C1);
 const kHPadding = 16.0;
 const kBorderRadius = 15.0;

@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:timely/core/services/services.dart';
+import 'package:timely/meta/view/Screens/MainAppPages/createTask.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/profileInformationPage.dart';
 import 'package:timely/meta/view/Screens/Onboarding/welcomeScreen.dart';
+import 'package:timely/theme.dart';
 import 'core/services/navigationService.dart';
 import 'meta/view/Screens/Onboarding/onboarding.dart';
 import 'meta/view/Screens/ForgotPassword/forgotpassword.dart';
@@ -81,10 +83,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: NavigationService.instance.navigationKey,
-        theme: ThemeData.light().copyWith(
-            primaryColor: kPrimaryColor,
-            splashColor: kGrayTextColor,
-            highlightColor: kGrayTextColor),
+        theme: myTheme,
         themeMode: ThemeMode.light,
         initialRoute: services.auth.currentUser == null
             ? OnBoarding.route
@@ -100,6 +99,7 @@ class MyApp extends StatelessWidget {
           OnBoarding.route: (context) => OnBoarding(),
           WelcomeScreen.route: (context) => WelcomeScreen(),
           ProfileInformationPage.route: (context) => ProfileInformationPage(),
+          CreateTask.route: (context) => CreateTask(),
         },
       ),
     );

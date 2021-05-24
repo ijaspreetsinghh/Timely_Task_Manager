@@ -46,10 +46,12 @@ class PrimaryButton extends StatelessWidget {
                 )),
             onPressed: () => action(),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   title,
+                  overflow: TextOverflow.visible,
                   style: TextStyle(
                       fontSize: textSize ?? 18,
                       color: textColor ?? Colors.white,

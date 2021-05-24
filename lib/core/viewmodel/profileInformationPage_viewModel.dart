@@ -9,7 +9,8 @@ import 'dart:io';
 
 class ProfileInformationPageViewModel extends BaseViewModel {
   Services services = Services();
-  bool isProUser = true;
+  bool _isProUser;
+  get isProUser => _isProUser;
   String _photoURL;
   String _email;
   get email => _email;
@@ -17,6 +18,7 @@ class ProfileInformationPageViewModel extends BaseViewModel {
   initialize() {
     _photoURL = services.auth.currentUser.photoURL;
     _email = services.auth.currentUser.email;
+    _isProUser = services.isPro;
   }
 
   GlobalKey<FormState> updateNameFormKey = GlobalKey();

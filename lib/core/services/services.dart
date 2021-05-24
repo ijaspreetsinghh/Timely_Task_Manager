@@ -12,23 +12,29 @@ import 'package:timely/meta/widgets/constants.dart';
 class Services extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
+  CollectionReference tasks = FirebaseFirestore.instance.collection('Tasks');
   String displayName;
   String email;
   String photoUrl;
   bool isEmailVerified;
   final firebaseStorageRef = FirebaseStorage.instance.ref();
-  bool isPro;
+  bool _isPro = false;
+  get isPro => _isPro;
 
   initializeUser() {
     photoUrl = auth.currentUser.photoURL;
     displayName = auth.currentUser.displayName;
     email = auth.currentUser.email;
     isEmailVerified = auth.currentUser.emailVerified;
-    isPro = false;
+    // _isPro = false;
     notifyListeners();
     print('Current User Initialized');
     print('email ${auth.currentUser.emailVerified}');
     // print('_isEmailVerified $_isEmailVerified')
+  }
+
+  Future createTask() {
+    // return tasks.doc(auth.currentUser.uid);
   }
 
   Future uploadImageToFirebase({BuildContext context, thisImageFile}) async {

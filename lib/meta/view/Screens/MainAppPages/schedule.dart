@@ -104,7 +104,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Hello, ${model.displayName}',
+                                  'Hello, ${model.displayName.split(' ')[0]} ',
                                   style: kCircularStdText.copyWith(
                                       color: Colors.white,
                                       fontSize: 20,
@@ -140,7 +140,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                             ),
                           ),
                           SizedBox(
-                            height: kVPadding * 4,
+                            height: kVPadding * 2,
                           ),
                           Container(
                             alignment: AlignmentDirectional.center,
@@ -180,167 +180,87 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                       ),
                     ),
                     // backgroundColor: kGreyWhite,
-                    toolbarHeight: 208,
+                    toolbarHeight: 180,
                     automaticallyImplyLeading: false,
                     foregroundColor: kRedColor,
                   ),
-                  body: TabBarView(controller: _controller, children: [
-                    Container(
-                      color: kGreyWhite,
-                      child: ListView(
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.fromLTRB(kHPadding * 1.5,
-                              kVPadding * 2, kHPadding * 1.5, 0),
-                          children: [
-                            GridView.count(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              crossAxisCount: 2,
-                              crossAxisSpacing: kHPadding,
-                              childAspectRatio: 1.1,
-                              mainAxisSpacing: kHPadding,
-                              children: List.generate(gridList.length, (index) {
-                                return gridList[index];
-                              }),
-                            ),
-                            Container(
-                              alignment: AlignmentDirectional.centerEnd,
-                              padding: EdgeInsets.only(right: kHPadding * .7),
-                              child: Icon(
-                                Icons.more_horiz_rounded,
-                                size: 34,
-                                color: kPrimaryColor,
+                  body: Container(
+                    child: TabBarView(controller: _controller, children: [
+                      Container(
+                        color: kGreyWhite,
+                        child: ListView(
+                            physics: BouncingScrollPhysics(),
+                            padding: EdgeInsets.fromLTRB(kHPadding * 1.5,
+                                kVPadding * 2, kHPadding * 1.5, 0),
+                            children: [
+                              GridView.count(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                crossAxisCount: 2,
+                                crossAxisSpacing: kHPadding,
+                                childAspectRatio: 1.1,
+                                mainAxisSpacing: kHPadding,
+                                children:
+                                    List.generate(gridList.length, (index) {
+                                  return gridList[index];
+                                }),
                               ),
-                            ),
-                            Container(
-                              margin:
-                                  EdgeInsets.symmetric(vertical: kVPadding * 2),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: kHPadding * 0.8),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Today'.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: kBlackTextColor,
-                                          fontFamily: kCircularStdFont,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: kHPadding,
-                                      ),
-                                      Text(
-                                        'This week'.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: kGrayTextColor,
-                                          fontFamily: kCircularStdFont,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    'View All',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: kPrimaryColor,
-                                      fontFamily: kCircularStdFont,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                TodayHorizontalTaskBuilder(
-                                  color: kRedColor,
-                                  time: 'Tomorrow',
-                                  taskTitle: 'Skype call with jack',
+                              Container(
+                                alignment: AlignmentDirectional.centerEnd,
+                                padding: EdgeInsets.only(right: kHPadding * .7),
+                                child: Icon(
+                                  Icons.more_horiz_rounded,
+                                  size: 34,
+                                  color: kPrimaryColor,
                                 ),
-                                TodayHorizontalTaskBuilder(
-                                  color: kGreenColor,
-                                  time: 'Tomorrow',
-                                  taskTitle: 'Skype call with mickey',
-                                )
-                              ],
-                            ),
-                          ]),
-                    ),
-                    Container(
-                      color: kGreyWhite,
-                      child: ListView(
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.fromLTRB(0, kVPadding * 2, 0, 0),
-                          children: [
-                            GridView.count(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: kHPadding * 1.5),
-                              crossAxisCount: 2,
-                              crossAxisSpacing: kHPadding,
-                              mainAxisSpacing: kHPadding,
-                              childAspectRatio: 1.4,
-                              children:
-                                  List.generate(categoryList.length, (index) {
-                                return categoryList[index];
-                              }),
-                            ),
-                            Container(
-                              alignment: AlignmentDirectional.centerEnd,
-                              padding: EdgeInsets.only(right: kHPadding * 1.5),
-                              child: Icon(
-                                Icons.more_horiz_rounded,
-                                size: 34,
-                                color: kPrimaryColor,
                               ),
-                            ),
-                            Container(
-                              margin:
-                                  EdgeInsets.symmetric(vertical: kVPadding * 2),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: kHPadding * 2),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Tasks'.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: kBlackTextColor,
-                                          fontFamily: kCircularStdFont,
-                                          fontWeight: FontWeight.w700,
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: kVPadding * 2),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: kHPadding * 0.8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Today'.toUpperCase(),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: kBlackTextColor,
+                                            fontFamily: kCircularStdFont,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    'View All',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: kPrimaryColor,
-                                      fontFamily: kCircularStdFont,
-                                      fontWeight: FontWeight.w700,
+                                        SizedBox(
+                                          width: kHPadding,
+                                        ),
+                                        Text(
+                                          'This week'.toUpperCase(),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: kGrayTextColor,
+                                            fontFamily: kCircularStdFont,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      'View All',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: kPrimaryColor,
+                                        fontFamily: kCircularStdFont,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding:
-                                  EdgeInsets.symmetric(horizontal: kHPadding),
-                              child: Column(
+                              Column(
                                 children: [
                                   TodayHorizontalTaskBuilder(
                                     color: kRedColor,
@@ -354,10 +274,95 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                   )
                                 ],
                               ),
-                            ),
-                          ]),
-                    ),
-                  ]),
+                            ]),
+                      ),
+                      Container(
+                        color: kGreyWhite,
+                        child: ListView(
+                            physics: BouncingScrollPhysics(),
+                            padding:
+                                EdgeInsets.fromLTRB(0, kVPadding * 2, 0, 0),
+                            children: [
+                              GridView.count(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: kHPadding * 1.5),
+                                crossAxisCount: 2,
+                                crossAxisSpacing: kHPadding,
+                                mainAxisSpacing: kHPadding,
+                                childAspectRatio: 1.4,
+                                children:
+                                    List.generate(categoryList.length, (index) {
+                                  return categoryList[index];
+                                }),
+                              ),
+                              Container(
+                                alignment: AlignmentDirectional.centerEnd,
+                                padding:
+                                    EdgeInsets.only(right: kHPadding * 1.5),
+                                child: Icon(
+                                  Icons.more_horiz_rounded,
+                                  size: 34,
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: kVPadding * 2),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: kHPadding * 2),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Tasks'.toUpperCase(),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: kBlackTextColor,
+                                            fontFamily: kCircularStdFont,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      'View All',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: kPrimaryColor,
+                                        fontFamily: kCircularStdFont,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: kHPadding),
+                                child: Column(
+                                  children: [
+                                    TodayHorizontalTaskBuilder(
+                                      color: kRedColor,
+                                      time: 'Tomorrow',
+                                      taskTitle: 'Skype call with jack',
+                                    ),
+                                    TodayHorizontalTaskBuilder(
+                                      color: kGreenColor,
+                                      time: 'Tomorrow',
+                                      taskTitle: 'Skype call with mickey',
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ]),
+                  ),
                 ),
               ),
             ),
