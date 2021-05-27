@@ -22,7 +22,8 @@ const applicationName = 'Timely';
 const applicationLegalese = '2021 \u00a9 Timely';
 const defaultProfilePictureLocation =
     'https://firebasestorage.googleapis.com/v0/b/timely-80246.appspot.com/o/profile.png?alt=media&token=a6994fcb-5b8a-4f61-8407-4eea93d7d532';
-
+var dateToday = DateTime(
+    DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(StartApp());

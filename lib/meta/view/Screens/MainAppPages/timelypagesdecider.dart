@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/createTask.dart';
 import '../../Screens/MainAppPages/fourthTab.dart';
 import '../../Screens/MainAppPages/fifthTab.dart';
 import '../../Screens/MainAppPages/thirdTab.dart';
-import 'package:timely/meta/widgets/components.dart';
 import 'package:timely/meta/widgets/constants.dart';
 import 'schedule.dart';
 import 'secondTab.dart';

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/core/viewmodel/secondTab_ViewModel.dart';
 
+import '../../../../main.dart';
 import '../../../widgets/constants.dart';
 import '../../../widgets/components.dart';
 
@@ -11,13 +12,7 @@ class SecondTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SecondTabViewModel>.reactive(
-        onModelReady: (model) => model.dateSelector(DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-            0,
-            0,
-            0)),
+        onModelReady: (model) => model.dateSelector(dateToday),
         builder: (context, model, child) {
           return Container(
             color: kPrimaryColor,
@@ -52,14 +47,7 @@ class SecondTab extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  model.selectedDate ==
-                                          DateTime(
-                                              DateTime.now().year,
-                                              DateTime.now().month,
-                                              DateTime.now().day,
-                                              0,
-                                              0,
-                                              0)
+                                  model.selectedDate == dateToday
                                       ? 'You have total 5 tasks today.'
                                       : model.selectedDate ==
                                               DateTime(

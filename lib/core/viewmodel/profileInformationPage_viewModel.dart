@@ -161,6 +161,9 @@ class ProfileInformationPageViewModel extends BaseViewModel {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        SizedBox(
+                          height: kVPadding,
+                        ),
                         FormHeading(title: 'Update Name'),
                         SizedBox(
                           height: kVPadding * 4,
@@ -284,6 +287,9 @@ class ProfileInformationPageViewModel extends BaseViewModel {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        SizedBox(
+                          height: kVPadding,
+                        ),
                         FormHeading(title: 'Update Email'),
                         SizedBox(
                           height: kVPadding * 4,
@@ -474,6 +480,9 @@ class ProfileInformationPageViewModel extends BaseViewModel {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        SizedBox(
+                          height: kVPadding,
+                        ),
                         FormHeading(title: 'Change Password'),
                         SizedBox(
                           height: kVPadding * 4,
