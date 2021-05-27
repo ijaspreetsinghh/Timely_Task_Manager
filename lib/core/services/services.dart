@@ -12,7 +12,7 @@ import 'package:timely/meta/widgets/constants.dart';
 class Services extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
-  CollectionReference tasks = FirebaseFirestore.instance.collection('Tasks');
+
   String displayName;
   String email;
   String photoUrl;
@@ -33,8 +33,35 @@ class Services extends ChangeNotifier {
     // print('_isEmailVerified $_isEmailVerified')
   }
 
-  Future createTask() {
-    // return tasks.doc(auth.currentUser.uid);
+  Future createTask(
+      {@required taskDateTime,
+      @required taskTitle,
+      @required taskDescription,
+      @required alarmSet,
+      @required taskCategory}) {
+    NavigationService.instance.showLoader(title: 'Creating Task');
+    return users.doc(auth.currentUser.uid).collection('Tasks').add({
+      'Task Title': taskTitle,
+      'Task Description': taskDescription,
+      'Task Date Time': taskDateTime,
+      'isAlarmSet': alarmSet,
+      'Task Category': taskCategory
+    }).then((value) {
+      NavigationService.instance.hideLoader();
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Success',
+          content: 'Task create for \'$taskTitle\'',
+          primaryAction: () =>
+              NavigationService.instance.replace(PagesDecider.route),
+          primaryActionTitle: 'OK');
+    }).catchError((onError) {
+      NavigationService.instance.hideLoader();
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Failure',
+          content: 'Request failed due to $onError',
+          primaryAction: () => NavigationService.instance.goBack(),
+          primaryActionTitle: 'Try again');
+    });
   }
 
   Future uploadImageToFirebase({BuildContext context, thisImageFile}) async {

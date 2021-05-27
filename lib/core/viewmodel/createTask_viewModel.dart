@@ -14,6 +14,7 @@ class CreateTaskViewModel extends BaseViewModel {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   get autoValidate => _autoValidate;
   TextEditingController taskTitleController = TextEditingController();
+  TextEditingController taskDescController = TextEditingController();
   GlobalKey<FormState> createTaskFormKey = GlobalKey();
   Services services = Services();
   DateTime _pickedDate = DateTime.now();
@@ -148,19 +149,28 @@ class CreateTaskViewModel extends BaseViewModel {
     _autoValidate = AutovalidateMode.onUserInteraction;
     notifyListeners();
     if (createTaskFormKey.currentState.validate()) {
-      print('ok');
+      createTask();
     }
   }
 
   Future createTask() async {
-    DateTime taskDateTime = DateTime(pickedDate.year, pickedDate.month,
-        pickedDate.day, pickedTime.hour, pickedTime.minute, 0);
-    Timestamp myTimeStamp = Timestamp.fromDate(taskDateTime);
-    print(taskTitle);
-    print(myTimeStamp);
-    print(isAlarmSet);
-    validateCreateTask();
-    // await services.createTask();
+    Timestamp myTimeStamp = Timestamp.fromDate(DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        pickedTime.hour,
+        pickedTime.minute,
+        0));
+    String createTaskTitle = taskTitleController.text;
+    bool alarmSet = isAlarmSet;
+    String createTaskDesc = taskDescController.text;
+    String createTaskCategory = selectedCategoryTitle;
+    await services.createTask(
+        alarmSet: alarmSet,
+        taskDateTime: myTimeStamp,
+        taskTitle: createTaskTitle,
+        taskDescription: createTaskDesc,
+        taskCategory: createTaskCategory);
   }
 
   pickTime(time) {

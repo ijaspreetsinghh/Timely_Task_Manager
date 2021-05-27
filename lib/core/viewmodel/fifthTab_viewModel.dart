@@ -10,6 +10,9 @@ class FifthTabViewModel extends BaseViewModel {
   get email => _email;
   get displayName => _displayName;
   initialize() {
+    if (!services.auth.currentUser.emailVerified) {
+      services.auth.currentUser.reload();
+    }
     _photoURL = services.auth.currentUser.photoURL;
     _email = services.auth.currentUser.email;
     _displayName = services.auth.currentUser.displayName;

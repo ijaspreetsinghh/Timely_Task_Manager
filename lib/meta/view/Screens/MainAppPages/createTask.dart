@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/viewmodel/createTask_viewModel.dart';
 import 'package:timely/meta/widgets/components.dart';
 import 'package:timely/meta/widgets/constants.dart';
@@ -250,6 +249,7 @@ class CreateTask extends StatelessWidget {
                                           TextCapitalization.sentences,
                                       cursorColor: kPrimaryColor,
                                       cursorHeight: 22,
+                                      controller: model.taskDescController,
                                       decoration: InputDecoration(
                                         hintText:
                                             'The agenda of the meeting will be..',
@@ -400,7 +400,7 @@ class CreateTask extends StatelessWidget {
                           kHPadding * 3, kVPadding),
                       child: PrimaryButton(
                         title: 'Create Task',
-                        action: () => model.createTask(),
+                        action: () => model.validateCreateTask(),
                       ),
                     ),
                   ),
