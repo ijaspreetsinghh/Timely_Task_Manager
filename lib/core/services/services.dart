@@ -64,6 +64,25 @@ class Services extends ChangeNotifier {
     });
   }
 
+  Color colorSelector({String taskCategory}) {
+    if (taskCategory == 'Work')
+      return kRedColor;
+    else if (taskCategory == 'Home')
+      return kGreenColor;
+    else if (taskCategory == 'Personal')
+      return kPrimaryColor;
+    else
+      return kAquaColor;
+  }
+
+  Stream getTasks() {
+    return users
+        .doc(auth.currentUser.uid)
+        .collection('Tasks')
+        .orderBy('Task Date Time')
+        .snapshots();
+  }
+
   Future uploadImageToFirebase({BuildContext context, thisImageFile}) async {
     NavigationService.instance.showLoader(title: 'Setting Profile Image');
     var snapshot = await firebaseStorageRef

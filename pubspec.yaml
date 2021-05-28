@@ -30,12 +30,12 @@ dependencies:
   flutter_svg: any
   stacked: ^2.1.0
   intl: any
-  date_picker_timeline: any
+
+
   syncfusion_flutter_calendar: ^19.1.56
   firebase_core: ^1.0.4
   firebase_auth: ^1.1.1
-  cloud_firestore: ^2.0.0
-  firebase_analytics: ^8.0.4
+  cloud_firestore: ^1.0.7
   firebase_storage: ^8.0.6
   image_picker: ^0.7.5
 dev_dependencies:

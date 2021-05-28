@@ -94,6 +94,7 @@ class PriorityTaskGrid extends StatelessWidget {
       @required this.remainingTime,
       @required this.taskTitle,
       @required this.time});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -256,11 +257,11 @@ class CategoryGrid extends StatelessWidget {
   }
 }
 
-class TodayHorizontalTaskBuilder extends StatelessWidget {
+class HorizontalTaskBuilder extends StatelessWidget {
   final String taskTitle;
   final String time;
   final Color color;
-  TodayHorizontalTaskBuilder(
+  HorizontalTaskBuilder(
       {@required this.color, @required this.taskTitle, @required this.time});
 
   @override

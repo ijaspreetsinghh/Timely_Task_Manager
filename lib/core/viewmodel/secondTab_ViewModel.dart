@@ -1,10 +1,11 @@
 import 'package:stacked/stacked.dart';
+import 'package:timely/core/services/services.dart';
 
-class SecondTabViewModel extends BaseViewModel {
+class SecondTabViewModel extends StreamViewModel {
   var _selectedDate = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
   get selectedDate => _selectedDate;
-
+  Services services = Services();
   dateSelector(DateTime thisDate) {
     _selectedDate = thisDate;
 
@@ -23,4 +24,12 @@ class SecondTabViewModel extends BaseViewModel {
 
     return days;
   }
+
+  Stream getTasks() {
+    return services.getTasks();
+  }
+
+  @override
+  // TODO: implement stream
+  Stream get stream => getTasks();
 }

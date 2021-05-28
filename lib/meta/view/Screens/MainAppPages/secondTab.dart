@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -185,10 +186,88 @@ class SecondTab extends StatelessWidget {
                             SizedBox(
                               height: kVPadding,
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [],
-                            ),
+                            StreamBuilder(
+                              builder: (context, AsyncSnapshot snapshot) {
+                                if (snapshot.hasData) {
+                                  var data = snapshot.data.docs;
+                                  List<HorizontalTaskBuilder> taskList = [];
+                                  for (var dataItem in data) {
+                                    String taskTitle = dataItem['Task Title'];
+                                    Timestamp taskDateandTime =
+                                        dataItem['Task Date Time'];
+                                    String taskDesc =
+                                        dataItem['Task Description'];
+                                    String taskCategory =
+                                        dataItem['Task Category'];
+                                    bool isalarmSet = dataItem['isAlarmSet'];
+                                    DateTime taskDate = DateTime(
+                                        taskDateandTime.toDate().year,
+                                        taskDateandTime.toDate().month,
+                                        taskDateandTime.toDate().day);
+                                    TimeOfDay taskTime = TimeOfDay(
+                                        hour: taskDateandTime.toDate().hour,
+                                        minute:
+                                            taskDateandTime.toDate().minute);
+                                    if (taskDate == model.selectedDate) {
+                                      taskList.add(
+                                        HorizontalTaskBuilder(
+                                          color: model.services.colorSelector(
+                                              taskCategory: taskCategory),
+                                          taskTitle: taskTitle,
+                                          time: taskTime.format(context),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: taskList.length > 0
+                                        ? taskList
+                                        : [
+                                            Container(
+                                              color: Colors.white,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: kHPadding,
+                                                  vertical: kVPadding),
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Image(
+                                                    height: 200,
+                                                    fit: BoxFit.contain,
+                                                    image: AssetImage(
+                                                        'assets/images/organized.png'),
+                                                  ),
+                                                  SizedBox(
+                                                    height: kVPadding,
+                                                  ),
+                                                  FormHeading(
+                                                    title:
+                                                        'If you have time, you\'re productive. Timely helps you spend your time well.',
+                                                    fontSize: 18,
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                  );
+                                } else
+                                  return Center(
+                                    child: Container(
+                                      height: 50,
+                                      width: 50,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                              },
+                              stream: model.stream,
+                            )
                           ],
                         ),
                       ),
