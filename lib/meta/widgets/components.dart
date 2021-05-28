@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:timely/core/services/navigationService.dart';
+import 'package:timely/core/services/services.dart';
 
 import 'constants.dart';
+
+Services services = Services();
 
 class PrimaryButton extends StatelessWidget {
   final String title;
@@ -175,6 +178,14 @@ class PriorityTaskGrid extends StatelessWidget {
 }
 
 class CategoryGrid extends StatelessWidget {
+  CategoryGrid(
+      {@required this.icon,
+      @required this.categoryName,
+      @required this.numberOfTasks});
+  final IconData icon;
+  final String categoryName;
+  final int numberOfTasks;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -190,12 +201,14 @@ class CategoryGrid extends StatelessWidget {
           Row(
             children: [
               Container(
+                padding: EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                    color: kYellowColor,
+                    color: services.colorSelector(taskCategory: categoryName),
                     borderRadius: BorderRadius.circular(kBorderRadius / 3)),
                 child: Icon(
-                  Icons.star_border_rounded,
+                  icon,
                   color: Colors.white,
+                  size: 18,
                 ),
               ),
               SizedBox(
@@ -206,7 +219,7 @@ class CategoryGrid extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '12',
+                    numberOfTasks.toString(),
                     style: kCircularStdText.copyWith(
                         color: Colors.black,
                         fontSize: 20,
@@ -232,7 +245,7 @@ class CategoryGrid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Important',
+                categoryName,
                 style: kCircularStdText.copyWith(
                     color: Colors.black,
                     fontSize: 16,

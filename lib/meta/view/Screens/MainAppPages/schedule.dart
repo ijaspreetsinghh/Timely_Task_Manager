@@ -44,10 +44,21 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
   ];
 
   final List<CategoryGrid> categoryList = [
-    CategoryGrid(),
-    CategoryGrid(),
-    CategoryGrid(),
-    CategoryGrid(),
+    CategoryGrid(
+      icon: Icons.home_filled,
+      categoryName: 'Home',
+      numberOfTasks: 2,
+    ),
+    CategoryGrid(
+      icon: Icons.person,
+      categoryName: 'Personal',
+      numberOfTasks: 2,
+    ),
+    CategoryGrid(
+      icon: Icons.work_outline_outlined,
+      categoryName: 'Work',
+      numberOfTasks: 2,
+    ),
   ];
   final List<HorizontalTaskBuilder> tomorrowWhitWeekList = [
     HorizontalTaskBuilder(
