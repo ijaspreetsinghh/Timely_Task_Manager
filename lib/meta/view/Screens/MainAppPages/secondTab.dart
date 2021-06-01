@@ -211,10 +211,16 @@ class SecondTab extends StatelessWidget {
                                     if (taskDate == model.selectedDate) {
                                       taskList.add(
                                         HorizontalTaskBuilder(
+                                          isAlarmSet: isalarmSet,
                                           color: model.services.colorSelector(
                                               taskCategory: taskCategory),
                                           taskTitle: taskTitle,
                                           time: taskTime.format(context),
+                                          taskDescription: taskDesc,
+                                          taskDate: DateFormat('MMMMEEEEd')
+                                              .format(taskDate),
+                                          category: taskCategory,
+                                          taskTime: taskTime.format(context),
                                         ),
                                       );
                                     }

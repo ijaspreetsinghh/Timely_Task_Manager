@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/app/taskModel.dart';
+import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/viewmodel/schedule_viewModel.dart';
 import '../../../widgets/components.dart';
 import '../../../widgets/constants.dart';
+import 'notificationsPage.dart';
 
 class Schedule extends StatefulWidget {
   static const route = 'Schedule';
@@ -16,32 +18,6 @@ class Schedule extends StatefulWidget {
 
 class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
   TabController _controller;
-  final List<PriorityTaskGrid> gridList = [
-    PriorityTaskGrid(
-      color: kGreenColor,
-      remainingTime: 'In 2 hrs 12 mins',
-      taskTitle: 'Skype call with Jack',
-      time: '9:00 am',
-    ),
-    PriorityTaskGrid(
-      color: kYellowColor,
-      remainingTime: 'In 2 hrs 12 mins',
-      taskTitle: 'Video call about app',
-      time: '10:30 am',
-    ),
-    PriorityTaskGrid(
-      color: kAquaColor,
-      remainingTime: 'In 2 hrs 12 mins',
-      taskTitle: 'Start development discussing',
-      time: '1:20 pm',
-    ),
-    PriorityTaskGrid(
-      color: kRedColor,
-      remainingTime: 'In 2 hrs 12 mins',
-      taskTitle: 'Start development discussing',
-      time: '1:20 pm',
-    ),
-  ];
 
   final List<CategoryGrid> categoryList = [
     CategoryGrid(
@@ -60,61 +36,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
       numberOfTasks: 2,
     ),
   ];
-  final List<HorizontalTaskBuilder> tomorrowWhitWeekList = [
-    HorizontalTaskBuilder(
-      color: kRedColor,
-      time: 'Tomorrow',
-      taskTitle: 'Skype call with jack',
-    ),
-    HorizontalTaskBuilder(
-      color: kGreenColor,
-      time: 'Tomorrow',
-      taskTitle: 'Skype call with mickey',
-    )
-  ];
-
-  final List<HorizontalTaskBuilder> tomorrowWeekList = [
-    HorizontalTaskBuilder(
-      color: kRedColor,
-      time: 'Tomorrow',
-      taskTitle: 'Skype call with jack',
-    ),
-    HorizontalTaskBuilder(
-      color: kGreenColor,
-      time: 'Tomorrow',
-      taskTitle: 'Skype call with mickey',
-    ),
-    HorizontalTaskBuilder(
-      color: kRedColor,
-      time: 'Tomorrow',
-      taskTitle: 'Skype call with jack',
-    ),
-    HorizontalTaskBuilder(
-      color: kGreenColor,
-      time: 'Tomorrow',
-      taskTitle: 'Skype call with mickey',
-    ),
-  ];
-
-  List<String> item = [
-    "Clients",
-    "Designer",
-    "Developer",
-    "Director",
-    "Employee",
-    "Manager",
-    "Worker",
-    "Owner"
-  ];
-  void reorderData(int oldindex, int newindex) {
-    setState(() {
-      if (newindex > oldindex) {
-        newindex -= 1;
-      }
-      final items = item.removeAt(oldindex);
-      item.insert(newindex, items);
-    });
-  }
 
   @override
   void initState() {
@@ -135,7 +56,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
               child: DefaultTabController(
                 length: 2,
                 child: Scaffold(
-                  backgroundColor: kPrimaryColor,
+                  backgroundColor: kGreyWhite,
                   appBar: AppBar(
                     brightness: Brightness.light,
                     elevation: 0, backgroundColor: Colors.white,
@@ -166,6 +87,18 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                     'assets/images/hand.png',
                                   ),
                                   height: 28,
+                                ),
+                                Expanded(child: Container()),
+                                GestureDetector(
+                                  onTap: () => NavigationService.instance
+                                      .pushNamed(NotificationsPage.route),
+                                  child: RotationTransition(
+                                    turns: AlwaysStoppedAnimation(15 / 360),
+                                    child: Icon(
+                                      Icons.notifications_none_rounded,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 )
                               ],
                             ),
@@ -232,384 +165,424 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                     // backgroundColor: kGreyWhite,
                     toolbarHeight: 180,
                     automaticallyImplyLeading: false,
-                    foregroundColor: kRedColor,
                   ),
                   body: Container(
-                    child: TabBarView(controller: _controller, children: [
-                      Container(
-                        color: kGreyWhite,
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: model.stream,
-                          builder: (context, AsyncSnapshot snapshot) {
-                            if (snapshot.hasData) {
-                              var data = snapshot.data.docs;
-                              int numberOfTasks = snapshot.data.docs.length;
-                              List<TaskModel> availableGridTasks = [];
-                              List<HorizontalTaskBuilder> tomorrowTaskList = [];
-                              List<HorizontalTaskBuilder> weekTaskList = [];
-                              if (numberOfTasks > 0) {
-                                for (var dataItem in data) {
-                                  String taskTitle = dataItem['Task Title'];
-                                  Timestamp taskDateandTime =
-                                      dataItem['Task Date Time'];
-                                  String taskDesc =
-                                      dataItem['Task Description'];
-                                  String taskCategory =
-                                      dataItem['Task Category'];
-                                  bool isalarmSet = dataItem['isAlarmSet'];
-                                  DateTime taskDate = DateTime(
-                                      taskDateandTime.toDate().year,
-                                      taskDateandTime.toDate().month,
-                                      taskDateandTime.toDate().day);
-                                  TimeOfDay taskTime = TimeOfDay(
-                                      hour: taskDateandTime.toDate().hour,
-                                      minute: taskDateandTime.toDate().minute);
-                                  if (taskDate ==
-                                      DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day,
-                                          0,
-                                          0,
-                                          0)) {
-                                    availableGridTasks.add(
-                                      TaskModel(
-                                          taskTitle: taskTitle,
-                                          taskDate: taskDate,
-                                          taskTime: taskTime,
-                                          taskDescription: taskDesc,
-                                          isAlarmSet: isalarmSet,
-                                          taskCategory: taskCategory),
-                                    );
+                    child: TabBarView(
+                        controller: _controller,
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          Container(
+                            color: kGreyWhite,
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: model.stream,
+                              builder: (context, AsyncSnapshot snapshot) {
+                                if (snapshot.hasData) {
+                                  var data = snapshot.data.docs;
+                                  int numberOfTasks = snapshot.data.docs.length;
+                                  List<TaskModel> availableGridTasks = [];
+                                  List<HorizontalTaskBuilder> tomorrowTaskList =
+                                      [];
+                                  List<HorizontalTaskBuilder> weekTaskList = [];
+                                  if (numberOfTasks > 0) {
+                                    for (var dataItem in data) {
+                                      String taskTitle = dataItem['Task Title'];
+                                      Timestamp taskDateandTime =
+                                          dataItem['Task Date Time'];
+                                      String taskDesc =
+                                          dataItem['Task Description'];
+                                      String taskCategory =
+                                          dataItem['Task Category'];
+                                      bool isalarmSet = dataItem['isAlarmSet'];
+                                      DateTime taskDate = DateTime(
+                                          taskDateandTime.toDate().year,
+                                          taskDateandTime.toDate().month,
+                                          taskDateandTime.toDate().day);
+                                      TimeOfDay taskTime = TimeOfDay(
+                                          hour: taskDateandTime.toDate().hour,
+                                          minute:
+                                              taskDateandTime.toDate().minute);
+                                      if (taskDate ==
+                                          DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day,
+                                              0,
+                                              0,
+                                              0)) {
+                                        availableGridTasks.add(
+                                          TaskModel(
+                                              taskTitle: taskTitle,
+                                              taskDate: taskDate,
+                                              taskTime: taskTime,
+                                              taskDescription: taskDesc,
+                                              isAlarmSet: isalarmSet,
+                                              taskCategory: taskCategory),
+                                        );
+                                      }
+                                      if (taskDate ==
+                                          DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day + 1,
+                                              0,
+                                              0,
+                                              0)) {
+                                        tomorrowTaskList.add(
+                                          HorizontalTaskBuilder(
+                                            color: model.services.colorSelector(
+                                                taskCategory: taskCategory),
+                                            taskTitle: taskTitle,
+                                            taskTime: taskTime.format(context),
+                                            isAlarmSet: isalarmSet,
+                                            time:
+                                                'Tomorrow at ${taskTime.format(context)}',
+                                            category: taskCategory,
+                                            taskDate: DateFormat('MMMMEEEEd')
+                                                .format(taskDate),
+                                            taskDescription: taskDesc,
+                                          ),
+                                        );
+                                      }
+                                      if (taskDate.isAfter(DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day + 1,
+                                              0,
+                                              0,
+                                              0)) &&
+                                          taskDate.isBefore(DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day + 8,
+                                              0,
+                                              0,
+                                              0))) {
+                                        weekTaskList.add(
+                                          HorizontalTaskBuilder(
+                                            color: model.services.colorSelector(
+                                                taskCategory: taskCategory),
+                                            taskTitle: taskTitle,
+                                            isAlarmSet: isalarmSet,
+                                            time:
+                                                '${DateFormat('MMMMEEEEd').format(taskDate)} at ${taskTime.format(context)}',
+                                            taskDescription: taskDesc,
+                                            taskDate: DateFormat('MMMMEEEEd')
+                                                .format(taskDate),
+                                            category: taskCategory,
+                                            taskTime: taskTime.format(context),
+                                          ),
+                                        );
+                                      }
+                                    }
                                   }
-                                  if (taskDate ==
-                                      DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day + 1,
-                                          0,
-                                          0,
-                                          0)) {
-                                    tomorrowTaskList.add(HorizontalTaskBuilder(
-                                        color: model.services.colorSelector(
-                                            taskCategory: taskCategory),
-                                        taskTitle: taskTitle,
-                                        time:
-                                            'Tomorrow at ${taskTime.format(context)}'));
-                                  }
-                                  if (taskDate.isAfter(DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day + 1,
-                                          0,
-                                          0,
-                                          0)) &&
-                                      taskDate.isBefore(DateTime(
-                                          DateTime.now().year,
-                                          DateTime.now().month,
-                                          DateTime.now().day + 8,
-                                          0,
-                                          0,
-                                          0))) {
-                                    weekTaskList.add(HorizontalTaskBuilder(
-                                        color: model.services.colorSelector(
-                                            taskCategory: taskCategory),
-                                        taskTitle: taskTitle,
-                                        time:
-                                            '${DateFormat('MMMMEEEEd').format(taskDate)} at ${taskTime.format(context)}'));
-                                  }
-                                }
-                              }
 
-                              return numberOfTasks > 0
-                                  ? ListView(
-                                      physics: BouncingScrollPhysics(),
-                                      padding: EdgeInsets.fromLTRB(
-                                          kHPadding * 1.5,
-                                          kVPadding * 2,
-                                          kHPadding * 1.5,
-                                          0),
-                                      children: [
-                                          GridView.count(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: kHPadding,
-                                            childAspectRatio: 1.1,
-                                            mainAxisSpacing: kHPadding,
-                                            children: List.generate(
-                                                availableGridTasks.length,
-                                                (index) {
-                                              return PriorityTaskGrid(
-                                                color: model.selectColor(
-                                                    thisTaskCategory:
+                                  return numberOfTasks > 0
+                                      ? ListView(
+                                          physics: BouncingScrollPhysics(),
+                                          padding: EdgeInsets.fromLTRB(
+                                              kHPadding * 1.5,
+                                              kVPadding * 2,
+                                              kHPadding * 1.5,
+                                              0),
+                                          children: [
+                                              GridView.count(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: kHPadding,
+                                                childAspectRatio: 1.1,
+                                                mainAxisSpacing: kHPadding,
+                                                children: List.generate(
+                                                    availableGridTasks.length,
+                                                    (index) {
+                                                  return PriorityTaskGrid(
+                                                    taskDate: DateFormat(
+                                                            'MMMMEEEEd')
+                                                        .format(
+                                                            availableGridTasks[
+                                                                    index]
+                                                                .taskDate),
+                                                    isAlarmSet:
                                                         availableGridTasks[
                                                                 index]
-                                                            .taskCategory),
-                                                remainingTime:
-                                                    'In ${availableGridTasks[index].taskTime.format(context)}',
-                                                taskTitle:
-                                                    availableGridTasks[index]
-                                                        .taskTitle,
-                                                time: availableGridTasks[index]
-                                                    .taskTime
-                                                    .format(context)
-                                                    .toString(),
-                                              );
-                                            }),
-                                          ),
-                                          Container(
-                                            alignment:
-                                                AlignmentDirectional.centerEnd,
-                                            padding: EdgeInsets.only(
-                                                right: kHPadding * .7),
-                                            child: Icon(
-                                              Icons.more_horiz_rounded,
-                                              size: 34,
-                                              color: kPrimaryColor,
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: kVPadding * 2),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
+                                                            .isAlarmSet,
+                                                    taskCategory:
+                                                        availableGridTasks[
+                                                                index]
+                                                            .taskCategory,
+                                                    taskDesc:
+                                                        availableGridTasks[
+                                                                index]
+                                                            .taskDescription,
+                                                    color: model.selectColor(
+                                                        thisTaskCategory:
+                                                            availableGridTasks[
+                                                                    index]
+                                                                .taskCategory),
+                                                    remainingTime:
+                                                        'In ${availableGridTasks[index].taskTime.format(context)}',
+                                                    taskTitle:
+                                                        availableGridTasks[
+                                                                index]
+                                                            .taskTitle,
+                                                    time: availableGridTasks[
+                                                            index]
+                                                        .taskTime
+                                                        .format(context)
+                                                        .toString(),
+                                                  );
+                                                }),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: kVPadding * 2),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
-                                                    GestureDetector(
-                                                      child: Container(
-                                                        child: Text(
-                                                          'tomorrow'
-                                                              .toUpperCase(),
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: model.selectedTaskListFromTomorrowThisWeek ==
-                                                                    0
-                                                                ? kBlackTextColor
-                                                                : kGrayTextColor,
-                                                            fontFamily:
-                                                                kCircularStdFont,
-                                                            fontWeight:
-                                                                FontWeight.w700,
+                                                    Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          child: Container(
+                                                            child: Text(
+                                                              'tomorrow'
+                                                                  .toUpperCase(),
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: model.selectedTaskListFromTomorrowThisWeek ==
+                                                                        0
+                                                                    ? kBlackTextColor
+                                                                    : kGrayTextColor,
+                                                                fontFamily:
+                                                                    kCircularStdFont,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              ),
+                                                            ),
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        kHPadding /
+                                                                            2,
+                                                                    vertical:
+                                                                        kVPadding),
                                                           ),
+                                                          onTap: () => model
+                                                              .tskListFromTomorrowThisWeekTabSelector(
+                                                                  0),
                                                         ),
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    kHPadding /
-                                                                        2,
-                                                                vertical:
-                                                                    kVPadding),
-                                                      ),
-                                                      onTap: () => model
-                                                          .tskListFromTomorrowThisWeekTabSelector(
-                                                              0),
-                                                    ),
-                                                    SizedBox(
-                                                      width: kHPadding,
-                                                    ),
-                                                    GestureDetector(
-                                                      child: Container(
-                                                        child: Text(
-                                                          'This week'
-                                                              .toUpperCase(),
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: model.selectedTaskListFromTomorrowThisWeek ==
-                                                                    1
-                                                                ? kBlackTextColor
-                                                                : kGrayTextColor,
-                                                            fontFamily:
-                                                                kCircularStdFont,
-                                                            fontWeight:
-                                                                FontWeight.w700,
+                                                        SizedBox(
+                                                          width: kHPadding,
+                                                        ),
+                                                        GestureDetector(
+                                                          child: Container(
+                                                            child: Text(
+                                                              'This week'
+                                                                  .toUpperCase(),
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: model.selectedTaskListFromTomorrowThisWeek ==
+                                                                        1
+                                                                    ? kBlackTextColor
+                                                                    : kGrayTextColor,
+                                                                fontFamily:
+                                                                    kCircularStdFont,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              ),
+                                                            ),
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        kHPadding /
+                                                                            2,
+                                                                    vertical:
+                                                                        kVPadding),
                                                           ),
+                                                          onTap: () => model
+                                                              .tskListFromTomorrowThisWeekTabSelector(
+                                                                  1),
                                                         ),
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    kHPadding /
-                                                                        2,
-                                                                vertical:
-                                                                    kVPadding),
+                                                      ],
+                                                    ),
+                                                    Text(
+                                                      'View All',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: kPrimaryColor,
+                                                        fontFamily:
+                                                            kCircularStdFont,
+                                                        fontWeight:
+                                                            FontWeight.w700,
                                                       ),
-                                                      onTap: () => model
-                                                          .tskListFromTomorrowThisWeekTabSelector(
-                                                              1),
                                                     ),
                                                   ],
                                                 ),
-                                                Text(
-                                                  'View All',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: kPrimaryColor,
-                                                    fontFamily:
-                                                        kCircularStdFont,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                              Column(
+                                                children:
+                                                    model.selectedTaskListFromTomorrowThisWeek ==
+                                                            0
+                                                        ? tomorrowTaskList
+                                                        : weekTaskList,
+                                              ),
+                                            ])
+                                      : Container(
+                                          color: Colors.white,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: kHPadding,
+                                              vertical: kVPadding),
+                                          alignment:
+                                              AlignmentDirectional.center,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Image(
+                                                height: 200,
+                                                fit: BoxFit.contain,
+                                                image: AssetImage(
+                                                    'assets/images/organized.png'),
+                                              ),
+                                              SizedBox(
+                                                height: kVPadding,
+                                              ),
+                                              FormHeading(
+                                                title:
+                                                    'If you have time, you\'re productive. Timely helps you spend your time well.',
+                                                fontSize: 18,
+                                              ),
+                                            ],
                                           ),
-                                          Column(
-                                            children:
-                                                model.selectedTaskListFromTomorrowThisWeek ==
-                                                        0
-                                                    ? tomorrowTaskList
-                                                    : weekTaskList,
-                                          ),
-                                        ])
-                                  : Container(
-                                      color: Colors.white,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: kHPadding,
-                                          vertical: kVPadding),
-                                      alignment: AlignmentDirectional.center,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image(
-                                            height: 200,
-                                            fit: BoxFit.contain,
-                                            image: AssetImage(
-                                                'assets/images/organized.png'),
-                                          ),
-                                          SizedBox(
-                                            height: kVPadding,
-                                          ),
-                                          FormHeading(
-                                            title:
-                                                'If you have time, you\'re productive. Timely helps you spend your time well.',
-                                            fontSize: 18,
-                                          ),
-                                        ],
+                                        );
+                                } else {
+                                  return Center(
+                                    child: Container(
+                                      height: 50,
+                                      width: 50,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                          Container(
+                            color: kGreyWhite,
+                            child: StreamBuilder(
+                              stream: model.stream,
+                              builder: (context, AsyncSnapshot snapshot) {
+                                if (snapshot.hasData) {
+                                  List<HorizontalTaskBuilder> allTasksList = [];
+                                  var data = snapshot.data.docs;
+                                  for (var dataItem in data) {
+                                    String taskTitle = dataItem['Task Title'];
+                                    Timestamp taskDateandTime =
+                                        dataItem['Task Date Time'];
+                                    String taskDesc =
+                                        dataItem['Task Description'];
+                                    String taskCategory =
+                                        dataItem['Task Category'];
+                                    bool isalarmSet = dataItem['isAlarmSet'];
+                                    DateTime taskDate = DateTime(
+                                        taskDateandTime.toDate().year,
+                                        taskDateandTime.toDate().month,
+                                        taskDateandTime.toDate().day);
+                                    TimeOfDay taskTime = TimeOfDay(
+                                        hour: taskDateandTime.toDate().hour,
+                                        minute:
+                                            taskDateandTime.toDate().minute);
+                                    allTasksList.add(
+                                      HorizontalTaskBuilder(
+                                        isAlarmSet: isalarmSet,
+                                        color: model.services.colorSelector(
+                                            taskCategory: taskCategory),
+                                        taskTitle: taskTitle,
+                                        time: taskTime.format(context),
+                                        taskTime: taskTime.format(context),
+                                        category: taskCategory,
+                                        taskDate: DateFormat('MMMMEEEEd')
+                                            .format(taskDate),
+                                        taskDescription: taskDesc,
                                       ),
                                     );
-                            } else {
-                              return Center(
-                                child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      Container(
-                        color: kGreyWhite,
-                        child: StreamBuilder(
-                          stream: model.stream,
-                          builder: (context, AsyncSnapshot snapshot) {
-                            if (snapshot.hasData) {
-                              List<HorizontalTaskBuilder> allTasksList = [];
-                              var data = snapshot.data.docs;
-                              for (var dataItem in data) {
-                                String taskTitle = dataItem['Task Title'];
-                                Timestamp taskDateandTime =
-                                    dataItem['Task Date Time'];
-                                String taskDesc = dataItem['Task Description'];
-                                String taskCategory = dataItem['Task Category'];
-                                bool isalarmSet = dataItem['isAlarmSet'];
-                                DateTime taskDate = DateTime(
-                                    taskDateandTime.toDate().year,
-                                    taskDateandTime.toDate().month,
-                                    taskDateandTime.toDate().day);
-                                TimeOfDay taskTime = TimeOfDay(
-                                    hour: taskDateandTime.toDate().hour,
-                                    minute: taskDateandTime.toDate().minute);
-                                allTasksList.add(HorizontalTaskBuilder(
-                                    color: model.services.colorSelector(
-                                        taskCategory: taskCategory),
-                                    taskTitle: taskTitle,
-                                    time: taskTime.format(context)));
-                              }
-                              return ListView(
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(
-                                      0, kVPadding * 2, 0, 0),
-                                  children: [
-                                    GridView.count(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: kHPadding * 1.5),
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: kHPadding,
-                                      mainAxisSpacing: kHPadding,
-                                      childAspectRatio: 1.4,
-                                      children: List.generate(
-                                          categoryList.length, (index) {
-                                        return categoryList[index];
-                                      }),
-                                    ),
-                                    Container(
-                                      alignment: AlignmentDirectional.centerEnd,
-                                      padding: EdgeInsets.only(
-                                          right: kHPadding * 1.5),
-                                      child: Icon(
-                                        Icons.more_horiz_rounded,
-                                        size: 34,
-                                        color: kPrimaryColor,
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: kVPadding * 2),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: kHPadding * 2),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
+                                  }
+                                  return ListView(
+                                      physics: BouncingScrollPhysics(),
+                                      padding: EdgeInsets.fromLTRB(
+                                          0, kVPadding * 2, 0, 0),
+                                      children: [
+                                        GridView.count(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: kHPadding * 1.5),
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: kHPadding,
+                                          mainAxisSpacing: kHPadding,
+                                          childAspectRatio: 1.4,
+                                          children: List.generate(
+                                              categoryList.length, (index) {
+                                            return categoryList[index];
+                                          }),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: kVPadding * 2),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: kHPadding * 2),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'Tasks'.toUpperCase(),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: kBlackTextColor,
+                                                      fontFamily:
+                                                          kCircularStdFont,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                               Text(
-                                                'Tasks'.toUpperCase(),
+                                                'View All',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  color: kBlackTextColor,
+                                                  color: kPrimaryColor,
                                                   fontFamily: kCircularStdFont,
                                                   fontWeight: FontWeight.w700,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          Text(
-                                            'View All',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: kPrimaryColor,
-                                              fontFamily: kCircularStdFont,
-                                              fontWeight: FontWeight.w700,
-                                            ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: kHPadding),
+                                          child: Column(
+                                            children: allTasksList,
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: kHPadding),
-                                      child: Column(
-                                        children: allTasksList,
-                                      ),
-                                    ),
-                                  ]);
-                            } else
-                              return Container();
-                          },
-                        ),
-                      ),
-                    ]),
+                                        ),
+                                      ]);
+                                } else
+                                  return Container();
+                              },
+                            ),
+                          ),
+                        ]),
                   ),
                 ),
               ),

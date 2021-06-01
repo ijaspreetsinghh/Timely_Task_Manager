@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:timely/core/services/services.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/createTask.dart';
+import 'package:timely/meta/view/Screens/MainAppPages/notificationsPage.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/profileInformationPage.dart';
 import 'package:timely/meta/view/Screens/Onboarding/welcomeScreen.dart';
-import 'package:timely/theme.dart';
+import 'package:timely/app/theme.dart';
 import 'core/services/navigationService.dart';
 import 'meta/view/Screens/Onboarding/onboarding.dart';
 import 'meta/view/Screens/ForgotPassword/forgotpassword.dart';
@@ -101,6 +102,7 @@ class MyApp extends StatelessWidget {
           WelcomeScreen.route: (context) => WelcomeScreen(),
           ProfileInformationPage.route: (context) => ProfileInformationPage(),
           CreateTask.route: (context) => CreateTask(),
+          NotificationsPage.route: (context) => NotificationsPage(),
         },
       ),
     );

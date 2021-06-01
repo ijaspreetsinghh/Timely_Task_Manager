@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/viewmodel/createTask_viewModel.dart';
 import 'package:timely/meta/widgets/components.dart';
 import 'package:timely/meta/widgets/constants.dart';
@@ -118,8 +119,19 @@ class CreateTask extends StatelessWidget {
                                             (DateTime.now().day)),
                                       ).then((date) {
                                         model.pickDate(date);
-                                      }).catchError(
-                                          (onError) => print(onError));
+                                      }).catchError((onError) {
+                                        NavigationService.instance.hideLoader();
+                                        NavigationService.instance
+                                            .showAlertWithOneButton(
+                                                title: 'Failure',
+                                                content:
+                                                    'Following error occurred \'$onError\'.',
+                                                primaryAction: () =>
+                                                    NavigationService.instance
+                                                        .goBack(),
+                                                primaryActionTitle:
+                                                    'Try again');
+                                      });
                                     },
                                     child: Column(
                                       crossAxisAlignment:

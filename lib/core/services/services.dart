@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:timely/core/services/navigationService.dart';
@@ -12,6 +13,21 @@ import 'package:timely/meta/widgets/constants.dart';
 class Services extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
+  String _messageTitle = "Empty";
+  get messageTitle => _messageTitle;
+  String _notificationAlert = "alert";
+  get notificationAlert => _notificationAlert;
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  getNotification() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _messageTitle = message.notification.title;
+      AndroidNotification android = message.notification?.android;
+      print(_messageTitle);
+      print('andro $android');
+      notifyListeners();
+    });
+  }
 
   String displayName;
   String email;
@@ -184,6 +200,12 @@ class Services extends ChangeNotifier {
             content: 'Email can not be updated without the current password.',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try Again');
+      } else {
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed due to $error',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
       }
     });
   }
@@ -224,6 +246,12 @@ class Services extends ChangeNotifier {
             content: 'Please check your current password and try again.',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try Again');
+      } else {
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed due to $error',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
       }
     });
   }
@@ -310,6 +338,12 @@ class Services extends ChangeNotifier {
               resetUserPassword(thisEmail: email);
             },
             primaryActionTitle: 'OK');
+      } else {
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed due to $e',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
       }
     });
     // NavigationService.instance.hideLoader();
@@ -327,7 +361,6 @@ class Services extends ChangeNotifier {
       NavigationService.instance.goBack();
       NavigationService.instance.replace(GoToEmail.route);
     }).catchError((e) {
-      print(e.code);
       NavigationService.instance.goBack();
       if (e.code == 'user-not-found') {
         NavigationService.instance.showAlertWithOneButton(
@@ -336,6 +369,12 @@ class Services extends ChangeNotifier {
                 'Please check if you have created any account with \'$thisEmail\', or try changing email.',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'OK');
+      } else {
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed due to $e',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
       }
     });
   }
@@ -352,7 +391,7 @@ class Services extends ChangeNotifier {
       }
     }).catchError((e) {
       NavigationService.instance.hideLoader();
-      print(e);
+
       if (e.code == 'wrong-password') {
         NavigationService.instance.showAlertWithTwoButtons(
             title: 'Invalid Credentials',
@@ -377,6 +416,12 @@ class Services extends ChangeNotifier {
               NavigationService.instance.goBack();
               NavigationService.instance.pushNamed(SignUp.route);
             });
+      } else {
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed due to $e',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
       }
     });
   }

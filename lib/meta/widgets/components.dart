@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/services/services.dart';
+import 'package:timely/core/viewmodel/taskViewAndUpdate_viewModel.dart';
 
 import 'constants.dart';
 
@@ -49,7 +51,7 @@ class PrimaryButton extends StatelessWidget {
                 )),
             onPressed: () => action(),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -78,12 +80,15 @@ class FormHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(title,
-        textAlign: TextAlign.left,
-        style: kCircularStdText.copyWith(
-            fontSize: fontSize ?? 22,
-            fontWeight: FontWeight.w700,
-            color: color ?? kBlackTextColor));
+    return Text(
+      title,
+      textAlign: TextAlign.left,
+      overflow: TextOverflow.visible,
+      style: kCircularStdText.copyWith(
+          fontSize: fontSize ?? 22,
+          fontWeight: FontWeight.w700,
+          color: color ?? kBlackTextColor),
+    );
   }
 }
 
@@ -92,88 +97,104 @@ class PriorityTaskGrid extends StatelessWidget {
   final String remainingTime;
   final Color color;
   final String time;
+  final String taskDesc;
+  final String taskCategory;
+  final bool isAlarmSet;
+  final String taskDate;
   PriorityTaskGrid(
       {@required this.color,
       @required this.remainingTime,
       @required this.taskTitle,
-      @required this.time});
+      @required this.time,
+      @required this.isAlarmSet,
+      @required this.taskCategory,
+      @required this.taskDesc,
+      @required this.taskDate});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding:
-          EdgeInsets.only(left: kVPadding, top: kVPadding, bottom: kVPadding),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(kBorderRadius),
-          color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                time,
-                style: kHintTextStyle.copyWith(
-                  fontSize: 13,
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(kBorderRadius),
-                        bottomLeft: Radius.circular(kBorderRadius))),
-                width: 30,
-                height: 7,
-              )
-            ],
-          ),
-          SizedBox(
-            height: kVPadding,
-          ),
-          Expanded(
-            child: Text(
-              taskTitle,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
-              style: kCircularStdText.copyWith(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700),
-            ),
-          ),
-          SizedBox(
-            height: kVPadding,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                remainingTime,
-                style: kHintTextStyle.copyWith(
-                  fontSize: 12,
-                  color: kGrayTextColor.withOpacity(.7),
-                  fontFamily: kCircularStdFont,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: kVPadding),
-                child: RotationTransition(
-                  turns: AlwaysStoppedAnimation(15 / 360),
-                  child: Icon(
-                    Icons.notifications_none_rounded,
-                    size: 20,
-                    color: kPrimaryColor,
+    return ViewModelBuilder<TaskViewAndUpdateViewModel>.reactive(
+        builder: (context, model, child) {
+          return GestureDetector(
+            onTap: () => model.editSelectedTask(
+                ctx: context,
+                taskName: taskTitle,
+                taskDesc: taskDesc,
+                taskDate: taskDate,
+                taskCategory: taskCategory,
+                taskTime: time,
+                taskColor: color),
+            child: Container(
+              padding: EdgeInsets.only(
+                  left: kVPadding, top: kVPadding, bottom: kVPadding),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(kBorderRadius),
+                  color: Colors.white),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        time,
+                        style: kHintTextStyle.copyWith(
+                          fontSize: 13,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: color,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(kBorderRadius),
+                                bottomLeft: Radius.circular(kBorderRadius))),
+                        width: 30,
+                        height: 7,
+                      )
+                    ],
                   ),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
+                  SizedBox(
+                    height: kVPadding,
+                  ),
+                  Expanded(
+                    child: Text(
+                      taskTitle,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: kCircularStdText.copyWith(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    height: kVPadding,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        remainingTime,
+                        style: kHintTextStyle.copyWith(
+                          fontSize: 12,
+                          color: kGrayTextColor.withOpacity(.7),
+                          fontFamily: kCircularStdFont,
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(right: kVPadding),
+                          child: AlarmBellIcon(
+                            isAlarmSet: isAlarmSet,
+                          ))
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+        viewModelBuilder: () => TaskViewAndUpdateViewModel());
   }
 }
 
@@ -212,7 +233,7 @@ class CategoryGrid extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: kHPadding,
+                width: kHPadding * 1.5,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,28 +262,10 @@ class CategoryGrid extends StatelessWidget {
           SizedBox(
             height: kVPadding,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                categoryName,
-                style: kCircularStdText.copyWith(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(3),
-                child: Icon(
-                  Icons.add_rounded,
-                  color: Colors.white,
-                  size: 16,
-                ),
-              ),
-            ],
+          Text(
+            categoryName,
+            style: kCircularStdText.copyWith(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
           )
         ],
       ),
@@ -274,52 +277,111 @@ class HorizontalTaskBuilder extends StatelessWidget {
   final String taskTitle;
   final String time;
   final Color color;
+  final String taskDescription;
+  final String category;
+  final String taskDate;
+  final String taskTime;
+  final bool isAlarmSet;
   HorizontalTaskBuilder(
-      {@required this.color, @required this.taskTitle, @required this.time});
+      {@required this.color,
+      @required this.taskTitle,
+      @required this.time,
+      @required this.taskTime,
+      @required this.taskDate,
+      @required this.taskDescription,
+      @required this.category,
+      @required this.isAlarmSet});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: kVPadding),
-      padding: EdgeInsets.only(
-          left: kHPadding, top: kVPadding * 2, bottom: kVPadding * 2),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(kBorderRadius)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(kBorderRadius),
-                    bottomLeft: Radius.circular(kBorderRadius))),
-            width: 25,
-            height: 7,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                taskTitle,
-                style: kCircularStdText.copyWith(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700),
+    return ViewModelBuilder<TaskViewAndUpdateViewModel>.reactive(
+        builder: (context, model, child) {
+          return GestureDetector(
+            onTap: () => model.editSelectedTask(
+                ctx: context,
+                taskName: taskTitle,
+                taskDesc: taskDescription,
+                taskDate: taskDate,
+                taskCategory: category,
+                taskTime: taskTime,
+                taskColor: color),
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: kVPadding),
+              padding: EdgeInsets.only(
+                  left: kHPadding, top: kVPadding * 2, bottom: kVPadding * 2),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(kBorderRadius)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(kBorderRadius),
+                            bottomLeft: Radius.circular(kBorderRadius))),
+                    width: 25,
+                    height: 7,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        taskTitle,
+                        style: kCircularStdText.copyWith(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: kHPadding / 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          time,
+                          style: kHintTextStyle.copyWith(
+                            fontSize: 13,
+                            color: kGrayTextColor.withOpacity(.9),
+                            fontFamily: kCircularStdFont,
+                          ),
+                        ),
+                        SizedBox(
+                          width: kHPadding / 2,
+                        ),
+                        AlarmBellIcon(
+                          isAlarmSet: isAlarmSet,
+                          iconSize: 16,
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(right: kHPadding / 2),
-            child: Text(time,
-                style: kHintTextStyle.copyWith(
-                  fontSize: 12,
-                  color: kGrayTextColor.withOpacity(.7),
-                  fontFamily: kCircularStdFont,
-                )),
-          )
-        ],
+            ),
+          );
+        },
+        viewModelBuilder: () => TaskViewAndUpdateViewModel());
+  }
+}
+
+class AlarmBellIcon extends StatelessWidget {
+  const AlarmBellIcon({@required this.isAlarmSet, this.iconSize});
+  final bool isAlarmSet;
+  final double iconSize;
+  @override
+  Widget build(BuildContext context) {
+    return RotationTransition(
+      turns: AlwaysStoppedAnimation(15 / 360),
+      child: Icon(
+        isAlarmSet
+            ? Icons.notifications_active_outlined
+            : Icons.notifications_off_outlined,
+        color: isAlarmSet ? kPrimaryColor : kGrayTextColor,
+        size: iconSize ?? 18,
       ),
     );
   }

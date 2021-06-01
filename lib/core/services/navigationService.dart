@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timely/core/viewmodel/taskViewAndUpdate_viewModel.dart';
+import 'package:timely/meta/widgets/components.dart';
 import 'package:timely/meta/widgets/constants.dart';
 
 import '../../main.dart';
@@ -116,6 +119,27 @@ class NavigationService {
       ),
     );
   }
+
+  // viewTaskInAlert(
+  //     {@required taskName,
+  //     @required taskDesc,
+  //     @required taskTime,
+  //     @required taskDate,
+  //     @required taskCategory,
+  //     @required taskColor}) {
+  //   showDialog(
+  //       barrierColor: Colors.black.withOpacity(.7),
+  //       // barrierDismissible: false,
+  //
+  //       context: navigationKey.currentContext,
+  //       builder: (context) => ViewTaskInAlert(
+  //           taskName: taskName,
+  //           taskDesc: taskDesc,
+  //           taskTime: taskTime,
+  //           taskDate: taskDate,
+  //           taskCategory: taskCategory,
+  //           taskColor: taskColor));
+  // }
 
   showAlertWithOneButton({
     title,
@@ -753,3 +777,281 @@ class _AlertBoxWithTwoButtonWithoutText
     );
   }
 }
+
+// class ViewTaskInAlert extends StatefulWidget {
+//   ViewTaskInAlert({
+//     @required this.taskName,
+//     @required this.taskDesc,
+//     @required this.taskTime,
+//     @required this.taskDate,
+//     @required this.taskCategory,
+//     @required this.taskColor,
+//   });
+//   final String taskName;
+//   final String taskDesc;
+//   final String taskTime;
+//   final Color taskColor;
+//   final String taskCategory;
+//   final String taskDate;
+//   @override
+//   _ViewTaskInAlert createState() => _ViewTaskInAlert();
+// }
+//
+// class _ViewTaskInAlert extends State<ViewTaskInAlert>
+//     with SingleTickerProviderStateMixin {
+//   AnimationController controller;
+//   Animation<double> scaleAnimation;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//
+//     controller =
+//         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+//     scaleAnimation =
+//         CurvedAnimation(parent: controller, curve: Curves.linearToEaseOut);
+//
+//     controller.addListener(() {
+//       setState(() {});
+//     });
+//
+//     controller.forward();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Material(
+//         color: Colors.transparent,
+//         child: ScaleTransition(
+//           scale: scaleAnimation,
+//           child: Hero(
+//             tag: 'View Task',
+//             child: Container(
+//                 width: 275,
+//                 constraints: BoxConstraints(maxHeight: 600),
+//                 padding: EdgeInsets.fromLTRB(0, kVPadding * 2, 0, 0),
+//                 decoration: ShapeDecoration(
+//                     color: Colors.white,
+//                     shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(kBorderRadius))),
+//                 child: SingleChildScrollView(
+//                   child: Column(
+//                     mainAxisSize: MainAxisSize.min,
+//                     crossAxisAlignment: CrossAxisAlignment.stretch,
+//                     children: [
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         children: [
+//                           Flexible(
+//                             child: Padding(
+//                                 padding: const EdgeInsets.symmetric(
+//                                     horizontal: kHPadding * 1.5),
+//                                 child: FormHeading(
+//                                   title: widget.taskName,
+//                                   fontSize: 20,
+//                                 )),
+//                           ),
+//                           Container(
+//                             decoration: BoxDecoration(
+//                                 color: services.colorSelector(
+//                                     taskCategory: widget.taskCategory),
+//                                 borderRadius: BorderRadius.only(
+//                                     topLeft: Radius.circular(kBorderRadius),
+//                                     bottomLeft:
+//                                         Radius.circular(kBorderRadius))),
+//                             width: 30,
+//                             height: 10,
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(
+//                         height: kVPadding * 2,
+//                       ),
+//                       Padding(
+//                         padding: const EdgeInsets.symmetric(
+//                             horizontal: kHPadding * 1.5),
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             FieldTitle(
+//                               fieldName: 'date',
+//                             ),
+//                             Text(
+//                               widget.taskDate,
+//                               overflow: TextOverflow.ellipsis,
+//                               maxLines: 3,
+//                               style: kCircularStdText.copyWith(
+//                                   color: kBlackTextColor,
+//                                   fontSize: 16,
+//                                   fontWeight: FontWeight.w700),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: kVPadding * 2,
+//                       ),
+//                       Padding(
+//                         padding: const EdgeInsets.symmetric(
+//                             horizontal: kHPadding * 1.5),
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             FieldTitle(
+//                               fieldName: 'time',
+//                             ),
+//                             Text(
+//                               widget.taskTime,
+//                               overflow: TextOverflow.ellipsis,
+//                               maxLines: 3,
+//                               style: kCircularStdText.copyWith(
+//                                   color: kBlackTextColor,
+//                                   fontSize: 16,
+//                                   fontWeight: FontWeight.w700),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: kVPadding,
+//                       ),
+//                       Padding(
+//                         padding: const EdgeInsets.symmetric(
+//                             horizontal: kHPadding * 1.5),
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             FieldTitle(
+//                               fieldName: 'description',
+//                             ),
+//                             Text(
+//                               widget.taskDesc,
+//                               overflow: TextOverflow.visible,
+//                               style: kCircularStdText.copyWith(
+//                                   color: kBlackTextColor,
+//                                   fontSize: 16,
+//                                   fontWeight: FontWeight.w700),
+//                             )
+//                           ],
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: kVPadding * 2,
+//                       ),
+//                       Row(
+//                         crossAxisAlignment: CrossAxisAlignment.center,
+//                         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                         children: [
+//                           Expanded(
+//                             child: Container(
+//                               transform: Matrix4.translationValues(0, 6, 0),
+//                               child: TextButton(
+//                                   onPressed: () => editSelectedTask(),
+//                                   style: TextButton.styleFrom(
+//                                       primary: kPrimaryColor,
+//                                       padding: EdgeInsets.symmetric(
+//                                           horizontal: kHPadding * 1.5,
+//                                           vertical: kVPadding * 2)),
+//                                   child: Row(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       Icon(
+//                                         Icons.edit_rounded,
+//                                         color: kPrimaryColor,
+//                                       ),
+//                                       SizedBox(
+//                                         width: kHPadding / 2,
+//                                       ),
+//                                       Text(
+//                                         'Edit',
+//                                         style: kCircularStdText.copyWith(
+//                                             fontWeight: FontWeight.w700,
+//                                             color: kPrimaryColor,
+//                                             fontSize: 16),
+//                                       ),
+//                                     ],
+//                                   )),
+//                             ),
+//                           ),
+//                           Container(
+//                             width: .5,
+//                             height: 30,
+//                             transform: Matrix4.translationValues(0, 6, 0),
+//                             color: kBlackTextColor.withOpacity(.2),
+//                           ),
+//                           Expanded(
+//                             child: Container(
+//                               transform: Matrix4.translationValues(0, 6, 0),
+//                               child: TextButton(
+//                                   onPressed: () => print('hon'),
+//                                   style: TextButton.styleFrom(
+//                                       primary: kRedColor,
+//                                       padding: EdgeInsets.symmetric(
+//                                           horizontal: kHPadding * 1.5,
+//                                           vertical: kVPadding * 2)),
+//                                   child: Row(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       Icon(
+//                                         Icons.delete_outline_rounded,
+//                                         color: kRedColor,
+//                                       ),
+//                                       SizedBox(
+//                                         width: kHPadding / 2,
+//                                       ),
+//                                       Text(
+//                                         'Delete',
+//                                         style: kCircularStdText.copyWith(
+//                                             fontWeight: FontWeight.w700,
+//                                             color: kRedColor,
+//                                             fontSize: 16),
+//                                       ),
+//                                     ],
+//                                   )),
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       Container(
+//                         transform: Matrix4.translationValues(0, 6, 0),
+//                         height: .5,
+//                         color: kBlackTextColor.withOpacity(.2),
+//                       ),
+//                       Container(
+//                         transform: Matrix4.translationValues(0, 6, 0),
+//                         child: TextButton(
+//                             onPressed: () => print('hi'),
+//                             style: TextButton.styleFrom(
+//                                 primary: kBlackTextColor,
+//                                 padding: EdgeInsets.symmetric(
+//                                     horizontal: kHPadding * 1.5,
+//                                     vertical: kVPadding * 2)),
+//                             child: Row(
+//                               mainAxisAlignment: MainAxisAlignment.center,
+//                               children: [
+//                                 Icon(
+//                                   Icons.check,
+//                                 ),
+//                                 SizedBox(
+//                                   width: kHPadding,
+//                                 ),
+//                                 Text(
+//                                   'Mark as Done',
+//                                   style: kCircularStdText.copyWith(
+//                                       color: kBlackTextColor,
+//                                       fontSize: 16,
+//                                       fontWeight: FontWeight.w700),
+//                                 ),
+//                               ],
+//                             )),
+//                       )
+//                     ],
+//                   ),
+//                 )),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
