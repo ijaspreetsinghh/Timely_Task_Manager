@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:timely/core/services/navigationService.dart';
@@ -17,17 +16,6 @@ class Services extends ChangeNotifier {
   get messageTitle => _messageTitle;
   String _notificationAlert = "alert";
   get notificationAlert => _notificationAlert;
-
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  getNotification() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _messageTitle = message.notification.title;
-      AndroidNotification android = message.notification?.android;
-      print(_messageTitle);
-      print('andro $android');
-      notifyListeners();
-    });
-  }
 
   String displayName;
   String email;
@@ -61,7 +49,8 @@ class Services extends ChangeNotifier {
       'Task Description': taskDescription,
       'Task Date Time': taskDateTime,
       'isAlarmSet': alarmSet,
-      'Task Category': taskCategory
+      'Task Category': taskCategory,
+      'Task Status': 'Pending',
     }).then((value) {
       NavigationService.instance.hideLoader();
       NavigationService.instance.showAlertWithOneButton(
@@ -125,8 +114,6 @@ class Services extends ChangeNotifier {
             primaryAction: () => NavigationService.instance.goBack());
       });
       NavigationService.instance.hideLoader();
-      NavigationService.instance.replace(PagesDecider.route);
-      print('done');
     }).catchError((onError) {
       NavigationService.instance.hideLoader();
       NavigationService.instance.showAlertWithOneButton(
@@ -143,18 +130,7 @@ class Services extends ChangeNotifier {
 
     return await auth.currentUser
         .updateProfile(displayName: name)
-        .then((value) {
-      NavigationService.instance.hideLoader();
-      NavigationService.instance.showAlertWithOneButton(
-          title: 'Success',
-          content: 'Name updated successfully,',
-          primaryAction: () {
-            print('ok');
-            initializeUser();
-            NavigationService.instance.replace(PagesDecider.route);
-          },
-          primaryActionTitle: 'OK');
-    }).catchError((error) {
+        .catchError((error) {
       NavigationService.instance.hideLoader();
       NavigationService.instance.showAlertWithOneButton(
           title: 'Error',
@@ -292,7 +268,7 @@ class Services extends ChangeNotifier {
     NavigationService.instance.showLoader(title: 'Generating email');
     return auth.currentUser.sendEmailVerification().then((value) async {
       NavigationService.instance.hideLoader();
-      NavigationService.instance.replace(GoToEmail.route);
+      NavigationService.instance.pushNamed(GoToEmail.route);
     }).catchError((error) {
       NavigationService.instance.hideLoader();
       NavigationService.instance.showAlertWithOneButton(
@@ -311,6 +287,7 @@ class Services extends ChangeNotifier {
         .then((value) async {
       await initializeUser();
       await updateDisplayName(name);
+      await addUserData();
       if (auth.currentUser != null) {
         NavigationService.instance.pushNamed(PagesDecider.route);
       }
@@ -349,6 +326,125 @@ class Services extends ChangeNotifier {
     // NavigationService.instance.hideLoader();
   }
 
+  Future addUserData() async {
+    await users
+        .doc(auth.currentUser.uid)
+        .set({'isPro': false}).catchError((error) {
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Error',
+          content: 'Something went wrong. ${error.code}',
+          primaryAction: () => NavigationService.instance.goBack(),
+          primaryActionTitle: 'OK');
+    });
+    await users
+        .doc(auth.currentUser.uid)
+        .collection('Tasks')
+        .doc('dummyId')
+        .set({}).catchError((error) {
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Error',
+          content: 'Something went wrong. ${error.code}',
+          primaryAction: () => NavigationService.instance.goBack(),
+          primaryActionTitle: 'OK');
+    });
+    await users
+        .doc(auth.currentUser.uid)
+        .collection('History')
+        .doc('dummyId')
+        .set({}).catchError((error) {
+      NavigationService.instance.hideLoader();
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Error',
+          content: 'Something went wrong. ${error.code}',
+          primaryAction: () => NavigationService.instance.goBack(),
+          primaryActionTitle: 'OK');
+    });
+  }
+
+  Future updateTask(
+      {@required thisTaskId,
+      @required taskName,
+      @required taskDesc,
+      @required taskDate,
+      @required taskTime,
+      @required isAlarmSet,
+      @required taskCategory,
+      @required taskStatus}) {
+    Timestamp myTaskDateTime = Timestamp.fromDate(DateTime(taskDate.year,
+        taskDate.month, taskDate.day, taskTime.hour, taskTime.minute, 0));
+    NavigationService.instance.goBack();
+
+    NavigationService.instance.showLoader(title: 'Updating Task');
+    return users
+        .doc(auth.currentUser.uid)
+        .collection('Tasks')
+        .doc(thisTaskId)
+        .update({
+      'Task Category': taskCategory,
+      'Task Description': taskDesc,
+      'Task Title': taskName,
+      'isAlarmSet': isAlarmSet,
+      'Task Status': taskStatus,
+      'Task Date Time': myTaskDateTime
+    }).then(
+      (value) {
+        NavigationService.instance.hideLoader();
+      },
+    ).catchError(
+      (onError) => print('error'),
+    );
+  }
+
+  Future markTaskAsDone(
+      {@required thisTaskId,
+      @required taskName,
+      @required taskDesc,
+      @required taskDate,
+      @required taskTime,
+      @required isAlarmSet,
+      @required taskCategory,
+      @required taskStatus}) {
+    NavigationService.instance.goBack();
+
+    NavigationService.instance.showLoader(title: 'Updating Task Status');
+    Timestamp myTaskDateTime = Timestamp.fromDate(DateTime(taskDate.year,
+        taskDate.month, taskDate.day, taskTime.hour, taskTime.minute, 0));
+    return users
+        .doc(auth.currentUser.uid)
+        .collection('Tasks')
+        .doc(thisTaskId)
+        .update({
+      'Task Category': taskCategory,
+      'Task Description': taskDesc,
+      'Task Title': taskName,
+      'isAlarmSet': isAlarmSet,
+      'Task Status': 'Done',
+      'Task Date Time': myTaskDateTime
+    }).then(
+      (value) {
+        NavigationService.instance.hideLoader();
+      },
+    ).catchError(
+      (onError) => print('error'),
+    );
+  }
+
+  Future deleteTask(thisTaskId) {
+    NavigationService.instance.goBack();
+
+    NavigationService.instance.showLoader(title: 'Deleting Task');
+    return users
+        .doc(auth.currentUser.uid)
+        .collection('Tasks')
+        .doc(thisTaskId)
+        .delete()
+        .then(
+      (value) {
+        NavigationService.instance.hideLoader();
+      },
+    );
+  }
+
   logOut() async {
     await auth.signOut();
     NavigationService.instance.replace(WelcomeScreen.route);
@@ -359,7 +455,7 @@ class Services extends ChangeNotifier {
         .showLoader(title: 'Generating password reset email');
     await auth.sendPasswordResetEmail(email: thisEmail).then((value) {
       NavigationService.instance.goBack();
-      NavigationService.instance.replace(GoToEmail.route);
+      NavigationService.instance.pushNamed(GoToEmail.route);
     }).catchError((e) {
       NavigationService.instance.goBack();
       if (e.code == 'user-not-found') {

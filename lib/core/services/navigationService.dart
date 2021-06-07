@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:timely/core/viewmodel/taskViewAndUpdate_viewModel.dart';
-import 'package:timely/meta/widgets/components.dart';
 import 'package:timely/meta/widgets/constants.dart';
 
 import '../../main.dart';
@@ -507,7 +505,9 @@ class _AlertBoxWithTwoButton extends State<AlertBoxWithTwoButton>
                         child: Text(
                           widget.titleAction1,
                           style: kCircularStdText.copyWith(
-                              color: kPrimaryColor, fontSize: 16),
+                              fontWeight: FontWeight.w700,
+                              color: kPrimaryColor,
+                              fontSize: 16),
                         )),
                   ),
                   Container(

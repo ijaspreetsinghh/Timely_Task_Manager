@@ -28,6 +28,5 @@ class ScheduleViewModel extends StreamViewModel<QuerySnapshot> {
   }
 
   @override
-  // TODO: implement stream
   Stream<QuerySnapshot> get stream => getTasks();
 }

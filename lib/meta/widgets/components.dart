@@ -76,13 +76,15 @@ class FormHeading extends StatelessWidget {
   final String title;
   final Color color;
   final double fontSize;
-  FormHeading({@required this.title, this.color, this.fontSize});
+  final TextAlign alignment;
+  FormHeading(
+      {@required this.title, this.color, this.fontSize, this.alignment});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       title,
-      textAlign: TextAlign.left,
+      textAlign: alignment ?? TextAlign.left,
       overflow: TextOverflow.visible,
       style: kCircularStdText.copyWith(
           fontSize: fontSize ?? 22,
@@ -96,11 +98,14 @@ class PriorityTaskGrid extends StatelessWidget {
   final String taskTitle;
   final String remainingTime;
   final Color color;
-  final String time;
+  final TimeOfDay time;
   final String taskDesc;
   final String taskCategory;
   final bool isAlarmSet;
-  final String taskDate;
+  final DateTime taskDate;
+  final String taskId;
+  final String taskStatus;
+
   PriorityTaskGrid(
       {@required this.color,
       @required this.remainingTime,
@@ -109,16 +114,54 @@ class PriorityTaskGrid extends StatelessWidget {
       @required this.isAlarmSet,
       @required this.taskCategory,
       @required this.taskDesc,
-      @required this.taskDate});
+      @required this.taskDate,
+      @required this.taskId,
+      @required this.taskStatus});
+  IconData getIcon(
+      thisTaskStatus, TimeOfDay thisTaskTime, DateTime thisTaskDate) {
+    if (thisTaskStatus == 'Pending') {
+      DateTime taskDeadline = DateTime(thisTaskDate.year, thisTaskDate.month,
+          thisTaskDate.day, thisTaskTime.hour, thisTaskTime.minute, 0);
+
+      if (taskDeadline.isBefore(DateTime.now())) {
+        return Icons.priority_high_rounded;
+      } else {
+        return Icons.access_time_rounded;
+      }
+    } else if (taskStatus == 'Done') {
+      return Icons.check;
+    } else {
+      return Icons.priority_high;
+    }
+  }
+
+  Color getColor(
+      thisTaskStatus, TimeOfDay thisTaskTime, DateTime thisTaskDate) {
+    if (thisTaskStatus == 'Pending') {
+      DateTime taskDeadline = DateTime(thisTaskDate.year, thisTaskDate.month,
+          thisTaskDate.day, thisTaskTime.hour, thisTaskTime.minute, 0);
+
+      if (taskDeadline.isBefore(DateTime.now())) {
+        return kRedColor;
+      } else {
+        return kYellowColor;
+      }
+    } else if (taskStatus == 'Done') {
+      return kGreenColor;
+    } else {
+      return Colors.transparent;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TaskViewAndUpdateViewModel>.reactive(
         builder: (context, model, child) {
           return GestureDetector(
-            onTap: () => model.editSelectedTask(
-                ctx: context,
+            onTap: () => model.viewSelectedTask(
+                taskId: taskId,
                 taskName: taskTitle,
+                ctx: context,
                 taskDesc: taskDesc,
                 taskDate: taskDate,
                 taskCategory: taskCategory,
@@ -129,7 +172,7 @@ class PriorityTaskGrid extends StatelessWidget {
                   left: kVPadding, top: kVPadding, bottom: kVPadding),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(kBorderRadius),
-                  color: Colors.white),
+                  color: taskStatus == 'Done' ? kGreenColor : Colors.white),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -138,7 +181,7 @@ class PriorityTaskGrid extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        time,
+                        time.format(context),
                         style: kHintTextStyle.copyWith(
                           fontSize: 13,
                         ),
@@ -174,12 +217,19 @@ class PriorityTaskGrid extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        remainingTime,
-                        style: kHintTextStyle.copyWith(
-                          fontSize: 12,
-                          color: kGrayTextColor.withOpacity(.7),
-                          fontFamily: kCircularStdFont,
+                      Container(
+                        child: Icon(
+                          getIcon(taskStatus, time, taskDate),
+                          size: 14,
+                          color: kGreyWhite,
+                        ),
+                        padding: EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: getColor(taskStatus, time, taskDate),
+                              width: 2),
+                          color: getColor(taskStatus, time, taskDate),
                         ),
                       ),
                       Padding(
@@ -275,13 +325,15 @@ class CategoryGrid extends StatelessWidget {
 
 class HorizontalTaskBuilder extends StatelessWidget {
   final String taskTitle;
-  final String time;
+  final TimeOfDay time;
   final Color color;
   final String taskDescription;
   final String category;
-  final String taskDate;
-  final String taskTime;
+  final DateTime taskDate;
+  final TimeOfDay taskTime;
   final bool isAlarmSet;
+  final String taskStatus;
+  final String taskId;
   HorizontalTaskBuilder(
       {@required this.color,
       @required this.taskTitle,
@@ -290,78 +342,139 @@ class HorizontalTaskBuilder extends StatelessWidget {
       @required this.taskDate,
       @required this.taskDescription,
       @required this.category,
-      @required this.isAlarmSet});
+      @required this.isAlarmSet,
+      @required this.taskStatus,
+      @required this.taskId});
+
+  IconData getIcon(
+      thisTaskStatus, TimeOfDay thisTaskTime, DateTime thisTaskDate) {
+    if (thisTaskStatus == 'Pending') {
+      DateTime taskDeadline = DateTime(thisTaskDate.year, thisTaskDate.month,
+          thisTaskDate.day, thisTaskTime.hour, thisTaskTime.minute, 0);
+
+      if (taskDeadline.isBefore(DateTime.now())) {
+        return Icons.priority_high_rounded;
+      } else {
+        return Icons.access_time_rounded;
+      }
+    } else if (taskStatus == 'Done') {
+      return Icons.check;
+    } else {
+      return Icons.priority_high;
+    }
+  }
+
+  Color getColor(
+      thisTaskStatus, TimeOfDay thisTaskTime, DateTime thisTaskDate) {
+    if (thisTaskStatus == 'Pending') {
+      DateTime taskDeadline = DateTime(thisTaskDate.year, thisTaskDate.month,
+          thisTaskDate.day, thisTaskTime.hour, thisTaskTime.minute, 0);
+
+      if (taskDeadline.isBefore(DateTime.now())) {
+        return kRedColor;
+      } else {
+        return kYellowColor;
+      }
+    } else if (taskStatus == 'Done') {
+      return kGreenColor;
+    } else {
+      return Colors.transparent;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TaskViewAndUpdateViewModel>.reactive(
         builder: (context, model, child) {
-          return GestureDetector(
-            onTap: () => model.editSelectedTask(
-                ctx: context,
-                taskName: taskTitle,
-                taskDesc: taskDescription,
-                taskDate: taskDate,
-                taskCategory: category,
-                taskTime: taskTime,
-                taskColor: color),
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: kVPadding),
-              padding: EdgeInsets.only(
-                  left: kHPadding, top: kVPadding * 2, bottom: kVPadding * 2),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(kBorderRadius)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                child: Icon(
+                  getIcon(taskStatus, taskTime, taskDate),
+                  size: 18,
+                  color: kGreyWhite,
+                ),
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                      color: getColor(taskStatus, taskTime, taskDate),
+                      width: 2),
+                  color: getColor(taskStatus, taskTime, taskDate),
+                ),
+              ),
+              SizedBox(
+                width: kHPadding,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => model.viewSelectedTask(
+                      taskId: taskId,
+                      taskName: taskTitle,
+                      ctx: context,
+                      taskDesc: taskDescription,
+                      taskDate: taskDate,
+                      taskCategory: category,
+                      taskTime: time,
+                      taskColor: color),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: kVPadding),
+                    padding: EdgeInsets.only(
+                        left: kHPadding,
+                        top: kVPadding * 2,
+                        bottom: kVPadding * 2),
                     decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(kBorderRadius),
-                            bottomLeft: Radius.circular(kBorderRadius))),
-                    width: 25,
-                    height: 7,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        taskTitle,
-                        style: kCircularStdText.copyWith(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: kHPadding / 2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                        color:
+                            taskStatus == 'Done' ? kGreenColor : Colors.white,
+                        borderRadius: BorderRadius.circular(kBorderRadius)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          time,
-                          style: kHintTextStyle.copyWith(
-                            fontSize: 13,
-                            color: kGrayTextColor.withOpacity(.9),
-                            fontFamily: kCircularStdFont,
+                        Container(
+                          decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(kBorderRadius),
+                                  bottomLeft: Radius.circular(kBorderRadius))),
+                          width: 25,
+                          height: 7,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              taskTitle,
+                              style: kCircularStdText.copyWith(
+                                  color: taskStatus == 'Done'
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: kHPadding / 2),
+                          child: Text(
+                            time.format(context),
+                            style: kHintTextStyle.copyWith(
+                              fontSize: 13,
+                              color: taskStatus == 'Done'
+                                  ? Colors.white
+                                  : kGrayTextColor,
+                              fontFamily: kCircularStdFont,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: kHPadding / 2,
-                        ),
-                        AlarmBellIcon(
-                          isAlarmSet: isAlarmSet,
-                          iconSize: 16,
                         )
                       ],
                     ),
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
+            ],
           );
         },
         viewModelBuilder: () => TaskViewAndUpdateViewModel());
@@ -369,9 +482,10 @@ class HorizontalTaskBuilder extends StatelessWidget {
 }
 
 class AlarmBellIcon extends StatelessWidget {
-  const AlarmBellIcon({@required this.isAlarmSet, this.iconSize});
+  const AlarmBellIcon({@required this.isAlarmSet, this.iconSize, this.color});
   final bool isAlarmSet;
   final double iconSize;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
@@ -380,7 +494,7 @@ class AlarmBellIcon extends StatelessWidget {
         isAlarmSet
             ? Icons.notifications_active_outlined
             : Icons.notifications_off_outlined,
-        color: isAlarmSet ? kPrimaryColor : kGrayTextColor,
+        color: color ?? (isAlarmSet ? kPrimaryColor : kGrayTextColor),
         size: iconSize ?? 18,
       ),
     );
@@ -573,6 +687,39 @@ class ProfileEntryField extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class NoTaskFound extends StatelessWidget {
+  const NoTaskFound({this.title, this.imageSize});
+  final String title;
+  final double imageSize;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: kGreyWhite,
+      padding: EdgeInsets.symmetric(horizontal: kHPadding, vertical: kVPadding),
+      alignment: AlignmentDirectional.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+            height: imageSize ?? 200,
+            fit: BoxFit.contain,
+            image: AssetImage('assets/images/organized.png'),
+          ),
+          SizedBox(
+            height: kVPadding,
+          ),
+          FormHeading(
+            title: title ?? 'No task for selected date.',
+            fontSize: 18,
+            alignment: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

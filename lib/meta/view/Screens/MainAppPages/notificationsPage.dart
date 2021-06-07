@@ -9,7 +9,6 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<NotificationsPageViewModel>.reactive(
-        onModelReady: (model) => model.initialize(),
         builder: (context, model, child) {
           return Container(
             color: kGreyWhite,

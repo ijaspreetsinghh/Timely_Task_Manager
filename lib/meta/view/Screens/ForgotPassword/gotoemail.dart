@@ -83,23 +83,50 @@ class _GoToEmailState extends State<GoToEmail> {
                     ),
                     PrimaryButton(
                       title: 'Open Email',
-                      action: () => print('hello'),
+                      action: () {
+                        print('open email');
+                        // try {
+                        //   AppAvailability.launchApp(Platform.isIOS
+                        //           ? "message://"
+                        //           : "com.google.android.gm")
+                        //       .then((_) {
+                        //         print("App Email launched!");
+                        //       })
+                        //       .then(
+                        //         (value) => services.auth.currentUser != null
+                        //             ? NavigationService.instance
+                        //                 .replace(PagesDecider.route)
+                        //             : NavigationService.instance
+                        //                 .replace(WelcomeScreen.route),
+                        //       )
+                        //       .catchError((err) {
+                        //         print(err);
+                        //       });
+                        // } catch (e) {
+                        //   print(e);
+                        // }
+                      },
                     ),
                     SizedBox(
                       height: kVPadding * 3,
                     ),
-                    GestureDetector(
-                      onTap: () => NavigationService.instance
-                          .replace(PagesDecider.route),
-                      child: Text(
-                        'Skip for now',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: kGrayTextColor,
-                            fontSize: 16,
-                            fontFamily: kCircularStdFont,
-                            fontWeight: FontWeight.w600,
-                            height: 1.2),
+                    Visibility(
+                      visible: services.auth.currentUser != null,
+                      child: GestureDetector(
+                        onTap: () {
+                          NavigationService.instance
+                              .replace(PagesDecider.route);
+                        },
+                        child: Text(
+                          'Skip for now',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: kGrayTextColor,
+                              fontSize: 16,
+                              fontFamily: kCircularStdFont,
+                              fontWeight: FontWeight.w600,
+                              height: 1.2),
+                        ),
                       ),
                     ),
                   ],

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/app/taskModel.dart';
 import 'package:timely/core/services/navigationService.dart';
@@ -59,7 +58,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                   backgroundColor: kGreyWhite,
                   appBar: AppBar(
                     brightness: Brightness.light,
-                    elevation: 0, backgroundColor: Colors.white,
+                    elevation: 0,
                     flexibleSpace: Container(
                       color: kPrimaryColor,
                       padding: EdgeInsets.zero,
@@ -69,8 +68,8 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: kHPadding * 1.5),
+                            padding: const EdgeInsets.only(
+                                left: kHPadding * 1.5, right: kHPadding / 2),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -89,15 +88,16 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                   height: 28,
                                 ),
                                 Expanded(child: Container()),
-                                GestureDetector(
-                                  onTap: () => NavigationService.instance
-                                      .pushNamed(NotificationsPage.route),
-                                  child: RotationTransition(
-                                    turns: AlwaysStoppedAnimation(15 / 360),
-                                    child: Icon(
+                                RotationTransition(
+                                  turns: AlwaysStoppedAnimation(15 / 360),
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(
                                       Icons.notifications_none_rounded,
                                       color: Colors.white,
                                     ),
+                                    onPressed: () => NavigationService.instance
+                                        .pushNamed(NotificationsPage.route),
                                   ),
                                 )
                               ],
@@ -193,6 +193,10 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                       String taskCategory =
                                           dataItem['Task Category'];
                                       bool isalarmSet = dataItem['isAlarmSet'];
+                                      String taskStatus =
+                                          dataItem['Task Status'];
+
+                                      String taskId = dataItem.id;
                                       DateTime taskDate = DateTime(
                                           taskDateandTime.toDate().year,
                                           taskDateandTime.toDate().month,
@@ -216,6 +220,8 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                               taskTime: taskTime,
                                               taskDescription: taskDesc,
                                               isAlarmSet: isalarmSet,
+                                              taskId: taskId,
+                                              taskStatus: taskStatus,
                                               taskCategory: taskCategory),
                                         );
                                       }
@@ -229,16 +235,16 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                               0)) {
                                         tomorrowTaskList.add(
                                           HorizontalTaskBuilder(
+                                            taskId: taskId,
                                             color: model.services.colorSelector(
                                                 taskCategory: taskCategory),
+                                            taskStatus: taskStatus,
                                             taskTitle: taskTitle,
-                                            taskTime: taskTime.format(context),
+                                            taskTime: taskTime,
                                             isAlarmSet: isalarmSet,
-                                            time:
-                                                'Tomorrow at ${taskTime.format(context)}',
+                                            time: taskTime,
                                             category: taskCategory,
-                                            taskDate: DateFormat('MMMMEEEEd')
-                                                .format(taskDate),
+                                            taskDate: taskDate,
                                             taskDescription: taskDesc,
                                           ),
                                         );
@@ -250,26 +256,28 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                               0,
                                               0,
                                               0)) &&
-                                          taskDate.isBefore(DateTime(
-                                              DateTime.now().year,
-                                              DateTime.now().month,
-                                              DateTime.now().day + 8,
-                                              0,
-                                              0,
-                                              0))) {
+                                          taskDate.isBefore(
+                                            DateTime(
+                                                DateTime.now().year,
+                                                DateTime.now().month,
+                                                DateTime.now().day + 8,
+                                                0,
+                                                0,
+                                                0),
+                                          )) {
                                         weekTaskList.add(
                                           HorizontalTaskBuilder(
+                                            taskId: taskId,
                                             color: model.services.colorSelector(
                                                 taskCategory: taskCategory),
+                                            taskStatus: taskStatus,
                                             taskTitle: taskTitle,
                                             isAlarmSet: isalarmSet,
-                                            time:
-                                                '${DateFormat('MMMMEEEEd').format(taskDate)} at ${taskTime.format(context)}',
+                                            time: taskTime,
                                             taskDescription: taskDesc,
-                                            taskDate: DateFormat('MMMMEEEEd')
-                                                .format(taskDate),
+                                            taskDate: taskDate,
                                             category: taskCategory,
-                                            taskTime: taskTime.format(context),
+                                            taskTime: taskTime,
                                           ),
                                         );
                                       }
@@ -285,55 +293,68 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                               kHPadding * 1.5,
                                               0),
                                           children: [
-                                              GridView.count(
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                crossAxisCount: 2,
-                                                crossAxisSpacing: kHPadding,
-                                                childAspectRatio: 1.1,
-                                                mainAxisSpacing: kHPadding,
-                                                children: List.generate(
-                                                    availableGridTasks.length,
-                                                    (index) {
-                                                  return PriorityTaskGrid(
-                                                    taskDate: DateFormat(
-                                                            'MMMMEEEEd')
-                                                        .format(
-                                                            availableGridTasks[
-                                                                    index]
-                                                                .taskDate),
-                                                    isAlarmSet:
-                                                        availableGridTasks[
-                                                                index]
-                                                            .isAlarmSet,
-                                                    taskCategory:
-                                                        availableGridTasks[
-                                                                index]
-                                                            .taskCategory,
-                                                    taskDesc:
-                                                        availableGridTasks[
-                                                                index]
-                                                            .taskDescription,
-                                                    color: model.selectColor(
-                                                        thisTaskCategory:
-                                                            availableGridTasks[
-                                                                    index]
-                                                                .taskCategory),
-                                                    remainingTime:
-                                                        'In ${availableGridTasks[index].taskTime.format(context)}',
-                                                    taskTitle:
-                                                        availableGridTasks[
-                                                                index]
-                                                            .taskTitle,
-                                                    time: availableGridTasks[
-                                                            index]
-                                                        .taskTime
-                                                        .format(context)
-                                                        .toString(),
-                                                  );
-                                                }),
-                                              ),
+                                              availableGridTasks.length > 0
+                                                  ? GridView.count(
+                                                      physics:
+                                                          NeverScrollableScrollPhysics(),
+                                                      shrinkWrap: true,
+                                                      crossAxisCount: 2,
+                                                      crossAxisSpacing:
+                                                          kHPadding,
+                                                      childAspectRatio: 1.1,
+                                                      mainAxisSpacing:
+                                                          kHPadding,
+                                                      children: List.generate(
+                                                          availableGridTasks
+                                                              .length, (index) {
+                                                        return PriorityTaskGrid(
+                                                          taskStatus:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .taskStatus,
+                                                          taskId:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .taskId,
+                                                          taskDate:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .taskDate,
+                                                          isAlarmSet:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .isAlarmSet,
+                                                          taskCategory:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .taskCategory,
+                                                          taskDesc:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .taskDescription,
+                                                          color: model.selectColor(
+                                                              thisTaskCategory:
+                                                                  availableGridTasks[
+                                                                          index]
+                                                                      .taskCategory),
+                                                          remainingTime:
+                                                              'In ${availableGridTasks[index].taskTime.format(context)}',
+                                                          taskTitle:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .taskTitle,
+                                                          time:
+                                                              availableGridTasks[
+                                                                      index]
+                                                                  .taskTime,
+                                                        );
+                                                      }),
+                                                    )
+                                                  : NoTaskFound(
+                                                      title:
+                                                          'No task created for today.',
+                                                      imageSize: 150,
+                                                    ),
                                               Container(
                                                 margin: EdgeInsets.symmetric(
                                                     vertical: kVPadding * 2),
@@ -409,17 +430,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                                         ),
                                                       ],
                                                     ),
-                                                    Text(
-                                                      'View All',
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: kPrimaryColor,
-                                                        fontFamily:
-                                                            kCircularStdFont,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
                                                   ],
                                                 ),
                                               ),
@@ -431,36 +441,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                                         : weekTaskList,
                                               ),
                                             ])
-                                      : Container(
-                                          color: Colors.white,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: kHPadding,
-                                              vertical: kVPadding),
-                                          alignment:
-                                              AlignmentDirectional.center,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Image(
-                                                height: 200,
-                                                fit: BoxFit.contain,
-                                                image: AssetImage(
-                                                    'assets/images/organized.png'),
-                                              ),
-                                              SizedBox(
-                                                height: kVPadding,
-                                              ),
-                                              FormHeading(
-                                                title:
-                                                    'If you have time, you\'re productive. Timely helps you spend your time well.',
-                                                fontSize: 18,
-                                              ),
-                                            ],
-                                          ),
-                                        );
+                                      : NoTaskFound();
                                 } else {
                                   return Center(
                                     child: Container(
@@ -489,7 +470,9 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                         dataItem['Task Description'];
                                     String taskCategory =
                                         dataItem['Task Category'];
+                                    String taskId = dataItem.id;
                                     bool isalarmSet = dataItem['isAlarmSet'];
+                                    String taskStatus = dataItem['Task Status'];
                                     DateTime taskDate = DateTime(
                                         taskDateandTime.toDate().year,
                                         taskDateandTime.toDate().month,
@@ -500,15 +483,16 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                             taskDateandTime.toDate().minute);
                                     allTasksList.add(
                                       HorizontalTaskBuilder(
+                                        taskId: taskId,
                                         isAlarmSet: isalarmSet,
                                         color: model.services.colorSelector(
                                             taskCategory: taskCategory),
+                                        taskStatus: taskStatus,
                                         taskTitle: taskTitle,
-                                        time: taskTime.format(context),
-                                        taskTime: taskTime.format(context),
+                                        time: taskTime,
+                                        taskTime: taskTime,
                                         category: taskCategory,
-                                        taskDate: DateFormat('MMMMEEEEd')
-                                            .format(taskDate),
+                                        taskDate: taskDate,
                                         taskDescription: taskDesc,
                                       ),
                                     );
@@ -524,14 +508,21 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                           shrinkWrap: true,
                                           padding: EdgeInsets.symmetric(
                                               horizontal: kHPadding * 1.5),
-                                          crossAxisCount: 2,
+                                          crossAxisCount: MediaQuery.of(context)
+                                                      .size
+                                                      .width >
+                                                  500
+                                              ? 3
+                                              : 2,
                                           crossAxisSpacing: kHPadding,
                                           mainAxisSpacing: kHPadding,
                                           childAspectRatio: 1.4,
                                           children: List.generate(
-                                              categoryList.length, (index) {
-                                            return categoryList[index];
-                                          }),
+                                            categoryList.length,
+                                            (index) {
+                                              return categoryList[index];
+                                            },
+                                          ),
                                         ),
                                         Container(
                                           margin: EdgeInsets.symmetric(
@@ -557,15 +548,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                                   ),
                                                 ],
                                               ),
-                                              Text(
-                                                'View All',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: kPrimaryColor,
-                                                  fontFamily: kCircularStdFont,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
                                             ],
                                           ),
                                         ),
@@ -573,7 +555,13 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: kHPadding),
                                           child: Column(
-                                            children: allTasksList,
+                                            children: allTasksList.length > 0
+                                                ? allTasksList
+                                                : [
+                                                    NoTaskFound(
+                                                      imageSize: 150,
+                                                    )
+                                                  ],
                                           ),
                                         ),
                                       ]);

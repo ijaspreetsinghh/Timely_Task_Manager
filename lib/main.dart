@@ -6,6 +6,7 @@ import 'package:timely/core/services/services.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/createTask.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/notificationsPage.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/profileInformationPage.dart';
+import 'package:timely/meta/view/Screens/MainAppPages/viewAllTasksPage.dart';
 import 'package:timely/meta/view/Screens/Onboarding/welcomeScreen.dart';
 import 'package:timely/app/theme.dart';
 import 'core/services/navigationService.dart';
@@ -18,7 +19,7 @@ import 'meta/view/Screens/SignIn/signin.dart';
 import 'meta/widgets/constants.dart';
 import 'meta/view/Screens/SignUp/signup.dart';
 
-const applicationVersion = '1.0.0+1';
+const applicationVersion = '1.0.0+3';
 const applicationName = 'Timely';
 const applicationLegalese = '2021 \u00a9 Timely';
 const defaultProfilePictureLocation =
@@ -103,6 +104,7 @@ class MyApp extends StatelessWidget {
           ProfileInformationPage.route: (context) => ProfileInformationPage(),
           CreateTask.route: (context) => CreateTask(),
           NotificationsPage.route: (context) => NotificationsPage(),
+          ViewAllTasksPage.route: (context) => ViewAllTasksPage(),
         },
       ),
     );

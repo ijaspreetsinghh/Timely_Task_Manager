@@ -73,7 +73,9 @@ class ProfileInformationPageViewModel extends BaseViewModel {
     );
 
     await services.uploadImageToFirebase(
-        context: context, thisImageFile: File(pickedFile.path));
+      context: context,
+      thisImageFile: File(pickedFile.path),
+    );
   }
 
   void updatePasswordFormValidator() {

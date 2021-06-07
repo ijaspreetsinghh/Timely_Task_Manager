@@ -5,7 +5,4 @@ class NotificationsPageViewModel extends BaseViewModel {
   Services services = Services();
   String notificationMessageTitle = Services().messageTitle;
   String notificationAlert = Services().notificationAlert;
-  initialize() {
-    services.getNotification();
-  }
 }
