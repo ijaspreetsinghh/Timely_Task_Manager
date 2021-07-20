@@ -32,10 +32,6 @@ class CreateTaskViewModel extends BaseViewModel {
 
   bool _isAlarmSet = true;
   get isAlarmSet => _isAlarmSet;
-  changeCheckBox() {
-    _isAlarmSet = !_isAlarmSet;
-    notifyListeners();
-  }
 
   taskTitleValidator(thisTaskTitle) {
     if (thisTaskTitle.length < 1) {

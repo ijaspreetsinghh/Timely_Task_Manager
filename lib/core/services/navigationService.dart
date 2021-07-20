@@ -64,7 +64,7 @@ class NavigationService {
       secondaryActionTitle}) {
     return showDialog(
         barrierColor: Colors.black.withOpacity(.7),
-        // barrierDismissible: false,
+        barrierDismissible: false,
         context: navigationKey.currentContext,
         builder: (context) => AlertBoxWithTwoButton(
               title: title,
@@ -84,7 +84,7 @@ class NavigationService {
   }) {
     return showDialog(
         barrierColor: Colors.black.withOpacity(.7),
-        // barrierDismissible: false,
+        barrierDismissible: false,
         context: navigationKey.currentContext,
         builder: (context) => AlertBoxWithTwoButtonWithoutText(
               action1: primaryAction,
@@ -97,7 +97,7 @@ class NavigationService {
   showAboutAppDialog() {
     return showDialog(
       barrierColor: Colors.black.withOpacity(.7),
-      // barrierDismissible: false,
+      barrierDismissible: false,
       context: navigationKey.currentContext,
       builder: (context) => AboutAppDialog(
         title: 'Timely',
@@ -147,7 +147,7 @@ class NavigationService {
   }) {
     return showDialog(
         barrierColor: Colors.black.withOpacity(.7),
-        // barrierDismissible: false,
+        barrierDismissible: false,
         context: navigationKey.currentContext,
         builder: (context) => AlertBoxWithOneButton(
               title: title,

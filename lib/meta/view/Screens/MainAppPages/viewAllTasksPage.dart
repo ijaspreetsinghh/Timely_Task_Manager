@@ -12,6 +12,7 @@ class ViewAllTasksPage extends StatelessWidget {
       child: SafeArea(
         child: Scaffold(
           body: ListView(
+            shrinkWrap: true,
             children: [
               Row(
                 children: [

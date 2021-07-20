@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:timely/core/services/navigationService.dart';
+import 'package:timely/core/services/services.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/timelypagesdecider.dart';
+import 'package:timely/meta/view/Screens/Onboarding/welcomeScreen.dart';
 import '../../../widgets/components.dart';
 import '../../../widgets/constants.dart';
 
@@ -11,6 +16,24 @@ class GoToEmail extends StatefulWidget {
 }
 
 class _GoToEmailState extends State<GoToEmail> {
+  Services services = Services();
+  void openEmailApp(BuildContext context) {
+    try {
+      AppAvailability.launchApp(
+              Platform.isIOS ? "message://" : "com.google.android.gm")
+          .then((_) {})
+          .catchError((err) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Something went wrong.')));
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Something went wrong.')));
+    }
+  }
+
+  bool openMailClicked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +92,9 @@ class _GoToEmailState extends State<GoToEmail> {
                       height: kVPadding,
                     ),
                     Text(
-                      'We have sent a password recovery instructions to your email.',
+                      services.auth.currentUser != null
+                          ? 'We have sent an email with a confirmation link to your registered email address.'
+                          : 'We have sent a password recovery instructions to your email.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: kGrayTextColor,
@@ -81,52 +106,65 @@ class _GoToEmailState extends State<GoToEmail> {
                     SizedBox(
                       height: kVPadding * 4,
                     ),
-                    PrimaryButton(
-                      title: 'Open Email',
-                      action: () {
-                        print('open email');
-                        // try {
-                        //   AppAvailability.launchApp(Platform.isIOS
-                        //           ? "message://"
-                        //           : "com.google.android.gm")
-                        //       .then((_) {
-                        //         print("App Email launched!");
-                        //       })
-                        //       .then(
-                        //         (value) => services.auth.currentUser != null
-                        //             ? NavigationService.instance
-                        //                 .replace(PagesDecider.route)
-                        //             : NavigationService.instance
-                        //                 .replace(WelcomeScreen.route),
-                        //       )
-                        //       .catchError((err) {
-                        //         print(err);
-                        //       });
-                        // } catch (e) {
-                        //   print(e);
-                        // }
-                      },
-                    ),
+                    services.auth.currentUser != null
+                        ? openMailClicked
+                            ? PrimaryButton(
+                                title: 'Check Now',
+                                buttonColor: kBlackTextColor,
+                                action: () async {
+                                  await services.auth.currentUser.reload();
+                                  if (services.auth.currentUser.emailVerified ==
+                                      true)
+                                    NavigationService.instance
+                                        .replace(PagesDecider.route);
+                                },
+                              )
+                            : PrimaryButton(
+                                title: 'Open Email',
+                                action: () {
+                                  setState(() {
+                                    openMailClicked = true;
+                                    openEmailApp(context);
+                                  });
+                                },
+                              )
+                        : openMailClicked
+                            ? PrimaryButton(
+                                title: 'SignIn Now',
+                                buttonColor: kBlackTextColor,
+                                action: () => NavigationService.instance
+                                    .replace(WelcomeScreen.route),
+                              )
+                            : PrimaryButton(
+                                title: 'Open Email',
+                                action: () {
+                                  setState(() {
+                                    openMailClicked = true;
+
+                                    openEmailApp(context);
+                                  });
+                                },
+                              ),
                     SizedBox(
                       height: kVPadding * 3,
                     ),
-                    Visibility(
-                      visible: services.auth.currentUser != null,
-                      child: GestureDetector(
-                        onTap: () {
-                          NavigationService.instance
-                              .replace(PagesDecider.route);
-                        },
-                        child: Text(
-                          'Skip for now',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: kGrayTextColor,
-                              fontSize: 16,
-                              fontFamily: kCircularStdFont,
-                              fontWeight: FontWeight.w600,
-                              height: 1.2),
-                        ),
+                    GestureDetector(
+                      onTap: () {
+                        services.auth.currentUser != null
+                            ? NavigationService.instance
+                                .replace(PagesDecider.route)
+                            : NavigationService.instance
+                                .replace(WelcomeScreen.route);
+                      },
+                      child: Text(
+                        'Skip for now',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: kGrayTextColor,
+                            fontSize: 16,
+                            fontFamily: kCircularStdFont,
+                            fontWeight: FontWeight.w600,
+                            height: 1.2),
                       ),
                     ),
                   ],
@@ -142,7 +180,7 @@ class _GoToEmailState extends State<GoToEmail> {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                       text:
-                          'Did not receive the email? Check your spam filter or ',
+                          'Did not receive the email? Check your spam filter, ',
                       style: TextStyle(
                           color: kBlackTextColor.withOpacity(.8),
                           fontFamily: kMuliFont,
@@ -150,7 +188,7 @@ class _GoToEmailState extends State<GoToEmail> {
                           height: 1.5),
                       children: [
                         TextSpan(
-                            text: 'try another email address',
+                            text: 'This may take a few moment.',
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               color: kPrimaryColor,

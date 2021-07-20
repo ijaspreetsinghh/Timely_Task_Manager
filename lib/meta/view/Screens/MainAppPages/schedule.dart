@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/app/taskModel.dart';
-import 'package:timely/core/services/navigationService.dart';
+import 'package:timely/core/services/notificationService.dart';
 import 'package:timely/core/viewmodel/schedule_viewModel.dart';
 import '../../../widgets/components.dart';
 import '../../../widgets/constants.dart';
-import 'notificationsPage.dart';
 
 class Schedule extends StatefulWidget {
   static const route = 'Schedule';
@@ -18,30 +17,21 @@ class Schedule extends StatefulWidget {
 class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
   TabController _controller;
 
-  final List<CategoryGrid> categoryList = [
-    CategoryGrid(
-      icon: Icons.home_filled,
-      categoryName: 'Home',
-      numberOfTasks: 2,
-    ),
-    CategoryGrid(
-      icon: Icons.person,
-      categoryName: 'Personal',
-      numberOfTasks: 2,
-    ),
-    CategoryGrid(
-      icon: Icons.work_outline_outlined,
-      categoryName: 'Work',
-      numberOfTasks: 2,
-    ),
-  ];
-
   @override
   void initState() {
     _controller = TabController(vsync: this, length: 2);
     super.initState();
   }
 
+  List<String> subTitles = [
+    'The key is in not spending time, but in investing it.',
+    'Time is the wisest counselor of all.',
+    'Time is the most valuable thing a man can spend.',
+    'Lost time is never found again.',
+    'Better three hours too soon than a minute too late.',
+    'The two most powerful warriors are patience and time.',
+    'It is the time you have wasted for your rose that makes your rose so important.',
+  ];
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ScheduleViewModel>.reactive(
@@ -87,19 +77,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                   ),
                                   height: 28,
                                 ),
-                                Expanded(child: Container()),
-                                RotationTransition(
-                                  turns: AlwaysStoppedAnimation(15 / 360),
-                                  child: IconButton(
-                                    padding: EdgeInsets.zero,
-                                    icon: Icon(
-                                      Icons.notifications_none_rounded,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () => NavigationService.instance
-                                        .pushNamed(NotificationsPage.route),
-                                  ),
-                                )
                               ],
                             ),
                           ),
@@ -112,7 +89,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: kHPadding * 1.5),
                             child: Text(
-                              'You have some important tasks to do for today.',
+                              subTitles[model.randomNumber],
                               maxLines: 2,
                               style: TextStyle(
                                   color: Colors.white.withOpacity(.7),
@@ -155,7 +132,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                     text: 'Today\'s Priority'.toUpperCase(),
                                   ),
                                   Tab(
-                                    text: 'Categories'.toUpperCase(),
+                                    text: 'All Tasks'.toUpperCase(),
                                   ),
                                 ]),
                           ),
@@ -205,6 +182,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                           hour: taskDateandTime.toDate().hour,
                                           minute:
                                               taskDateandTime.toDate().minute);
+
                                       if (taskDate ==
                                           DateTime(
                                               DateTime.now().year,
@@ -281,6 +259,26 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                           ),
                                         );
                                       }
+
+                                      String notificationID =
+                                          '${taskDate.month}${taskDate.day}${taskTime.hour}${taskTime.minute}';
+
+                                      NotificationService()
+                                          .scheduleNotification(
+                                              taskId: taskId,
+                                              taskDate: taskDate,
+                                              taskTime: taskTime,
+                                              notificationId:
+                                                  int.parse(notificationID),
+                                              taskDesc: taskDesc,
+                                              taskTitle: taskTitle,
+                                              context: context,
+                                              taskCategory: taskCategory,
+                                              taskColor: model.services
+                                                  .colorSelector(
+                                                      taskCategory:
+                                                          taskCategory),
+                                              taskStaus: taskStatus);
                                     }
                                   }
 
@@ -434,11 +432,18 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                                 ),
                                               ),
                                               Column(
-                                                children:
-                                                    model.selectedTaskListFromTomorrowThisWeek ==
-                                                            0
-                                                        ? tomorrowTaskList
-                                                        : weekTaskList,
+                                                children: [
+                                                  Column(
+                                                    children:
+                                                        model.selectedTaskListFromTomorrowThisWeek ==
+                                                                0
+                                                            ? tomorrowTaskList
+                                                            : weekTaskList,
+                                                  ),
+                                                  SizedBox(
+                                                    height: kVPadding * 10,
+                                                  )
+                                                ],
                                               ),
                                             ])
                                       : NoTaskFound();
@@ -497,71 +502,31 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                                       ),
                                     );
                                   }
+
                                   return ListView(
                                       physics: BouncingScrollPhysics(),
                                       padding: EdgeInsets.fromLTRB(
                                           0, kVPadding * 2, 0, 0),
                                       children: [
-                                        GridView.count(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: kHPadding * 1.5),
-                                          crossAxisCount: MediaQuery.of(context)
-                                                      .size
-                                                      .width >
-                                                  500
-                                              ? 3
-                                              : 2,
-                                          crossAxisSpacing: kHPadding,
-                                          mainAxisSpacing: kHPadding,
-                                          childAspectRatio: 1.4,
-                                          children: List.generate(
-                                            categoryList.length,
-                                            (index) {
-                                              return categoryList[index];
-                                            },
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: kVPadding * 2),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: kHPadding * 2),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'Tasks'.toUpperCase(),
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: kBlackTextColor,
-                                                      fontFamily:
-                                                          kCircularStdFont,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
                                         Container(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: kHPadding),
                                           child: Column(
-                                            children: allTasksList.length > 0
-                                                ? allTasksList
-                                                : [
-                                                    NoTaskFound(
-                                                      imageSize: 150,
-                                                    )
-                                                  ],
+                                            children: [
+                                              Column(
+                                                children:
+                                                    allTasksList.length > 0
+                                                        ? allTasksList
+                                                        : [
+                                                            NoTaskFound(
+                                                              imageSize: 150,
+                                                            )
+                                                          ],
+                                              ),
+                                              SizedBox(
+                                                height: kVPadding * 10,
+                                              )
+                                            ],
                                           ),
                                         ),
                                       ]);

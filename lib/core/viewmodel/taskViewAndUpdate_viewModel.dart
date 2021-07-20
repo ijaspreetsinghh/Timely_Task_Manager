@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:flutter/material.dart';
 import 'package:timely/app/taskCategory.dart';
 import 'package:timely/core/services/navigationService.dart';
+import 'package:timely/core/services/notificationService.dart';
 import 'package:timely/core/services/services.dart';
 import 'package:timely/meta/view/Screens/TaskViewAndUpdate/taskViewAndUpdate.dart';
 import 'package:timely/meta/widgets/components.dart';
@@ -50,11 +51,6 @@ class TaskViewAndUpdateViewModel extends BaseViewModel {
     taskDescriptionController.text = thisTaskDescription;
     _pickedTime = thisTaskTime;
     _pickedDate = thisTaskDate;
-  }
-
-  changeCheckBox() {
-    _isAlarmSet = !_isAlarmSet;
-    notifyListeners();
   }
 
   taskTitleValidator(thisTaskTitle) {
@@ -246,6 +242,10 @@ class TaskViewAndUpdateViewModel extends BaseViewModel {
       @required taskTime,
       @required isAlarmSet,
       @required taskCategory}) {
+    String notificationID =
+        '${taskDate.month}${taskDate.day}${taskTime.hour}${taskTime.minute}';
+
+    NotificationService().cancelNotification(int.parse(notificationID));
     return services.markTaskAsDone(
         thisTaskId: taskId,
         isAlarmSet: isAlarmSet,
@@ -253,6 +253,44 @@ class TaskViewAndUpdateViewModel extends BaseViewModel {
         taskDesc: taskDesc,
         taskDate: taskDate,
         taskStatus: 'Done',
+        taskTime: taskTime,
+        taskCategory: taskCategory);
+  }
+
+  Future markTaskAsInComplete(
+      {@required taskId,
+      @required taskName,
+      @required taskDesc,
+      @required taskDate,
+      @required taskTime,
+      @required isAlarmSet,
+      @required taskCategory,
+      @required BuildContext context,
+      @required String taskStatus,
+      @required taskColor}) {
+    String notificationID =
+        '${taskDate.month}${taskDate.day}${taskTime.hour}${taskTime.minute}';
+
+    NotificationService().scheduleNotification(
+        notificationId: int.parse(
+          notificationID,
+        ),
+        context: context,
+        taskDesc: taskDesc,
+        taskId: taskId,
+        taskTitle: taskTitle,
+        taskDate: taskDate,
+        taskCategory: taskCategory,
+        taskColor: taskColor,
+        taskStaus: taskStatus,
+        taskTime: taskTime);
+    return services.markTaskAsInComplete(
+        thisTaskId: taskId,
+        isAlarmSet: isAlarmSet,
+        taskName: taskName,
+        taskDesc: taskDesc,
+        taskDate: taskDate,
+        taskStatus: 'Pending',
         taskTime: taskTime,
         taskCategory: taskCategory);
   }
@@ -265,7 +303,8 @@ class TaskViewAndUpdateViewModel extends BaseViewModel {
       @required taskDate,
       @required taskId,
       @required taskCategory,
-      @required taskColor}) {
+      @required taskColor,
+      @required taskStatus}) {
     showModalBottomSheet(
         isScrollControlled: true,
         elevation: 20,
@@ -286,14 +325,16 @@ class TaskViewAndUpdateViewModel extends BaseViewModel {
                   height: kVPadding,
                 ),
                 TaskViewAndUpdate(
-                    taskName: taskName,
-                    taskDesc: taskDesc,
-                    taskId: taskId,
-                    taskTime: taskTime,
-                    isAlarmSet: isAlarmSet,
-                    taskDate: taskDate,
-                    taskCategory: taskCategory,
-                    taskColor: taskColor),
+                  taskName: taskName,
+                  taskDesc: taskDesc,
+                  taskId: taskId,
+                  taskTime: taskTime,
+                  isAlarmSet: isAlarmSet,
+                  taskDate: taskDate,
+                  taskCategory: taskCategory,
+                  taskColor: taskColor,
+                  taskStatus: taskStatus,
+                ),
               ],
             ));
   }

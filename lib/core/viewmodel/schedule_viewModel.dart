@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/core/services/services.dart';
 
@@ -11,6 +14,7 @@ class ScheduleViewModel extends StreamViewModel<QuerySnapshot> {
     _displayName = services.auth.currentUser.displayName;
   }
 
+  final randomNumber = Random().nextInt(6);
   Color selectColor({@required thisTaskCategory}) {
     return services.colorSelector(taskCategory: thisTaskCategory);
   }

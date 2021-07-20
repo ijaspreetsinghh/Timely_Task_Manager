@@ -25,16 +25,18 @@ class Services extends ChangeNotifier {
   bool _isPro = false;
   get isPro => _isPro;
 
-  initializeUser() {
+  initializeUser() async {
     photoUrl = auth.currentUser.photoURL;
     displayName = auth.currentUser.displayName;
     email = auth.currentUser.email;
     isEmailVerified = auth.currentUser.emailVerified;
-    // _isPro = false;
+    // var data;
+    // await users
+    //     .doc(auth.currentUser.uid)
+    //     .get()
+    //     .then((value) => data = value.data());
+    // _isPro = data['isPro'];
     notifyListeners();
-    print('Current User Initialized');
-    print('email ${auth.currentUser.emailVerified}');
-    // print('_isEmailVerified $_isEmailVerified')
   }
 
   Future createTask(
@@ -63,7 +65,7 @@ class Services extends ChangeNotifier {
       NavigationService.instance.hideLoader();
       NavigationService.instance.showAlertWithOneButton(
           title: 'Failure',
-          content: 'Request failed due to $onError',
+          content: 'Request failed, try after some time',
           primaryAction: () => NavigationService.instance.goBack(),
           primaryActionTitle: 'Try again');
     });
@@ -84,6 +86,14 @@ class Services extends ChangeNotifier {
     return users
         .doc(auth.currentUser.uid)
         .collection('Tasks')
+        .orderBy('Task Date Time')
+        .snapshots();
+  }
+
+  Stream getHistorys() {
+    return users
+        .doc(auth.currentUser.uid)
+        .collection('History')
         .orderBy('Task Date Time')
         .snapshots();
   }
@@ -135,7 +145,7 @@ class Services extends ChangeNotifier {
       NavigationService.instance.showAlertWithOneButton(
           title: 'Error',
           content: 'Something went wrong. ${error.code}',
-          primaryAction: () => print('ok'),
+          primaryAction: () => NavigationService.instance.goBack(),
           primaryActionTitle: 'OK');
     });
   }
@@ -179,7 +189,7 @@ class Services extends ChangeNotifier {
       } else {
         NavigationService.instance.showAlertWithOneButton(
             title: 'Failure',
-            content: 'Request failed due to $error',
+            content: 'Request failed, try after some time',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try again');
       }
@@ -225,7 +235,7 @@ class Services extends ChangeNotifier {
       } else {
         NavigationService.instance.showAlertWithOneButton(
             title: 'Failure',
-            content: 'Request failed due to $error',
+            content: 'Request failed, try after some time',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try again');
       }
@@ -289,7 +299,9 @@ class Services extends ChangeNotifier {
       await updateDisplayName(name);
       await addUserData();
       if (auth.currentUser != null) {
-        NavigationService.instance.pushNamed(PagesDecider.route);
+        auth.currentUser.emailVerified
+            ? NavigationService.instance.pushNamed(PagesDecider.route)
+            : NavigationService.instance.pushNamed(GoToEmail.route);
       }
     }).catchError((e) {
       NavigationService.instance.goBack();
@@ -318,7 +330,7 @@ class Services extends ChangeNotifier {
       } else {
         NavigationService.instance.showAlertWithOneButton(
             title: 'Failure',
-            content: 'Request failed due to $e',
+            content: 'Request failed, try after some time',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try again');
       }
@@ -429,6 +441,40 @@ class Services extends ChangeNotifier {
     );
   }
 
+  Future markTaskAsInComplete(
+      {@required thisTaskId,
+      @required taskName,
+      @required taskDesc,
+      @required taskDate,
+      @required taskTime,
+      @required isAlarmSet,
+      @required taskCategory,
+      @required taskStatus}) {
+    NavigationService.instance.goBack();
+
+    NavigationService.instance.showLoader(title: 'Updating Task Status');
+    Timestamp myTaskDateTime = Timestamp.fromDate(DateTime(taskDate.year,
+        taskDate.month, taskDate.day, taskTime.hour, taskTime.minute, 0));
+    return users
+        .doc(auth.currentUser.uid)
+        .collection('Tasks')
+        .doc(thisTaskId)
+        .update({
+      'Task Category': taskCategory,
+      'Task Description': taskDesc,
+      'Task Title': taskName,
+      'isAlarmSet': isAlarmSet,
+      'Task Status': 'Pending',
+      'Task Date Time': myTaskDateTime
+    }).then(
+      (value) {
+        NavigationService.instance.hideLoader();
+      },
+    ).catchError(
+      (onError) => print('error'),
+    );
+  }
+
   Future deleteTask(thisTaskId) {
     NavigationService.instance.goBack();
 
@@ -468,7 +514,7 @@ class Services extends ChangeNotifier {
       } else {
         NavigationService.instance.showAlertWithOneButton(
             title: 'Failure',
-            content: 'Request failed due to $e',
+            content: 'Request failed, try after some time',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try again');
       }
@@ -483,7 +529,9 @@ class Services extends ChangeNotifier {
       await initializeUser();
 
       if (auth.currentUser != null) {
-        NavigationService.instance.pushNamed(PagesDecider.route);
+        auth.currentUser.emailVerified
+            ? NavigationService.instance.pushNamed(PagesDecider.route)
+            : NavigationService.instance.pushNamed(GoToEmail.route);
       }
     }).catchError((e) {
       NavigationService.instance.hideLoader();
@@ -515,7 +563,7 @@ class Services extends ChangeNotifier {
       } else {
         NavigationService.instance.showAlertWithOneButton(
             title: 'Failure',
-            content: 'Request failed due to $e',
+            content: 'Request failed, try after some time',
             primaryAction: () => NavigationService.instance.goBack(),
             primaryActionTitle: 'Try again');
       }

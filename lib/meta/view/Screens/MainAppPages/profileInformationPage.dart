@@ -309,90 +309,90 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                         ],
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: kBlackTextColor.withOpacity(.03),
-                          borderRadius: BorderRadius.circular(kBorderRadius)),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: kHPadding * 1.5, vertical: kVPadding * 2),
-                      margin: EdgeInsets.only(
-                          top: 0,
-                          left: kHPadding * 1.5,
-                          bottom: kVPadding * 3,
-                          right: kHPadding * 1.5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Subscription',
-                            style: kCircularStdText.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: kBlackTextColor.withOpacity(.7)),
-                          ),
-                          SizedBox(
-                            height: kVPadding,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  model.isProUser
-                                      ? 'Timely Pro'
-                                      : 'Timely Free',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: kCircularStdText.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: kBlackTextColor,
-                                      fontSize: 18),
-                                ),
-                              ),
-                              SizedBox(
-                                width: kHPadding / 2,
-                              ),
-                              GestureDetector(
-                                onTap: () => print('hu'),
-                                child: Container(
-                                  margin: EdgeInsets.only(top: kVPadding),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        const Color(0xFFff0f7b),
-                                        const Color(0xFFf89b29),
-                                      ],
-                                      begin: const FractionalOffset(0.0, 0.0),
-                                      end: const FractionalOffset(1.0, 0.0),
-                                      stops: [0.0, 1.0],
-                                      tileMode: TileMode.clamp,
-                                    ),
-                                    // border: Border.all(color: kGreyWhite, width: 2),
-                                    borderRadius: BorderRadius.circular(
-                                        kBorderRadius / 2),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: kHPadding,
-                                      vertical: kVPadding / 1.5),
-                                  child: Text(
-                                    model.isProUser
-                                        ? 'Pro User'
-                                        : 'Upgrade to Pro',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: kCircularStdText.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: kVPadding * 2,
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       color: kBlackTextColor.withOpacity(.03),
+                    //       borderRadius: BorderRadius.circular(kBorderRadius)),
+                    //   padding: EdgeInsets.symmetric(
+                    //       horizontal: kHPadding * 1.5, vertical: kVPadding * 2),
+                    //   margin: EdgeInsets.only(
+                    //       top: 0,
+                    //       left: kHPadding * 1.5,
+                    //       bottom: kVPadding * 3,
+                    //       right: kHPadding * 1.5),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //     children: [
+                    //       Text(
+                    //         'Subscription',
+                    //         style: kCircularStdText.copyWith(
+                    //             fontWeight: FontWeight.w700,
+                    //             color: kBlackTextColor.withOpacity(.7)),
+                    //       ),
+                    //       SizedBox(
+                    //         height: kVPadding,
+                    //       ),
+                    //       Row(
+                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           Expanded(
+                    //             child: Text(
+                    //               model.isProUser
+                    //                   ? 'Timely Pro'
+                    //                   : 'Timely Free',
+                    //               overflow: TextOverflow.ellipsis,
+                    //               style: kCircularStdText.copyWith(
+                    //                   fontWeight: FontWeight.w700,
+                    //                   color: kBlackTextColor,
+                    //                   fontSize: 18),
+                    //             ),
+                    //           ),
+                    //           SizedBox(
+                    //             width: kHPadding / 2,
+                    //           ),
+                    //           GestureDetector(
+                    //             onTap: () => print('hu'),
+                    //             child: Container(
+                    //               margin: EdgeInsets.only(top: kVPadding),
+                    //               decoration: BoxDecoration(
+                    //                 gradient: LinearGradient(
+                    //                   colors: [
+                    //                     const Color(0xFFff0f7b),
+                    //                     const Color(0xFFf89b29),
+                    //                   ],
+                    //                   begin: const FractionalOffset(0.0, 0.0),
+                    //                   end: const FractionalOffset(1.0, 0.0),
+                    //                   stops: [0.0, 1.0],
+                    //                   tileMode: TileMode.clamp,
+                    //                 ),
+                    //                 // border: Border.all(color: kGreyWhite, width: 2),
+                    //                 borderRadius: BorderRadius.circular(
+                    //                     kBorderRadius / 2),
+                    //               ),
+                    //               padding: EdgeInsets.symmetric(
+                    //                   horizontal: kHPadding,
+                    //                   vertical: kVPadding / 1.5),
+                    //               child: Text(
+                    //                 model.isProUser
+                    //                     ? 'Pro User'
+                    //                     : 'Upgrade to Pro',
+                    //                 overflow: TextOverflow.ellipsis,
+                    //                 style: kCircularStdText.copyWith(
+                    //                     color: Colors.white,
+                    //                     fontSize: 14,
+                    //                     fontWeight: FontWeight.w600),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //       SizedBox(
+                    //         height: kVPadding * 2,
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: kHPadding * 1.5,

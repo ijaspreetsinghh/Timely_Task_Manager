@@ -15,6 +15,18 @@ class ViewHistoryTasksPage extends StatelessWidget {
             color: Colors.white,
             child: SafeArea(
               child: Scaffold(
+                backgroundColor: kGreyWhite,
+                appBar: AppBar(
+                  elevation: 0,
+                  title: FormHeading(
+                    title: 'History',
+                  ),
+                  backgroundColor: kGreyWhite,
+                  leading: BackButtonWithoutAppBar(
+                    iconColor: kBlackTextColor,
+                  ),
+                  leadingWidth: 35,
+                ),
                 body: StreamBuilder(
                   stream: model.stream,
                   builder: (context, AsyncSnapshot snapshot) {
@@ -54,35 +66,24 @@ class ViewHistoryTasksPage extends StatelessWidget {
                       }
                       return ListView(
                           physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
                           padding: EdgeInsets.fromLTRB(0, kVPadding * 2, 0, 0),
                           children: [
                             Container(
-                              margin: EdgeInsets.zero,
-                              padding: EdgeInsets.zero,
-                              child: Row(
-                                children: [
-                                  BackButtonWithoutAppBar(
-                                    iconColor: kBlackTextColor,
-                                  ),
-                                  FormHeading(
-                                    title: 'History',
-                                    fontSize: 24,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
                               padding:
                                   EdgeInsets.symmetric(horizontal: kHPadding),
-                              child: Column(
-                                children: allTasksList.length > 0
-                                    ? allTasksList
-                                    : [
-                                        NoTaskFound(
-                                          imageSize: 150,
-                                        )
-                                      ],
-                              ),
+                              child: allTasksList.length > 0
+                                  ? AbsorbPointer(
+                                      child: Column(children: allTasksList))
+                                  : Container(
+                                      alignment: AlignmentDirectional.center,
+                                      margin:
+                                          EdgeInsets.only(top: kVPadding * 10),
+                                      child: FormHeading(
+                                        title: 'No History',
+                                        color: Color(0xff777777),
+                                      ),
+                                    ),
                             ),
                           ]);
                     } else

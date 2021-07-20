@@ -25,11 +25,12 @@ class ForgotPassword extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.zero,
                           margin: EdgeInsets.zero,
-                          // width: MediaQuery.of(context).size.width,
+                          width: MediaQuery.of(context).size.width,
                           child: Image(
                             // color: Colors.green,
                             image:
                                 AssetImage('assets/images/forgetPassword.png'),
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                         BackButtonWithoutAppBar(),
@@ -95,6 +96,14 @@ class ForgotPassword extends StatelessWidget {
                                     decoration: InputDecoration(
                                       errorStyle: kErrorTextStyle,
                                       errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            kBorderRadius),
+                                        borderSide: BorderSide(
+                                          color: kRedColor,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             kBorderRadius),
                                         borderSide: BorderSide(

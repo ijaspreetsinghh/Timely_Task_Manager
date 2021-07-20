@@ -16,19 +16,23 @@ class WelcomeScreen extends StatelessWidget {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: Container(
+            constraints: BoxConstraints(maxWidth: 450.0),
             decoration: BoxDecoration(color: Color(0xff5752BE)),
             child: ListView(
               physics: BouncingScrollPhysics(),
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                OnBoardingPageTitle(
-                  pageTitle: 'Timely', //Let\'s get organized withs
-                  topMargin: kHPadding * 2,
-                  textColor: Colors.white,
+                // OnBoardingPageTitle(
+                //   pageTitle: 'Timely', //Let\'s get organized withs
+                //   topMargin: kHPadding * 2,
+                //   textColor: Colors.white,
+                // ),
+                SizedBox(
+                  height: kVPadding * 2,
                 ),
                 OnBoardingImage(
                   imagePath: 'assets/images/welcomeScreen.png',
-                  verticalPadding: kVPadding * 2,
+                  verticalPadding: kVPadding * 4,
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: kVPadding * 2),

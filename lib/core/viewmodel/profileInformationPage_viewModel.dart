@@ -28,7 +28,6 @@ class ProfileInformationPageViewModel extends BaseViewModel {
   );
   bool obscureText = true;
   void toggle() {
-    print('togl');
     obscureText = !obscureText;
     obscureText == true
         ? showPasswordIcon = Icon(

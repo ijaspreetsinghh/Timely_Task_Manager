@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/services/services.dart';
@@ -166,7 +167,8 @@ class PriorityTaskGrid extends StatelessWidget {
                 taskDate: taskDate,
                 taskCategory: taskCategory,
                 taskTime: time,
-                taskColor: color),
+                taskColor: color,
+                taskStatus: taskStatus),
             child: Container(
               padding: EdgeInsets.only(
                   left: kVPadding, top: kVPadding, bottom: kVPadding),
@@ -184,6 +186,9 @@ class PriorityTaskGrid extends StatelessWidget {
                         time.format(context),
                         style: kHintTextStyle.copyWith(
                           fontSize: 13,
+                          color: taskStatus == 'Done'
+                              ? Colors.white
+                              : kGrayTextColor,
                         ),
                       ),
                       Container(
@@ -206,7 +211,9 @@ class PriorityTaskGrid extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: kCircularStdText.copyWith(
-                          color: Colors.black,
+                          color: taskStatus == 'Done'
+                              ? Colors.white
+                              : Colors.black,
                           fontSize: 16,
                           fontWeight: FontWeight.w700),
                     ),
@@ -419,7 +426,8 @@ class HorizontalTaskBuilder extends StatelessWidget {
                       taskDate: taskDate,
                       taskCategory: category,
                       taskTime: time,
-                      taskColor: color),
+                      taskColor: color,
+                      taskStatus: taskStatus),
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: kVPadding),
                     padding: EdgeInsets.only(
@@ -459,7 +467,7 @@ class HorizontalTaskBuilder extends StatelessWidget {
                         Container(
                           margin: EdgeInsets.only(right: kHPadding / 2),
                           child: Text(
-                            time.format(context),
+                            '${time.format(context)} on ${DateFormat('MMMMEEEEd').format(taskDate)}',
                             style: kHintTextStyle.copyWith(
                               fontSize: 13,
                               color: taskStatus == 'Done'
@@ -629,7 +637,8 @@ class OnBoardingImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: verticalPadding),
+      margin: EdgeInsets.symmetric(
+          vertical: verticalPadding, horizontal: kHPadding),
       child: Image(
         image: AssetImage(imagePath),
       ),

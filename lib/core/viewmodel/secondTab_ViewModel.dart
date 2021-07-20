@@ -4,9 +4,6 @@ import 'package:timely/core/services/services.dart';
 
 class SecondTabViewModel extends StreamViewModel {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  openEndDrawer() {
-    scaffoldKey.currentState.openEndDrawer();
-  }
 
   var _numberOfTasks;
   get numberOfTasks => _numberOfTasks;
@@ -23,7 +20,6 @@ class SecondTabViewModel extends StreamViewModel {
   setTotalTasks(value) {
     _numberOfTasks = value;
     // notifyListeners();
-    print(numberOfTasks);
   }
 
   List dateProvider(DateTime today) {

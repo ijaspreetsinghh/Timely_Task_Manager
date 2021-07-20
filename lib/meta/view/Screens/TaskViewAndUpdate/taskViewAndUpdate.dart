@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
@@ -16,7 +17,8 @@ class TaskViewAndUpdate extends StatefulWidget {
       @required this.taskCategory,
       @required this.taskColor,
       @required this.taskId,
-      @required this.isAlarmSet});
+      @required this.isAlarmSet,
+      @required this.taskStatus});
   final taskName;
   final taskDesc;
   final taskTime;
@@ -25,6 +27,7 @@ class TaskViewAndUpdate extends StatefulWidget {
   final taskColor;
   final taskId;
   final isAlarmSet;
+  final taskStatus;
 
   @override
   _TaskViewAndUpdateState createState() => _TaskViewAndUpdateState();
@@ -168,47 +171,55 @@ class _TaskViewAndUpdateState extends State<TaskViewAndUpdate> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Container(
-                                transform: Matrix4.translationValues(0, 6, 0),
-                                child: TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        edit = true;
-                                      });
-                                    },
-                                    style: TextButton.styleFrom(
-                                        primary: kPrimaryColor,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: kHPadding * 1.5,
-                                            vertical: kVPadding * 2)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.edit_rounded,
-                                          color: kPrimaryColor,
-                                        ),
-                                        SizedBox(
-                                          width: kHPadding / 2,
-                                        ),
-                                        Text(
-                                          'Edit',
-                                          style: kCircularStdText.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                              color: kPrimaryColor,
-                                              fontSize: 16),
-                                        ),
-                                      ],
-                                    )),
+                            Visibility(
+                              child: Expanded(
+                                child: Container(
+                                  transform: Matrix4.translationValues(0, 6, 0),
+                                  child: TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          edit = true;
+                                        });
+                                      },
+                                      style: TextButton.styleFrom(
+                                          primary: kPrimaryColor,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: kHPadding * 1.5,
+                                              vertical: kVPadding * 2)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.edit_rounded,
+                                            color: kPrimaryColor,
+                                          ),
+                                          SizedBox(
+                                            width: kHPadding / 2,
+                                          ),
+                                          Text(
+                                            'Edit',
+                                            style: kCircularStdText.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                color: kPrimaryColor,
+                                                fontSize: 16),
+                                          ),
+                                        ],
+                                      )),
+                                ),
                               ),
+                              visible:
+                                  widget.taskStatus == 'Done' ? false : true,
                             ),
-                            Container(
-                              width: .5,
-                              height: 30,
-                              transform: Matrix4.translationValues(0, 6, 0),
-                              color: kBlackTextColor.withOpacity(.2),
+                            Visibility(
+                              visible:
+                                  widget.taskStatus == 'Done' ? false : true,
+                              child: Container(
+                                width: .5,
+                                height: 30,
+                                transform: Matrix4.translationValues(0, 6, 0),
+                                color: kBlackTextColor.withOpacity(.2),
+                              ),
                             ),
                             Expanded(
                               child: Container(
@@ -257,15 +268,28 @@ class _TaskViewAndUpdateState extends State<TaskViewAndUpdate> {
                         child: Container(
                           transform: Matrix4.translationValues(0, 6, 0),
                           child: TextButton(
-                              onPressed: () => model.markTaskAsDone(
-                                  taskTime: model.pickedTime,
-                                  taskDate: model.pickedDate,
-                                  taskCategory: model.selectedCategoryTitle,
-                                  taskDesc:
-                                      model.taskDescriptionController.text,
-                                  taskName: model.taskNameController.text,
-                                  taskId: widget.taskId,
-                                  isAlarmSet: model.isAlarmSet),
+                              onPressed: () => widget.taskStatus == 'Done'
+                                  ? model.markTaskAsInComplete(
+                                      context: context,
+                                      taskStatus: widget.taskStatus,
+                                      taskColor: widget.taskColor,
+                                      taskTime: model.pickedTime,
+                                      taskDate: model.pickedDate,
+                                      taskCategory: model.selectedCategoryTitle,
+                                      taskDesc:
+                                          model.taskDescriptionController.text,
+                                      taskName: model.taskNameController.text,
+                                      taskId: widget.taskId,
+                                      isAlarmSet: model.isAlarmSet)
+                                  : model.markTaskAsDone(
+                                      taskTime: model.pickedTime,
+                                      taskDate: model.pickedDate,
+                                      taskCategory: model.selectedCategoryTitle,
+                                      taskDesc:
+                                          model.taskDescriptionController.text,
+                                      taskName: model.taskNameController.text,
+                                      taskId: widget.taskId,
+                                      isAlarmSet: model.isAlarmSet),
                               style: TextButton.styleFrom(
                                   primary: kBlackTextColor,
                                   padding: EdgeInsets.symmetric(
@@ -275,13 +299,17 @@ class _TaskViewAndUpdateState extends State<TaskViewAndUpdate> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
-                                    Icons.check,
+                                    widget.taskStatus == 'Done'
+                                        ? CupertinoIcons.refresh_bold
+                                        : Icons.check,
                                   ),
                                   SizedBox(
                                     width: kHPadding,
                                   ),
                                   Text(
-                                    'Mark as Done',
+                                    widget.taskStatus == 'Done'
+                                        ? 'Mark as Incomplete'
+                                        : 'Mark as Done',
                                     style: kCircularStdText.copyWith(
                                         color: kBlackTextColor,
                                         fontSize: 16,
@@ -570,40 +598,6 @@ class _TaskViewAndUpdateState extends State<TaskViewAndUpdate> {
                           ),
                           SizedBox(
                             height: kVPadding * 3,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              GestureDetector(
-                                onTap: () => model.changeCheckBox(),
-                                child: AnimatedContainer(
-                                  duration: Duration(milliseconds: 200),
-                                  child: Icon(
-                                    Icons.check_rounded,
-                                    size: 16,
-                                    color: kGreyWhite,
-                                  ),
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      color: model.isAlarmSet == true
-                                          ? kPrimaryColor
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(
-                                          kBorderRadius / 2),
-                                      border: Border.all(
-                                          color: kPrimaryColor, width: 1.5)),
-                                ),
-                              ),
-                              SizedBox(
-                                width: kVPadding,
-                              ),
-                              Text(
-                                'Set alarm for notification.',
-                                style: kCircularStdText.copyWith(
-                                    color: kBlackTextColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
                           ),
                           SizedBox(
                             height: kVPadding * 3,

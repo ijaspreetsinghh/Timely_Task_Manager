@@ -3,9 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/core/viewmodel/secondTab_ViewModel.dart';
-import 'package:timely/meta/view/Screens/MainAppPages/viewAllTasksPage.dart';
 
 import '../../../../main.dart';
 import '../../../widgets/constants.dart';
@@ -43,59 +41,40 @@ class SecondTab extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    DateFormat('MMMMEEEEd')
-                                        .format(model.selectedDate),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontFamily: kCircularStdFont,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Expanded(child: Container()),
-                                  GestureDetector(
-                                    onTap: () => model.openEndDrawer(),
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          left: kHPadding / 2,
-                                          top: kVPadding / 2,
-                                          bottom: kVPadding / 2,
-                                          right: 0),
-                                      child: Image(
-                                        image: AssetImage(
-                                          'assets/images/menu.png',
-                                        ),
-                                        fit: BoxFit.fitWidth,
-                                        height: 13,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
                               Text(
-                                model.selectedDate == dateToday
-                                    ? 'You have total ${model.numberOfTasks} tasks today.'
-                                    : model.selectedDate ==
-                                            DateTime(
-                                                DateTime.now().year,
-                                                DateTime.now().month,
-                                                DateTime.now().day + 1,
-                                                0,
-                                                0,
-                                                0)
-                                        ? 'You have total 5 tasks tomorrow.'
-                                        : 'You have total 5 tasks on ${DateFormat('MMMEd').format(model.selectedDate)}.',
-                                maxLines: 2,
+                                DateFormat('MMMMEEEEd')
+                                    .format(model.selectedDate),
                                 style: TextStyle(
-                                    color: Colors.white.withOpacity(.7),
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0,
-                                    fontSize: 14,
-                                    fontFamily: kMuliFont),
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: kCircularStdFont,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
+                              SizedBox(
+                                height: kVPadding / 2,
+                              ),
+                              // Text(
+                              //   model.selectedDate == dateToday
+                              //       ? 'You have total ${model.numberOfTasks} tasks today.'
+                              //       : model.selectedDate ==
+                              //               DateTime(
+                              //                   DateTime.now().year,
+                              //                   DateTime.now().month,
+                              //                   DateTime.now().day + 1,
+                              //                   0,
+                              //                   0,
+                              //                   0)
+                              //           ? 'You have total 5 tasks tomorrow.'
+                              //           : 'You have total 5 tasks on ${DateFormat('MMMEd').format(model.selectedDate)}.',
+                              //   maxLines: 2,
+                              //   style: TextStyle(
+                              //       color: Colors.white.withOpacity(.7),
+                              //       fontWeight: FontWeight.w600,
+                              //       letterSpacing: 0,
+                              //       fontSize: 14,
+                              //       fontFamily: kMuliFont),
+                              // ),
                             ],
                           ),
                         ),
@@ -270,43 +249,10 @@ class SecondTab extends StatelessWidget {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: kVPadding * 10,
+                    )
                   ],
-                ),
-                endDrawer: Drawer(
-                  elevation: 20.0,
-                  child: Container(
-                    child: ListView(
-                      padding: EdgeInsets.symmetric(vertical: kVPadding),
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.history_rounded),
-                          title: Text(
-                            'Tasks History',
-                            style: kCircularStdText.copyWith(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                                color: kBlackTextColor),
-                          ),
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.upcoming_rounded),
-                          onTap: () {
-                            NavigationService.instance.goBack();
-                            NavigationService.instance
-                                .pushNamed(ViewAllTasksPage.route);
-                          },
-                          title: Text(
-                            'View Upcoming Tasks',
-                            style: kCircularStdText.copyWith(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                                color: kBlackTextColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ),

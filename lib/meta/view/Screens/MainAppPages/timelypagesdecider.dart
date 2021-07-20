@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timely/core/services/navigationService.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/createTask.dart';
-import '../../Screens/MainAppPages/fourthTab.dart';
+import '../../../../main.dart';
 import '../../Screens/MainAppPages/fifthTab.dart';
-import '../../Screens/MainAppPages/thirdTab.dart';
 import 'package:timely/meta/widgets/constants.dart';
 import 'schedule.dart';
 import 'secondTab.dart';
+import '../../../extensions/neumorphism.dart';
+import '../../../../core/services/services.dart';
 
 class PagesDecider extends StatefulWidget {
   static const route = 'PagesDecider';
@@ -18,24 +19,12 @@ class PagesDecider extends StatefulWidget {
 class _PagesDeciderState extends State<PagesDecider> {
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
-    if (index == 2) {
-      NavigationService.instance.pushNamed(CreateTask.route);
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
-  
-
-  List _children = [
-    Schedule(),
-    SecondTab(),
-    ThirdTab(),
-    FourthTab(),
-    FifthTab()
-  ];
+  List _children = [Schedule(), SecondTab(), FifthTab()];
   DateTime pickedDate;
   TimeOfDay startTime;
   TimeOfDay endTime;
@@ -43,88 +32,99 @@ class _PagesDeciderState extends State<PagesDecider> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _children[_selectedIndex],
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent),
-        child: BottomNavigationBar(
-          elevation: 10,
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          items: [
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                'assets/icons/home.svg',
-                height: 28,
-              ),
-              icon: SvgPicture.asset(
-                'assets/icons/home-alt.svg',
-                height: 28,
-                color: kGrayTextColor.withOpacity(.7),
-              ),
-              label: 'Home',
+      body: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          _children[_selectedIndex],
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(kBorderRadius),
             ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                'assets/icons/list.svg',
-                height: 28,
-              ),
-              icon: SvgPicture.asset(
-                'assets/icons/list-alt.svg',
-                height: 28,
-                color: kGrayTextColor.withOpacity(.7),
-              ),
-              label: 'My Tasks',
-            ),
-            BottomNavigationBarItem(
-              icon: Hero(
-                tag: 'Create Task',
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: kPrimaryColor,
-                      borderRadius: BorderRadius.circular(50)),
-                  padding: EdgeInsets.all(7),
-                  child: Icon(
-                    Icons.add_rounded,
-                    color: Colors.white,
-                    size: 24,
+            margin: EdgeInsets.only(
+                bottom: kVPadding * 2,
+                right: kHPadding * 2,
+                left: kHPadding * 2),
+            child: BottomNavigationBar(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
+              showSelectedLabels: false,
+              items: [
+                BottomNavigationBarItem(
+                  activeIcon: SvgPicture.asset(
+                    'assets/icons/home.svg',
+                    height: 28,
                   ),
+                  icon: SvgPicture.asset(
+                    'assets/icons/home-alt.svg',
+                    height: 28,
+                    color: kGrayTextColor.withOpacity(.7),
+                  ),
+                  label: 'Home',
                 ),
-              ),
-              label: 'Add Task',
+                BottomNavigationBarItem(
+                  activeIcon: SvgPicture.asset(
+                    'assets/icons/list.svg',
+                    height: 28,
+                  ),
+                  icon: SvgPicture.asset(
+                    'assets/icons/list-alt.svg',
+                    height: 28,
+                    color: kGrayTextColor.withOpacity(.7),
+                  ),
+                  label: 'My Tasks',
+                ),
+                // BottomNavigationBarItem(
+                //   icon: Hero(
+                //     tag: 'Create Task',
+                //     child: Container(
+                //       decoration: BoxDecoration(
+                //           color: kPrimaryColor,
+                //           borderRadius: BorderRadius.circular(50)),
+                //       padding: EdgeInsets.all(7),
+                //       child: Icon(
+                //         Icons.add_rounded,
+                //         color: Colors.white,
+                //         size: 24,
+                //       ),
+                //     ),
+                //   ),
+                //   label: 'Add Task',
+                // ),
+                BottomNavigationBarItem(
+                  icon: CircleAvatar(
+                    radius: 16,
+                    backgroundColor: kBlackTextColor.withOpacity(.03),
+                    backgroundImage: NetworkImage(
+                        Services().auth.currentUser.photoURL ??
+                            defaultProfilePictureLocation),
+                  ),
+                  label: 'User Settings',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              unselectedItemColor: kGreyWhite,
+              selectedItemColor: kPrimaryColor,
+              iconSize: 28,
+              onTap: _onItemTapped,
             ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                'assets/icons/calendar.svg',
-                height: 28,
-              ),
-              icon: SvgPicture.asset(
-                'assets/icons/calendar-alt.svg',
-                height: 28,
-                color: kGrayTextColor.withOpacity(.7),
-              ),
-              label: 'Calendar',
-            ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                'assets/icons/user.svg',
-                height: 28,
-              ),
-              icon: SvgPicture.asset(
-                'assets/icons/user-alt.svg',
-                height: 28,
-                color: kGrayTextColor.withOpacity(.7),
-              ),
-              label: 'Settings',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          unselectedItemColor: kGreyWhite,
-          selectedItemColor: kPrimaryColor,
-          iconSize: 28,
-          onTap: _onItemTapped,
+          ).addNeumorphism()
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(bottom: kVPadding * 10),
+        child: FloatingActionButton(
+          tooltip: 'Create Task',
+          backgroundColor: kPrimaryColor,
+          child: Icon(
+            Icons.add_rounded,
+            size: 32,
+          ),
+          onPressed: () =>
+              NavigationService.instance.pushNamed(CreateTask.route),
         ),
       ),
     );

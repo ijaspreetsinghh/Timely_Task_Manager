@@ -115,8 +115,8 @@ class CreateTask extends StatelessWidget {
                                         firstDate: DateTime.now(),
                                         lastDate: DateTime(
                                             (DateTime.now().year),
-                                            (DateTime.now().month + 1),
-                                            (DateTime.now().day)),
+                                            (DateTime.now().month),
+                                            (DateTime.now().day + 30)),
                                       ).then((date) {
                                         model.pickDate(date);
                                       }).catchError((onError) {
@@ -356,44 +356,6 @@ class CreateTask extends StatelessWidget {
                               SizedBox(
                                 height: kVPadding * 3,
                               ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => model.changeCheckBox(),
-                                    child: AnimatedContainer(
-                                      duration: Duration(milliseconds: 200),
-                                      child: Icon(
-                                        Icons.check_rounded,
-                                        size: 16,
-                                        color: kGreyWhite,
-                                      ),
-                                      padding: EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                          color: model.isAlarmSet == true
-                                              ? kPrimaryColor
-                                              : Colors.transparent,
-                                          borderRadius: BorderRadius.circular(
-                                              kBorderRadius / 2),
-                                          border: Border.all(
-                                              color: kPrimaryColor,
-                                              width: 1.5)),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: kVPadding,
-                                  ),
-                                  Text(
-                                    'Set alarm for notification.',
-                                    style: kCircularStdText.copyWith(
-                                        color: kBlackTextColor,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: kVPadding * 3,
-                              ),
                             ],
                           ),
                         ),
@@ -405,15 +367,12 @@ class CreateTask extends StatelessWidget {
                 bottomNavigationBar: Container(
                   padding: EdgeInsets.only(bottom: kVPadding),
                   margin: EdgeInsets.zero,
-                  child: Hero(
-                    tag: 'Create Task',
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(kHPadding * 3, kVPadding / 2,
-                          kHPadding * 3, kVPadding),
-                      child: PrimaryButton(
-                        title: 'Create Task',
-                        action: () => model.validateCreateTask(),
-                      ),
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(
+                        kHPadding * 3, kVPadding / 2, kHPadding * 3, kVPadding),
+                    child: PrimaryButton(
+                      title: 'Create Task',
+                      action: () => model.validateCreateTask(),
                     ),
                   ),
                 ),

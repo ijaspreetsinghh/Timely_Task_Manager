@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:timely/core/services/services.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/createTask.dart';
-import 'package:timely/meta/view/Screens/MainAppPages/notificationsPage.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/profileInformationPage.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/viewAllTasksPage.dart';
+import 'package:timely/meta/view/Screens/MainAppPages/view_history_task_page.dart';
 import 'package:timely/meta/view/Screens/Onboarding/welcomeScreen.dart';
 import 'package:timely/app/theme.dart';
 import 'core/services/navigationService.dart';
+import 'core/services/notificationService.dart';
 import 'meta/view/Screens/Onboarding/onboarding.dart';
 import 'meta/view/Screens/ForgotPassword/forgotpassword.dart';
 import 'meta/view/Screens/ForgotPassword/gotoemail.dart';
@@ -20,14 +21,15 @@ import 'meta/widgets/constants.dart';
 import 'meta/view/Screens/SignUp/signup.dart';
 
 const applicationVersion = '1.0.0+3';
-const applicationName = 'Timely';
+const applicationName = 'timely';
 const applicationLegalese = '2021 \u00a9 Timely';
 const defaultProfilePictureLocation =
     'https://firebasestorage.googleapis.com/v0/b/timely-80246.appspot.com/o/profile.png?alt=media&token=a6994fcb-5b8a-4f61-8407-4eea93d7d532';
 var dateToday = DateTime(
     DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().init();
   runApp(StartApp());
 }
 
@@ -103,8 +105,8 @@ class MyApp extends StatelessWidget {
           WelcomeScreen.route: (context) => WelcomeScreen(),
           ProfileInformationPage.route: (context) => ProfileInformationPage(),
           CreateTask.route: (context) => CreateTask(),
-          NotificationsPage.route: (context) => NotificationsPage(),
           ViewAllTasksPage.route: (context) => ViewAllTasksPage(),
+          ViewHistoryTasksPage.route: (context) => ViewHistoryTasksPage(),
         },
       ),
     );
