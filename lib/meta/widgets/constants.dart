@@ -27,7 +27,7 @@ const kErrorTextStyle = TextStyle(
 );
 const kOffset = Offset(0, 1);
 const kTopShadowColor = Colors.transparent;
-const kBottomShadowColor = Color(0x46777777);
+const kBottomShadowColor = Color(0x56777777);
 const kGapPadding = 10;
 const kHintTextStyle = TextStyle(
     color: kGrayTextColor,

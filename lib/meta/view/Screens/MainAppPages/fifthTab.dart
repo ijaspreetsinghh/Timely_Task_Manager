@@ -55,32 +55,22 @@ class FifthTab extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Hero(
-                                  tag: 'Display Name',
-                                  child: Material(
-                                    type: MaterialType.transparency,
-                                    child: Text(
-                                      model.displayName ?? 'NA',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: kCircularStdText.copyWith(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ),
+                                Text(
+                                  model.displayName ?? 'NA',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: kCircularStdText.copyWith(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700),
                                 ),
-                                Hero(
-                                  tag: 'Email',
-                                  child: Material(
-                                    type: MaterialType.transparency,
-                                    child: Text(
-                                      model.email ?? 'NA',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: kCircularStdText.copyWith(
-                                          color:
-                                              kBlackTextColor.withOpacity(.7),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600),
-                                    ),
+                                Material(
+                                  type: MaterialType.transparency,
+                                  child: Text(
+                                    model.email ?? 'NA',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: kCircularStdText.copyWith(
+                                        color: kBlackTextColor.withOpacity(.7),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ],

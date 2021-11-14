@@ -67,9 +67,8 @@ class ProfileInformationPageViewModel extends BaseViewModel {
   }
 
   void openGallery(BuildContext context) async {
-    final pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-    );
+    final pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 50);
 
     await services.uploadImageToFirebase(
       context: context,
@@ -133,121 +132,134 @@ class ProfileInformationPageViewModel extends BaseViewModel {
         elevation: 20,
         backgroundColor: Colors.transparent,
         context: ctx,
-        builder: (ctx) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xffbbbbb9),
-                      borderRadius: BorderRadius.circular(kBorderRadius)),
-                  height: 3,
-                  width: 75,
-                  alignment: AlignmentDirectional.center,
-                ),
-                SizedBox(
-                  height: kVPadding,
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(kHPadding * 1.5, kVPadding * 2,
-                      kHPadding * 1.5, kVPadding),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(kBorderRadius * 2),
-                          topRight: Radius.circular(kBorderRadius * 2))),
-                  child: Form(
-                    key: updateNameFormKey,
-                    autovalidateMode: autoValidate,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: kVPadding,
-                        ),
-                        FormHeading(title: 'Update Name'),
-                        SizedBox(
-                          height: kVPadding * 4,
-                        ),
-                        TextFormField(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(kNameRegEx))
-                          ],
-                          controller: nameController,
-                          autofocus: false,
-                          textInputAction: TextInputAction.done,
-                          cursorColor: kPrimaryColor,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.words,
-                          style: kCircularStdText.copyWith(fontSize: 16),
-                          decoration: InputDecoration(
-                            errorStyle: kErrorTextStyle,
-                            errorBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kRedColor,
-                                width: 2,
-                              ),
-                            ),
-                            hintText: 'John Doe',
-                            hintStyle: kHintTextStyle,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: kHPadding * 1.5,
-                                vertical: kVPadding * 1.7),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Full Name',
-                            labelStyle: kLabelTextStyle,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: kPrimaryColor,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
-                              ),
-                            ),
+        builder: (ctx) => Padding(
+              padding: MediaQuery.of(ctx).viewInsets,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xffbbbbb9),
+                        borderRadius: BorderRadius.circular(kBorderRadius)),
+                    height: 3,
+                    width: 75,
+                    alignment: AlignmentDirectional.center,
+                  ),
+                  SizedBox(
+                    height: kVPadding,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(kHPadding * 1.5, kVPadding * 2,
+                        kHPadding * 1.5, kVPadding),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(kBorderRadius * 2),
+                            topRight: Radius.circular(kBorderRadius * 2))),
+                    child: Form(
+                      key: updateNameFormKey,
+                      autovalidateMode: autoValidate,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: kVPadding,
                           ),
-                          validator: (value) {
-                            return nameValidator(value);
-                          },
-                        ),
-                        SizedBox(
-                          height: kVPadding * 3,
-                        ),
-                        PrimaryButton(
-                          action: () {
-                            updateNameFormValidator();
-                          },
-                          title: 'Update Name',
-                          textColor: Colors.white,
-                          buttonColor: kPrimaryColor,
-                          buttonBackgroundColor: kPrimaryColor.withOpacity(.3),
-                        ),
-                        SizedBox(
-                          height: kVPadding * 2,
-                        ),
-                      ],
+                          FormHeading(title: 'Update Name'),
+                          SizedBox(
+                            height: kVPadding * 4,
+                          ),
+                          TextFormField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(kNameRegEx))
+                            ],
+                            controller: nameController,
+                            autofocus: false,
+                            textInputAction: TextInputAction.done,
+                            cursorColor: kPrimaryColor,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.words,
+                            style: kCircularStdText.copyWith(fontSize: 16),
+                            decoration: InputDecoration(
+                              errorStyle: kErrorTextStyle,
+                              errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
+                              ),
+                              hintText: 'John Doe',
+                              hintStyle: kHintTextStyle,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: kHPadding * 1.5,
+                                  vertical: kVPadding * 1.7),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelText: 'Full Name',
+                              labelStyle: kLabelTextStyle,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              return nameValidator(value);
+                            },
+                          ),
+                          SizedBox(
+                            height: kVPadding * 3,
+                          ),
+                          PrimaryButton(
+                            action: () {
+                              updateNameFormValidator();
+                            },
+                            title: 'Update Name',
+                            textColor: Colors.white,
+                            buttonColor: kPrimaryColor,
+                            buttonBackgroundColor:
+                                kPrimaryColor.withOpacity(.3),
+                          ),
+                          SizedBox(
+                            height: kVPadding * 2,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ));
   }
 
@@ -259,188 +271,210 @@ class ProfileInformationPageViewModel extends BaseViewModel {
         elevation: 20,
         backgroundColor: Colors.transparent,
         context: ctx,
-        builder: (ctx) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xffbbbbb9),
-                      borderRadius: BorderRadius.circular(kBorderRadius)),
-                  height: 3,
-                  width: 75,
-                  alignment: AlignmentDirectional.center,
-                ),
-                SizedBox(
-                  height: kVPadding,
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(kHPadding * 1.5, kVPadding * 2,
-                      kHPadding * 1.5, kVPadding),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(kBorderRadius * 2),
-                          topRight: Radius.circular(kBorderRadius * 2))),
-                  child: Form(
-                    key: updateEmailFormKey,
-                    autovalidateMode: autoValidate,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: kVPadding,
-                        ),
-                        FormHeading(title: 'Update Email'),
-                        SizedBox(
-                          height: kVPadding * 4,
-                        ),
-                        TextFormField(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.deny(RegExp(" ")),
-                          ],
-                          controller: emailController,
-                          autofocus: false,
-                          textInputAction: TextInputAction.done,
-                          cursorColor: kPrimaryColor,
-                          keyboardType: TextInputType.emailAddress,
-                          textCapitalization: TextCapitalization.none,
-                          style: kCircularStdText.copyWith(fontSize: 16),
-                          decoration: InputDecoration(
-                            errorStyle: kErrorTextStyle,
-                            errorBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kRedColor,
-                                width: 2,
+        builder: (ctx) => Padding(
+              padding: MediaQuery.of(ctx).viewInsets,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xffbbbbb9),
+                        borderRadius: BorderRadius.circular(kBorderRadius)),
+                    height: 3,
+                    width: 75,
+                    alignment: AlignmentDirectional.center,
+                  ),
+                  SizedBox(
+                    height: kVPadding,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(kHPadding * 1.5, kVPadding * 2,
+                        kHPadding * 1.5, kVPadding),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(kBorderRadius * 2),
+                            topRight: Radius.circular(kBorderRadius * 2))),
+                    child: Form(
+                      key: updateEmailFormKey,
+                      autovalidateMode: autoValidate,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: kVPadding,
+                          ),
+                          FormHeading(title: 'Update Email'),
+                          SizedBox(
+                            height: kVPadding * 4,
+                          ),
+                          TextFormField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(RegExp(" ")),
+                            ],
+                            controller: emailController,
+                            autofocus: false,
+                            textInputAction: TextInputAction.done,
+                            cursorColor: kPrimaryColor,
+                            keyboardType: TextInputType.emailAddress,
+                            textCapitalization: TextCapitalization.none,
+                            style: kCircularStdText.copyWith(fontSize: 16),
+                            decoration: InputDecoration(
+                              errorStyle: kErrorTextStyle,
+                              errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
+                              ),
+                              hintText: 'eg@example.com',
+                              hintStyle: kHintTextStyle,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: kHPadding * 1.5,
+                                  vertical: kVPadding * 1.7),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelText: 'New Email',
+                              labelStyle: kLabelTextStyle,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
                               ),
                             ),
-                            hintText: 'eg@example.com',
-                            hintStyle: kHintTextStyle,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: kHPadding * 1.5,
-                                vertical: kVPadding * 1.7),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'New Email',
-                            labelStyle: kLabelTextStyle,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: kPrimaryColor,
+                            validator: (value) {
+                              return emailValidator(value);
+                            },
+                          ),
+                          SizedBox(
+                            height: kVPadding * 3,
+                          ),
+                          TextFormField(
+                            controller: currentPasswordController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(RegExp(" ")),
+                            ],
+                            validator: (value) {
+                              return currentPasswordValidator(value);
+                            },
+                            autofocus: false,
+                            textInputAction: TextInputAction.done,
+                            cursorColor: kPrimaryColor,
+                            obscureText: obscureText,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.words,
+                            style: kCircularStdText.copyWith(fontSize: 16),
+                            decoration: InputDecoration(
+                              errorStyle: kErrorTextStyle,
+                              errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
                               ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
+                              isDense: true,
+                              suffixIcon: IconButton(
+                                icon: showPasswordIcon,
+                                onPressed: () => toggle(),
+                                padding: EdgeInsets.only(right: kHPadding),
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
+                              hintText: '• • • • • • • •',
+                              hintStyle: kHintTextStyle.copyWith(fontSize: 12),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: kHPadding * 1.5,
+                                  vertical: kVPadding * 1.7),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelText: 'Current Password',
+                              labelStyle: kLabelTextStyle,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
                               ),
                             ),
                           ),
-                          validator: (value) {
-                            return emailValidator(value);
-                          },
-                        ),
-                        SizedBox(
-                          height: kVPadding * 3,
-                        ),
-                        TextFormField(
-                          controller: currentPasswordController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.deny(RegExp(" ")),
-                          ],
-                          validator: (value) {
-                            return currentPasswordValidator(value);
-                          },
-                          autofocus: false,
-                          textInputAction: TextInputAction.done,
-                          cursorColor: kPrimaryColor,
-                          obscureText: obscureText,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.words,
-                          style: kCircularStdText.copyWith(fontSize: 16),
-                          decoration: InputDecoration(
-                            errorStyle: kErrorTextStyle,
-                            errorBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kRedColor,
-                                width: 2,
-                              ),
-                            ),
-                            isDense: true,
-                            suffixIcon: IconButton(
-                              icon: showPasswordIcon,
-                              onPressed: () => toggle(),
-                              padding: EdgeInsets.only(right: kHPadding),
-                            ),
-                            hintText: '• • • • • • • •',
-                            hintStyle: kHintTextStyle.copyWith(fontSize: 12),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: kHPadding * 1.5,
-                                vertical: kVPadding * 1.7),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Current Password',
-                            labelStyle: kLabelTextStyle,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: kPrimaryColor,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
-                              ),
-                            ),
+                          SizedBox(
+                            height: kVPadding * 3,
                           ),
-                        ),
-                        SizedBox(
-                          height: kVPadding * 3,
-                        ),
-                        PrimaryButton(
-                          action: () {
-                            updateEmailFormValidator();
-                          },
-                          title: 'Update Email',
-                          textColor: Colors.white,
-                          buttonColor: kPrimaryColor,
-                          buttonBackgroundColor: kPrimaryColor.withOpacity(.3),
-                        ),
-                        SizedBox(
-                          height: kVPadding * 2,
-                        ),
-                      ],
+                          PrimaryButton(
+                            action: () {
+                              updateEmailFormValidator();
+                            },
+                            title: 'Update Email',
+                            textColor: Colors.white,
+                            buttonColor: kPrimaryColor,
+                            buttonBackgroundColor:
+                                kPrimaryColor.withOpacity(.3),
+                          ),
+                          SizedBox(
+                            height: kVPadding * 2,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ));
   }
 
@@ -452,196 +486,218 @@ class ProfileInformationPageViewModel extends BaseViewModel {
         elevation: 20,
         backgroundColor: Colors.transparent,
         context: ctx,
-        builder: (ctx) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xffbbbbb9),
-                      borderRadius: BorderRadius.circular(kBorderRadius)),
-                  height: 3,
-                  width: 75,
-                  alignment: AlignmentDirectional.center,
-                ),
-                SizedBox(
-                  height: kVPadding,
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(kHPadding * 1.5, kVPadding * 2,
-                      kHPadding * 1.5, kVPadding),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(kBorderRadius * 2),
-                          topRight: Radius.circular(kBorderRadius * 2))),
-                  child: Form(
-                    key: updatePasswordFormKey,
-                    autovalidateMode: autoValidate,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: kVPadding,
-                        ),
-                        FormHeading(title: 'Change Password'),
-                        SizedBox(
-                          height: kVPadding * 4,
-                        ),
-                        TextFormField(
-                          controller: currentPasswordController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.deny(RegExp(" ")),
-                          ],
-                          validator: (value) {
-                            return currentPasswordValidator(value);
-                          },
-                          autofocus: false,
-                          textInputAction: TextInputAction.done,
-                          cursorColor: kPrimaryColor,
-                          obscureText: obscureText,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.words,
-                          style: kCircularStdText.copyWith(fontSize: 16),
-                          decoration: InputDecoration(
-                            errorStyle: kErrorTextStyle,
-                            errorBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kRedColor,
-                                width: 2,
+        builder: (ctx) => Padding(
+              padding: MediaQuery.of(ctx).viewInsets,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xffbbbbb9),
+                        borderRadius: BorderRadius.circular(kBorderRadius)),
+                    height: 3,
+                    width: 75,
+                    alignment: AlignmentDirectional.center,
+                  ),
+                  SizedBox(
+                    height: kVPadding,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(kHPadding * 1.5, kVPadding * 2,
+                        kHPadding * 1.5, kVPadding),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(kBorderRadius * 2),
+                            topRight: Radius.circular(kBorderRadius * 2))),
+                    child: Form(
+                      key: updatePasswordFormKey,
+                      autovalidateMode: autoValidate,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: kVPadding,
+                          ),
+                          FormHeading(title: 'Change Password'),
+                          SizedBox(
+                            height: kVPadding * 4,
+                          ),
+                          TextFormField(
+                            controller: currentPasswordController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(RegExp(" ")),
+                            ],
+                            validator: (value) {
+                              return currentPasswordValidator(value);
+                            },
+                            autofocus: false,
+                            textInputAction: TextInputAction.done,
+                            cursorColor: kPrimaryColor,
+                            obscureText: obscureText,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.words,
+                            style: kCircularStdText.copyWith(fontSize: 16),
+                            decoration: InputDecoration(
+                              errorStyle: kErrorTextStyle,
+                              errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
                               ),
-                            ),
-                            isDense: true,
-                            suffixIcon: IconButton(
-                              icon: showPasswordIcon,
-                              onPressed: () => toggle(),
-                              padding: EdgeInsets.only(right: kHPadding),
-                            ),
-                            hintText: '• • • • • • • •',
-                            hintStyle: kHintTextStyle.copyWith(fontSize: 12),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: kHPadding * 1.5,
-                                vertical: kVPadding * 1.7),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Current Password',
-                            labelStyle: kLabelTextStyle,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: kPrimaryColor,
+                              isDense: true,
+                              suffixIcon: IconButton(
+                                icon: showPasswordIcon,
+                                onPressed: () => toggle(),
+                                padding: EdgeInsets.only(right: kHPadding),
                               ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
+                              hintText: '• • • • • • • •',
+                              hintStyle: kHintTextStyle.copyWith(fontSize: 12),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: kHPadding * 1.5,
+                                  vertical: kVPadding * 1.7),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelText: 'Current Password',
+                              labelStyle: kLabelTextStyle,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: kPrimaryColor,
+                                ),
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: kVPadding * 3,
-                        ),
-                        TextFormField(
-                          controller: passwordController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.deny(RegExp(" ")),
-                          ],
-                          validator: (value) {
-                            return newPasswordValidator(value);
-                          },
-                          autofocus: false,
-                          textInputAction: TextInputAction.done,
-                          cursorColor: kPrimaryColor,
-                          obscureText: obscureText,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.words,
-                          style: kCircularStdText.copyWith(fontSize: 16),
-                          decoration: InputDecoration(
-                            errorStyle: kErrorTextStyle,
-                            errorBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kRedColor,
-                                width: 2,
+                          SizedBox(
+                            height: kVPadding * 3,
+                          ),
+                          TextFormField(
+                            controller: passwordController,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(RegExp(" ")),
+                            ],
+                            validator: (value) {
+                              return newPasswordValidator(value);
+                            },
+                            autofocus: false,
+                            textInputAction: TextInputAction.done,
+                            cursorColor: kPrimaryColor,
+                            obscureText: obscureText,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.words,
+                            style: kCircularStdText.copyWith(fontSize: 16),
+                            decoration: InputDecoration(
+                              errorStyle: kErrorTextStyle,
+                              errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
                               ),
-                            ),
-                            isDense: true,
-                            suffixIcon: IconButton(
-                              tooltip: 'hi',
-                              icon: showPasswordIcon,
-                              onPressed: () => toggle(),
-                              padding: EdgeInsets.only(right: kHPadding),
-                            ),
-                            hintText: '• • • • • • • •',
-                            hintStyle: kHintTextStyle.copyWith(fontSize: 12),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: kHPadding * 1.5,
-                                vertical: kVPadding * 1.7),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'New Password',
-                            labelStyle: kLabelTextStyle,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: kPrimaryColor,
+                              isDense: true,
+                              suffixIcon: IconButton(
+                                tooltip: 'hi',
+                                icon: showPasswordIcon,
+                                onPressed: () => toggle(),
+                                padding: EdgeInsets.only(right: kHPadding),
                               ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
+                              hintText: '• • • • • • • •',
+                              hintStyle: kHintTextStyle.copyWith(fontSize: 12),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: kHPadding * 1.5,
+                                  vertical: kVPadding * 1.7),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              labelText: 'New Password',
+                              labelStyle: kLabelTextStyle,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: kPrimaryColor,
+                                ),
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius),
-                              borderSide: BorderSide(
-                                color: kPrimaryColor,
-                                width: 2,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kRedColor,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kBorderRadius),
+                                borderSide: BorderSide(
+                                  color: kPrimaryColor,
+                                  width: 2,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: kVPadding * 3,
-                        ),
-                        PrimaryButton(
-                          action: () {
-                            updatePasswordFormValidator();
-                          },
-                          title: 'Change Password',
-                          textColor: Colors.white,
-                          buttonColor: kPrimaryColor,
-                          buttonBackgroundColor: kPrimaryColor.withOpacity(.3),
-                        ),
-                        SizedBox(
-                          height: kVPadding * 2,
-                        ),
-                      ],
+                          SizedBox(
+                            height: kVPadding * 3,
+                          ),
+                          PrimaryButton(
+                            action: () {
+                              updatePasswordFormValidator();
+                            },
+                            title: 'Change Password',
+                            textColor: Colors.white,
+                            buttonColor: kPrimaryColor,
+                            buttonBackgroundColor:
+                                kPrimaryColor.withOpacity(.3),
+                          ),
+                          SizedBox(
+                            height: kVPadding * 2,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ));
   }
 }

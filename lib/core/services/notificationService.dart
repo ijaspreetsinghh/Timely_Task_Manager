@@ -91,7 +91,6 @@ class NotificationService {
         .difference(DateTime.now())
         .inSeconds;
     if (duration > 0) {
-      print('scheduled');
       await flutterLocalNotificationsPlugin.zonedSchedule(
           notificationId,
           taskTitle,

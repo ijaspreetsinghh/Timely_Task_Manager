@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:timely/core/services/services.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/createTask.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/profileInformationPage.dart';
 import 'package:timely/meta/view/Screens/MainAppPages/viewAllTasksPage.dart';
-import 'package:timely/meta/view/Screens/MainAppPages/view_history_task_page.dart';
 import 'package:timely/meta/view/Screens/Onboarding/welcomeScreen.dart';
 import 'package:timely/app/theme.dart';
 import 'core/services/navigationService.dart';
@@ -17,7 +17,6 @@ import 'meta/view/Screens/ForgotPassword/gotoemail.dart';
 import 'meta/view/Screens/MainAppPages/schedule.dart';
 import 'meta/view/Screens/MainAppPages/timelypagesdecider.dart';
 import 'meta/view/Screens/SignIn/signin.dart';
-import 'meta/widgets/constants.dart';
 import 'meta/view/Screens/SignUp/signup.dart';
 
 const applicationVersion = '1.0.0+3';
@@ -29,49 +28,52 @@ var dateToday = DateTime(
     DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate();
+
   NotificationService().init();
-  runApp(StartApp());
+  runApp(MyApp());
 }
+//46609ECC-2D9C-4861-BAD7-BD723D59CC62
+// class StartApp extends StatelessWidget {
+//   // Create the initialization Future outside of `build`:
+//   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-class StartApp extends StatelessWidget {
-  // Create the initialization Future outside of `build`:
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder(
+//       // Initialize FlutterFire:
+//       future: _initialization,
+//       builder: (context, snapshot) {
+//         // Check for errors
+//         if (snapshot.hasError) {
+//           return Container(
+//             child: Text(
+//               'Error',
+//               style: TextStyle(
+//                   color: Colors.white,
+//                   fontSize: 30,
+//                   fontWeight: FontWeight.w900),
+//             ),
+//             color: Colors.red,
+//           );
+//         }
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      // Initialize FlutterFire:
-      future: _initialization,
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return Container(
-            child: Text(
-              'Error',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900),
-            ),
-            color: Colors.red,
-          );
-        }
+//         // Once complete, show your application
+//         if (snapshot.connectionState == ConnectionState.done) {
+//           return MyApp();
+//         }
 
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MyApp();
-        }
-
-        // Otherwise, show something whilst waiting for initialization to complete
-        return Container(
-            decoration: BoxDecoration(color: Colors.white),
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-            ));
-      },
-    );
-  }
-}
+//         // Otherwise, show something whilst waiting for initialization to complete
+//         return Container(
+//             decoration: BoxDecoration(color: Colors.white),
+//             child: CircularProgressIndicator(
+//               valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+//             ));
+//       },
+//     );
+//   }
+// }
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
@@ -86,6 +88,7 @@ class MyApp extends StatelessWidget {
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light),
       child: MaterialApp(
+        title: 'Timely',
         debugShowCheckedModeBanner: false,
         navigatorKey: NavigationService.instance.navigationKey,
         theme: myTheme,
@@ -106,7 +109,7 @@ class MyApp extends StatelessWidget {
           ProfileInformationPage.route: (context) => ProfileInformationPage(),
           CreateTask.route: (context) => CreateTask(),
           ViewAllTasksPage.route: (context) => ViewAllTasksPage(),
-          ViewHistoryTasksPage.route: (context) => ViewHistoryTasksPage(),
+          // ViewHistoryTasksPage.route: (context) => ViewHistoryTasksPage(),
         },
       ),
     );

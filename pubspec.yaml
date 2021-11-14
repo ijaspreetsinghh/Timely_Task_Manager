@@ -1,24 +1,14 @@
 name: timely
-description: A new Flutter application.
+description: Task manager & To-Do list app.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+4
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.11.0 <3.0.0"
 
 flutter_native_splash:
   color: "#ffffff"
@@ -27,24 +17,27 @@ flutter_native_splash:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^2.2.0
+  flutter_appavailability:
+    git:
+      url: https://github.com/bwhiteTP/flutter_appavailability.git
+      ref: 26461d5296cd8c0a58da1d9c5f1e960643ebb323
+  cloud_firestore: ^2.4.0
   cupertino_icons: ^1.0.3
-  firebase_auth: ^1.2.0
-  firebase_core: ^1.2.0
-  firebase_storage: ^8.1.0
-  flutter_appavailability: ^0.0.21
+  firebase_app_check: ^0.0.1+3
+  firebase_auth: ^3.0.1
+  firebase_core: ^1.4.0
+  firebase_storage: ^10.0.1
   flutter_local_notifications: ^6.0.0
   flutter_svg: ^0.22.0
-  image_picker: ^0.8.0
+  image_picker: ^0.8.2
   intl: ^0.17.0
-  stacked: ^2.1.7
-  syncfusion_flutter_calendar: ^19.1.66
+  stacked: ^2.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^1.2.0
 
-  flutter_native_splash: ^1.1.8+4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

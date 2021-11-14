@@ -67,7 +67,7 @@ class Services extends ChangeNotifier {
           title: 'Failure',
           content: 'Request failed, try after some time',
           primaryAction: () => NavigationService.instance.goBack(),
-          primaryActionTitle: 'Try again');
+          primaryActionTitle: 'Try again later');
     });
   }
 
@@ -90,40 +90,39 @@ class Services extends ChangeNotifier {
         .snapshots();
   }
 
-  Stream getHistorys() {
-    return users
-        .doc(auth.currentUser.uid)
-        .collection('History')
-        .orderBy('Task Date Time')
-        .snapshots();
-  }
-
   Future uploadImageToFirebase({BuildContext context, thisImageFile}) async {
     NavigationService.instance.showLoader(title: 'Setting Profile Image');
-    var snapshot = await firebaseStorageRef
+    await firebaseStorageRef
         .child('ProfilePictures/${Services().auth.currentUser.uid}')
         .putFile(thisImageFile)
-        .catchError((onError) {
-      NavigationService.instance.hideLoader();
-      NavigationService.instance.showAlertWithOneButton(
-          title: 'Error',
-          content: 'Something went wrong while uploading profile image.',
-          primaryActionTitle: 'Close',
-          primaryAction: () => NavigationService.instance.goBack());
-    });
-
-    await snapshot.ref.getDownloadURL().then((value) async {
-      await auth.currentUser
-          .updateProfile(photoURL: value)
-          .catchError((onError) {
+        .then((value) async {
+      await value.ref.getDownloadURL().then((value) async {
+        await auth.currentUser.updatePhotoURL(value).then((value) {
+          NavigationService.instance.hideLoader();
+          NavigationService.instance.showAlertWithOneButton(
+              title: 'Success',
+              content: 'Profile picture updated succesfully.',
+              primaryActionTitle: 'Close',
+              primaryAction: () =>
+                  NavigationService.instance.pushReplace(PagesDecider.route));
+        }).catchError((onError) {
+          print(onError);
+          NavigationService.instance.hideLoader();
+          NavigationService.instance.showAlertWithOneButton(
+              title: 'Error',
+              content: 'Something went wrong while setting profile image.',
+              primaryActionTitle: 'Close',
+              primaryAction: () => NavigationService.instance.goBack());
+        });
+      }).catchError((onError) {
+        print(onError.toString());
         NavigationService.instance.hideLoader();
         NavigationService.instance.showAlertWithOneButton(
             title: 'Error',
-            content: 'Something went wrong while setting profile image.',
+            content: 'Something went wrong while uploading profile image.',
             primaryActionTitle: 'Close',
             primaryAction: () => NavigationService.instance.goBack());
       });
-      NavigationService.instance.hideLoader();
     }).catchError((onError) {
       NavigationService.instance.hideLoader();
       NavigationService.instance.showAlertWithOneButton(
@@ -138,9 +137,14 @@ class Services extends ChangeNotifier {
     NavigationService.instance.goBack();
     NavigationService.instance.showLoader(title: 'Updating Name');
 
-    return await auth.currentUser
-        .updateProfile(displayName: name)
-        .catchError((error) {
+    return await auth.currentUser.updateDisplayName(name).then((value) {
+      NavigationService.instance.hideLoader();
+      NavigationService.instance.showAlertWithOneButton(
+          title: 'Success',
+          content: 'Name updated successfully to $name.',
+          primaryAction: () => NavigationService.instance.goBack(),
+          primaryActionTitle: 'OK');
+    }).catchError((error) {
       NavigationService.instance.hideLoader();
       NavigationService.instance.showAlertWithOneButton(
           title: 'Error',
@@ -403,7 +407,14 @@ class Services extends ChangeNotifier {
         NavigationService.instance.hideLoader();
       },
     ).catchError(
-      (onError) => print('error'),
+      (onError) {
+        NavigationService.instance.hideLoader();
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed, try after some time',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
+      },
     );
   }
 
@@ -437,7 +448,14 @@ class Services extends ChangeNotifier {
         NavigationService.instance.hideLoader();
       },
     ).catchError(
-      (onError) => print('error'),
+      (onError) {
+        NavigationService.instance.hideLoader();
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed, try after some time',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
+      },
     );
   }
 
@@ -471,7 +489,14 @@ class Services extends ChangeNotifier {
         NavigationService.instance.hideLoader();
       },
     ).catchError(
-      (onError) => print('error'),
+      (onError) {
+        NavigationService.instance.hideLoader();
+        NavigationService.instance.showAlertWithOneButton(
+            title: 'Failure',
+            content: 'Request failed, try after some time',
+            primaryAction: () => NavigationService.instance.goBack(),
+            primaryActionTitle: 'Try again');
+      },
     );
   }
 

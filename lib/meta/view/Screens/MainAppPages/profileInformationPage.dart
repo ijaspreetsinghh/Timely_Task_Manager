@@ -120,21 +120,13 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Hero(
-                                  tag: 'Display Name',
-                                  transitionOnUserGestures: true,
-                                  child: Material(
-                                    type: MaterialType.transparency,
-                                    child: Text(
-                                      model.services.auth.currentUser
-                                              .displayName ??
-                                          'NA',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: kCircularStdText.copyWith(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ),
+                                Text(
+                                  model.services.auth.currentUser.displayName ??
+                                      'NA',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: kCircularStdText.copyWith(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(top: kVPadding),
@@ -208,7 +200,6 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                                 onTap: () {
                                   if (model.services.auth.currentUser
                                       .emailVerified) {
-                                    print('email verified');
                                   } else {
                                     NavigationService.instance
                                         .showAlertWithTwoButtons(
@@ -276,16 +267,12 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                           SizedBox(
                             height: kVPadding,
                           ),
-                          Hero(
-                            tag: 'Email',
-                            child: Material(
-                              type: MaterialType.transparency,
-                              child: ProfileEntryField(
-                                entryText: model.email ?? 'NA',
-                                buttonTitle: 'Edit',
-                                action: () =>
-                                    model.showUpdateEmail(ctx: context),
-                              ),
+                          Material(
+                            type: MaterialType.transparency,
+                            child: ProfileEntryField(
+                              entryText: model.email ?? 'NA',
+                              buttonTitle: 'Edit',
+                              action: () => model.showUpdateEmail(ctx: context),
                             ),
                           ),
                           SizedBox(
@@ -397,12 +384,16 @@ class _ProfileInformationPageState extends State<ProfileInformationPage>
                       padding: const EdgeInsets.symmetric(
                         horizontal: kHPadding * 1.5,
                       ),
-                      child: PrimaryButton(
-                        action: () => model.logOut(),
-                        title: 'Sign Out',
-                        textColor: Colors.white,
-                        buttonColor: kBlackTextColor,
-                        buttonBackgroundColor: kBlackTextColor.withOpacity(.3),
+                      child: Hero(
+                        tag: 'SignInButton',
+                        child: PrimaryButton(
+                          action: () => model.logOut(),
+                          title: 'Sign Out',
+                          textColor: Colors.white,
+                          buttonColor: kBlackTextColor,
+                          buttonBackgroundColor:
+                              kBlackTextColor.withOpacity(.3),
+                        ),
                       ),
                     )
                   ],

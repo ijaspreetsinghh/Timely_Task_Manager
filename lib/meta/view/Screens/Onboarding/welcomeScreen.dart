@@ -74,24 +74,30 @@ class WelcomeScreen extends StatelessWidget {
                       SizedBox(
                         height: kVPadding * 4,
                       ),
-                      PrimaryButton(
-                        title: 'Sign In',
-                        action: () =>
-                            NavigationService.instance.pushNamed(SignIn.route),
-                        buttonColor: Colors.white,
-                        textColor: Colors.black,
-                        buttonBackgroundColor: Colors.white,
+                      Hero(
+                        tag: 'SignInButton',
+                        child: PrimaryButton(
+                          title: 'Sign In',
+                          action: () => NavigationService.instance
+                              .pushNamed(SignIn.route),
+                          buttonColor: Colors.white,
+                          textColor: Colors.black,
+                          buttonBackgroundColor: Colors.white,
+                        ),
                       ),
                       SizedBox(
                         height: kVPadding * 2.5,
                       ),
-                      PrimaryButton(
-                        title: 'Create Account',
-                        action: () =>
-                            NavigationService.instance.pushNamed(SignUp.route),
-                        buttonColor: kBlackTextColor,
-                        textColor: Colors.white,
-                        buttonBackgroundColor: Colors.black,
+                      Hero(
+                        tag: 'SignUpButton',
+                        child: PrimaryButton(
+                          title: 'Create Account',
+                          action: () => NavigationService.instance
+                              .pushNamed(SignUp.route),
+                          buttonColor: kBlackTextColor,
+                          textColor: Colors.white,
+                          buttonBackgroundColor: Colors.black,
+                        ),
                       ),
                       SizedBox(
                         height: kVPadding * 3,

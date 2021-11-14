@@ -44,8 +44,11 @@ class NavigationService {
       barrierColor: Colors.black.withOpacity(.7),
       barrierDismissible: false,
       context: navigationKey.currentContext,
-      builder: (context) => LoaderAlertBox(
-        title: title,
+      builder: (context) => WillPopScope(
+        onWillPop: () async => false,
+        child: LoaderAlertBox(
+          title: title,
+        ),
       ),
     );
   }

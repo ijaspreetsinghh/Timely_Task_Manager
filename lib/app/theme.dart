@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:timely/meta/widgets/constants.dart';
 
 final ThemeData myTheme = ThemeData(
+  pageTransitionsTheme: PageTransitionsTheme(builders: {
+    TargetPlatform.android: ZoomPageTransitionsBuilder(),
+  }),
   primarySwatch: MaterialColor(4279904427, {
     50: Color(0xffe9ebfc),
     100: Color(0xffd3d6f8),

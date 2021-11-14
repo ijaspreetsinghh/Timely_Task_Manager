@@ -453,14 +453,18 @@ class HorizontalTaskBuilder extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              taskTitle,
-                              style: kCircularStdText.copyWith(
-                                  color: taskStatus == 'Done'
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
+                            Flexible(
+                              child: Text(
+                                taskTitle,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: kCircularStdText.copyWith(
+                                    color: taskStatus == 'Done'
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
                             ),
                           ],
                         ),
@@ -731,4 +735,17 @@ class NoTaskFound extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget flightShuttleBuilder(
+  BuildContext flightContext,
+  Animation<double> animation,
+  HeroFlightDirection flightDirection,
+  BuildContext fromHeroContext,
+  BuildContext toHeroContext,
+) {
+  return DefaultTextStyle(
+    style: DefaultTextStyle.of(toHeroContext).style,
+    child: toHeroContext.widget,
+  );
 }

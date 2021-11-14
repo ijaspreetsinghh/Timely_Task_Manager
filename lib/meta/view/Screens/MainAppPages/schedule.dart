@@ -32,6 +32,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
     'The two most powerful warriors are patience and time.',
     'It is the time you have wasted for your rose that makes your rose so important.',
   ];
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ScheduleViewModel>.reactive(
